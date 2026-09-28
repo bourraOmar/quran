@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import SurahReader from "./SurahReader";
 import Sidebar from "../../components/Sidebar";
