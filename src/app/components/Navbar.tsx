@@ -79,11 +79,6 @@ export default function Navbar() {
                </svg>
              )}
           </button>
-          <button className="text-[#6b8ba7] dark:text-[#94a3b8]">
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-          </button>
         </div>
       </div>
     </nav>

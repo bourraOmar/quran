@@ -59,29 +59,29 @@ export default async function Home() {
       {/* Hero Section */}
       <section className="max-w-[1200px] mx-auto px-4 py-16 md:py-24 flex flex-col-reverse md:flex-row items-center gap-12">
         {/* Left Side: Images */}
-        <div className="flex-1 w-full relative h-[400px]">
-           <div className="absolute left-0 top-10 w-2/3 h-64 bg-gray-200 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] z-10">
+        <div className="flex-1 w-full relative h-[300px] md:h-[500px]">
+           <div className="absolute left-0 md:left-10 top-0 md:top-10 w-3/5 md:w-2/3 h-48 md:h-64 bg-gray-200 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] dark:border-[#0f172a] z-10">
               <Image src="/hero1.jpg" alt="Quran 1" fill className="object-cover" />
            </div>
-           <div className="absolute right-0 bottom-0 w-2/3 h-72 bg-gray-300 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] z-20">
+           <div className="absolute right-0 md:right-10 bottom-0 md:bottom-10 w-3/5 md:w-2/3 h-56 md:h-72 bg-gray-300 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] dark:border-[#0f172a] z-20">
               <Image src="/hero2.jpg" alt="Quran 2" fill className="object-cover" />
            </div>
         </div>
 
         {/* Right Side: Content */}
-        <div className="flex-1 text-right">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] leading-[1.2] mb-6">
+        <div className="flex-1 text-center md:text-right">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] leading-[1.3] md:leading-[1.2] mb-6">
             تزكية النفس<br/>بقراءة القرآن الكريم
           </h1>
-          <p className="text-lg text-[#5a7b9c] dark:text-[#94a3b8] mb-8 leading-relaxed">
+          <p className="text-base md:text-lg text-[#5a7b9c] dark:text-[#94a3b8] mb-8 leading-relaxed max-w-[500px] mx-auto md:mr-0">
             القرآن الكريم هو الكتاب الرئيسي في الإسلام، نزل به جبريل على النبي محمد ليكون هداية للناس كافة.
           </p>
-          <div className="flex items-center gap-4 justify-end">
-             <Link href="/surahs" className="bg-[#6b8ba7] text-white px-8 py-4 rounded-full font-bold hover:bg-[#537592] transition-shadow shadow-lg shadow-[#6b8ba7]/30 flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-end">
+             <Link href="/surahs" className="w-full sm:w-auto justify-center bg-[#6b8ba7] text-white px-8 py-4 rounded-full font-bold hover:bg-[#537592] transition-shadow shadow-lg shadow-[#6b8ba7]/30 flex items-center gap-3">
                <span>قراءة القرآن</span>
                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
              </Link>
-             <Link href="/reciters" className="bg-[#4a6b8c] text-white px-8 py-4 rounded-full font-bold hover:bg-[#395675] transition-shadow shadow-lg shadow-[#4a6b8c]/30 flex items-center gap-3">
+             <Link href="/reciters" className="w-full sm:w-auto justify-center bg-[#4a6b8c] text-white px-8 py-4 rounded-full font-bold hover:bg-[#395675] transition-shadow shadow-lg shadow-[#4a6b8c]/30 flex items-center gap-3">
                <span>استماع للقرآن</span>
                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
              </Link>
