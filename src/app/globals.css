@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: var(--font-cairo), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: var(--font-amiri), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-quran: var(--font-amiri-quran), var(--font-amiri), serif;
+}
+
+@layer base {
+  body {
+    background-color: #f4f7f9;
+    color: #1e354d;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}

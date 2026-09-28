@@ -1,0 +1,323 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+
+interface AudioPlayerProps {
+  chapterId: string;
+  onVerseChange?: (verseKey: string | null) => void;
+}
+
+interface Reciter {
+  id: number;
+  translated_name: { name: string };
+  style: string | null;
+}
+
+interface VerseAudio {
+  verse_key: string;
+  url: string;
+}
+
+export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerProps) {
+  const searchParams = useSearchParams();
+  const reciterParam = searchParams.get("reciter");
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  // Reciter & Style State
+  const [allReciters, setAllReciters] = useState<Reciter[]>([]);
+  const [selectedStyle, setSelectedStyle] = useState<"Murattal" | "Mujawwad">("Murattal");
+  const [selectedReciterId, setSelectedReciterId] = useState<number>(reciterParam ? Number(reciterParam) : 2); // default AbdulBaset Murattal
+  
+  // Playback State
+  const [audioMode, setAudioMode] = useState<"full" | "verse">("verse");
+  const [fullAudioUrl, setFullAudioUrl] = useState<string | null>(null);
+  
+  const [verseAudios, setVerseAudios] = useState<VerseAudio[]>([]);
+  const [currentVerseIndex, setCurrentVerseIndex] = useState<number>(0);
+  
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // 1. Fetch Reciters
+  useEffect(() => {
+    fetch("https://api.quran.com/api/v4/resources/recitations?language=ar")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.recitations) {
+          setAllReciters(data.recitations);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  // No longer filtering by style, all reciters are available in both modes
+  const availableReciters = allReciters;
+
+  // Auto-select first reciter if current selection doesn't match style
+  useEffect(() => {
+    if (availableReciters.length > 0) {
+      const exists = availableReciters.find(r => r.id === selectedReciterId);
+      if (!exists) {
+        setSelectedReciterId(availableReciters[0].id);
+      }
+    }
+  }, [selectedStyle, availableReciters, selectedReciterId]);
+
+  // 2. Fetch Audio (Full or Verse-by-Verse depending on style)
+  useEffect(() => {
+    // Reset state
+    setFullAudioUrl(null);
+    setVerseAudios([]);
+    setCurrentVerseIndex(0);
+    setCurrentTime(0);
+    setDuration(0);
+    setIsPlaying(false);
+    if (onVerseChange) onVerseChange(null);
+    
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+
+    if (selectedStyle === "Mujawwad") {
+      setAudioMode("full");
+      // Fetch full chapter audio
+      fetch(`https://api.quran.com/api/v4/chapter_recitations/${selectedReciterId}/${chapterId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.audio_file) {
+            setFullAudioUrl(data.audio_file.audio_url);
+          }
+        });
+    } else {
+      setAudioMode("verse");
+      // Fetch verse-by-verse audio for highlighting
+      // Note: we fetch up to 300 verses (per_page is usually capped, so we might need all if it's a long surah, but quran.com allows large per_page)
+      fetch(`https://api.quran.com/api/v4/recitations/${selectedReciterId}/by_chapter/${chapterId}?per_page=300`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.audio_files) {
+            setVerseAudios(data.audio_files);
+          }
+        });
+    }
+  }, [chapterId, selectedReciterId, selectedStyle, onVerseChange]);
+
+  let currentAudioUrl = null;
+  if (audioMode === "full") {
+    currentAudioUrl = fullAudioUrl;
+  } else if (verseAudios.length > 0 && verseAudios[currentVerseIndex]?.url) {
+    const rawUrl = verseAudios[currentVerseIndex].url;
+    if (rawUrl.startsWith("http") || rawUrl.startsWith("//")) {
+      currentAudioUrl = rawUrl.startsWith("//") ? `https:${rawUrl}` : rawUrl;
+    } else {
+      currentAudioUrl = `https://verses.quran.com/${rawUrl}`;
+    }
+  }
+
+  // Notify parent of verse change
+  useEffect(() => {
+    if (audioMode === "verse" && verseAudios.length > 0 && onVerseChange) {
+      if (isPlaying) {
+        onVerseChange(verseAudios[currentVerseIndex].verse_key);
+      } else {
+        // Optional: Keep highlighted or clear it when paused? Let's keep it highlighted so they know where they are.
+        onVerseChange(verseAudios[currentVerseIndex].verse_key);
+      }
+    } else if (audioMode === "full" && onVerseChange) {
+      onVerseChange(null); // No highlighting for Mujawwad
+    }
+  }, [currentVerseIndex, verseAudios, audioMode, isPlaying, onVerseChange]);
+
+  const togglePlay = () => {
+    if (!audioRef.current || !currentAudioUrl) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      setIsPlaying(true);
+      audioRef.current.play().catch(() => {
+        // Silently ignore browser audio play exceptions (AbortError, NotSupportedError)
+        // to prevent Next.js from throwing a full-screen error overlay.
+        setIsPlaying(false);
+      });
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+      setDuration(audioRef.current.duration || 0);
+    }
+  };
+
+  const handleEnded = () => {
+    if (audioMode === "verse") {
+      if (currentVerseIndex < verseAudios.length - 1) {
+        setCurrentVerseIndex(prev => prev + 1);
+      } else {
+        setIsPlaying(false);
+        setCurrentVerseIndex(0);
+        if (onVerseChange) onVerseChange(null);
+      }
+    } else {
+      setIsPlaying(false);
+    }
+  };
+
+  // Removed useEffect for auto-play, will rely on onCanPlay event instead
+
+  const formatTime = (time: number) => {
+    if (isNaN(time) || !isFinite(time)) return "0:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  return (
+    <div className="bg-white dark:bg-[#1e293b] rounded-3xl p-6 md:p-8 mb-12 flex flex-col items-center justify-between border border-[#e2e8f0] dark:border-[#334155] shadow-sm gap-6">
+      
+      {/* Top Row: Style Toggle & Reciter Select */}
+      <div className="flex flex-col md:flex-row items-center gap-6 w-full justify-between">
+        
+        {/* Style Toggle */}
+        <div className="flex bg-[#f4f7f9] dark:bg-[#0f172a] p-1 rounded-full border border-[#e2e8f0] dark:border-[#334155]">
+          <button
+            onClick={() => setSelectedStyle("Murattal")}
+            className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${selectedStyle === "Murattal" ? "bg-[#6b8ba7] text-white shadow-md" : "text-[#5a7b9c] dark:text-[#94a3b8] hover:text-[#1e354d] dark:hover:text-[#f8fafc]"}`}
+          >
+            مرتل (مع التتبع)
+          </button>
+          <button
+            onClick={() => setSelectedStyle("Mujawwad")}
+            className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${selectedStyle === "Mujawwad" ? "bg-[#6b8ba7] text-white shadow-md" : "text-[#5a7b9c] dark:text-[#94a3b8] hover:text-[#1e354d] dark:hover:text-[#f8fafc]"}`}
+          >
+            مجود
+          </button>
+        </div>
+
+        {/* Reciter Dropdown */}
+        <div className="text-right w-full md:w-auto flex-1 md:flex-none">
+          <p className="text-sm text-[#5a7b9c] dark:text-[#94a3b8] font-medium mb-1">القارئ</p>
+          <div className="relative inline-block w-full md:w-64">
+            <select
+              className="bg-transparent text-[#1e354d] dark:text-[#f8fafc] font-bold text-lg md:text-xl outline-none cursor-pointer border-b border-[#e2e8f0] dark:border-[#334155] pb-1 pr-8 w-full hover:border-[#6b8ba7] transition-colors appearance-none text-right"
+              value={selectedReciterId}
+              onChange={(e) => setSelectedReciterId(Number(e.target.value))}
+              disabled={availableReciters.length === 0}
+              dir="rtl"
+            >
+              {allReciters.length === 0 && <option className="bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-[#f8fafc]">جاري التحميل...</option>}
+              {availableReciters.map((r) => {
+                let styleLabel = "";
+                if (r.style === "Mujawwad") styleLabel = " (مجود)";
+                if (r.style === "Murattal") styleLabel = " (مرتل)";
+                if (r.style === "Muallim") styleLabel = " (معلم)";
+                
+                return (
+                  <option key={r.id} value={r.id} className="bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-[#f8fafc]">
+                    {r.translated_name.name}{styleLabel}
+                  </option>
+                );
+              })}
+            </select>
+            {/* Dropdown arrow */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-[#6b8ba7] dark:text-[#94a3b8]">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Audio Controls */}
+      <div className="w-full flex items-center gap-4 bg-[#f4f7f9] dark:bg-[#0f172a] rounded-full p-3 px-6 border border-[#e2e8f0] dark:border-[#334155]" dir="ltr">
+         <span className="text-sm font-medium text-[#5a7b9c] dark:text-[#94a3b8] shrink-0 w-12 text-center">
+            {audioMode === "verse" ? `${currentVerseIndex + 1}/${verseAudios.length || 0}` : formatTime(currentTime)}
+         </span>
+         
+         <div 
+            className={`flex-1 h-2 bg-[#d8e2eb] dark:bg-[#334155] rounded-full relative overflow-hidden ${audioMode === "full" ? "cursor-pointer" : ""}`}
+            onClick={(e) => {
+              if (audioMode === "full" && audioRef.current && duration) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                audioRef.current.currentTime = pos * duration;
+              }
+            }}
+         >
+            <div 
+              className="absolute left-0 top-0 h-full bg-[#6b8ba7] rounded-full transition-all duration-100"
+              style={{ width: audioMode === "full" ? (duration ? `${(currentTime / duration) * 100}%` : '0%') : (verseAudios.length ? `${((currentVerseIndex) / verseAudios.length) * 100}%` : '0%') }}
+            ></div>
+         </div>
+         
+         <span className="text-sm font-medium text-[#5a7b9c] dark:text-[#94a3b8] shrink-0 w-12 text-center">
+            {audioMode === "verse" ? "" : formatTime(duration)}
+         </span>
+         
+         {/* Previous Verse Button (Murattal only) */}
+         {audioMode === "verse" && (
+           <button 
+             onClick={() => {
+               if (currentVerseIndex > 0) {
+                 setCurrentVerseIndex(prev => prev - 1);
+               }
+             }}
+             disabled={currentVerseIndex === 0}
+             className="text-[#6b8ba7] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
+           >
+             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
+           </button>
+         )}
+
+         <button 
+           onClick={togglePlay}
+           disabled={!currentAudioUrl}
+           className="w-12 h-12 bg-[#6b8ba7] rounded-full flex items-center justify-center text-white hover:bg-[#537592] transition-colors shrink-0 disabled:opacity-50 shadow-md shadow-[#6b8ba7]/20 mx-2"
+         >
+            {isPlaying ? (
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+            ) : (
+              <svg className="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
+            )}
+         </button>
+
+         {/* Next Verse Button (Murattal only) */}
+         {audioMode === "verse" && (
+           <button 
+             onClick={() => {
+               if (currentVerseIndex < verseAudios.length - 1) {
+                 setCurrentVerseIndex(prev => prev + 1);
+               }
+             }}
+             disabled={currentVerseIndex === verseAudios.length - 1 || verseAudios.length === 0}
+             className="text-[#6b8ba7] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
+           >
+             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
+           </button>
+         )}
+      </div>
+
+      {/* Hidden Audio Tag */}
+      {currentAudioUrl && (
+        <audio 
+          ref={audioRef} 
+          src={currentAudioUrl}
+          autoPlay={isPlaying}
+          onCanPlay={() => {
+            if (isPlaying && audioRef.current) {
+              audioRef.current.play().catch(() => {});
+            }
+          }}
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={handleEnded}
+          onLoadedMetadata={handleTimeUpdate}
+        />
+      )}
+    </div>
+  );
+}
