@@ -59,11 +59,11 @@ export default async function Home() {
       {/* Hero Section */}
       <section className="max-w-[1200px] mx-auto px-4 py-16 md:py-24 flex flex-col-reverse md:flex-row items-center gap-12">
         {/* Left Side: Images */}
-        <div className="flex-1 w-full relative h-[300px] md:h-[500px]">
-           <div className="absolute left-0 md:left-10 top-0 md:top-10 w-3/5 md:w-2/3 h-48 md:h-64 bg-gray-200 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] dark:border-[#0f172a] z-10">
+        <div className="w-full md:flex-1 relative flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 md:mt-0 md:h-[500px]">
+           <div className="w-full sm:w-1/2 h-64 md:absolute md:left-10 md:top-10 md:w-2/3 md:h-64 bg-gray-200 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] dark:border-[#0f172a] z-10 relative">
               <Image src="/hero1.jpg" alt="Quran 1" fill className="object-cover" />
            </div>
-           <div className="absolute right-0 md:right-10 bottom-0 md:bottom-10 w-3/5 md:w-2/3 h-56 md:h-72 bg-gray-300 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] dark:border-[#0f172a] z-20">
+           <div className="w-full sm:w-1/2 h-64 md:absolute md:right-10 md:bottom-10 md:w-2/3 md:h-72 bg-gray-300 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] dark:border-[#0f172a] z-20 relative">
               <Image src="/hero2.jpg" alt="Quran 2" fill className="object-cover" />
            </div>
         </div>
