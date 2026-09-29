@@ -19,7 +19,11 @@ export default function GlobalPlayer() {
     playPrev,
     handleTimeUpdate,
     handleEnded,
-    setIsPlaying
+    setIsPlaying,
+    isRepeating,
+    isShuffling,
+    toggleRepeat,
+    toggleShuffle
   } = useGlobalAudio();
 
   const [isMaximized, setIsMaximized] = useState(false);
@@ -124,7 +128,7 @@ export default function GlobalPlayer() {
       {/* Sits right above the bottom player (bottom-[90px])                     */}
       {/* ---------------------------------------------------------------------- */}
       {isMaximized && (
-        <div className="hidden md:flex fixed inset-0 bottom-[90px] w-full bg-gradient-to-b from-[#8b4c3b] to-[#2a170f] dark:from-[#723b2b] dark:to-[#170a05] z-[30] flex-col p-6 px-8 animate-in fade-in duration-300" dir="ltr">
+        <div className="hidden md:flex fixed inset-0 bottom-[90px] w-full bg-gradient-to-b from-[#6b8ba7] to-[#1e354d] dark:from-[#33506b] dark:to-[#0f172a] z-[30] flex-col p-6 px-8 animate-in fade-in duration-300" dir="ltr">
           {/* Top Bar (Title on left, Minimize on right) */}
           <div className="flex justify-between items-center w-full">
             <h2 className="text-white font-bold text-[16px] drop-shadow-sm">{activeSurah.name_simple}</h2>
@@ -138,12 +142,12 @@ export default function GlobalPlayer() {
           <div className="flex-1 flex flex-col items-center justify-center min-h-0 relative">
              <div className="w-[350px] h-[350px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] bg-gradient-to-br from-[#1e354d] to-[#0f172a] rounded-xl flex flex-col items-center justify-center text-white shadow-2xl relative overflow-hidden border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                 {/* Glowing ring mimicking the art in screenshot */}
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-500/20 via-transparent to-transparent opacity-50 blur-xl"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#6b8ba7]/30 via-transparent to-transparent opacity-50 blur-xl"></div>
                 
-                <span className="font-quran text-[100px] lg:text-[140px] xl:text-[160px] leading-none drop-shadow-2xl z-10 text-orange-100">
+                <span className="font-quran text-[100px] lg:text-[140px] xl:text-[160px] leading-none drop-shadow-2xl z-10 text-white">
                   {activeSurah.name_arabic.replace('سورة ', '')}
                 </span>
-                <span className="font-bold text-3xl mt-4 tracking-wider text-orange-200 z-10 drop-shadow-lg uppercase">
+                <span className="font-bold text-3xl mt-4 tracking-wider text-[#f8fafc] z-10 drop-shadow-lg uppercase">
                   {activeSurah.name_simple}
                 </span>
              </div>
@@ -172,7 +176,7 @@ export default function GlobalPlayer() {
          <div className="flex items-center justify-center md:justify-self-start gap-3 w-full md:w-auto text-center md:text-left">
            {/* Desktop Album Art Icon */}
            <div 
-             className="hidden md:flex w-14 h-14 bg-gradient-to-br from-[#1e354d] to-[#0f172a] rounded items-center justify-center text-orange-100 font-quran font-bold text-2xl shrink-0 shadow-md cursor-pointer hover:opacity-80 transition relative overflow-hidden group" 
+             className="hidden md:flex w-14 h-14 bg-gradient-to-br from-[#1e354d] to-[#0f172a] rounded items-center justify-center text-white font-quran font-bold text-2xl shrink-0 shadow-md cursor-pointer hover:opacity-80 transition relative overflow-hidden group" 
              onClick={toggleFullscreen} 
              title="Expand"
            >
@@ -187,11 +191,6 @@ export default function GlobalPlayer() {
              <h4 className="font-bold text-[#1e354d] dark:text-white text-lg md:text-[14px] leading-tight group-hover:underline">{activeSurah.name_simple}</h4>
              <p className="text-sm md:text-[11px] text-[#5a7b9c] dark:text-[#a1a1aa] mt-1 md:mt-0.5 group-hover:underline group-hover:text-white transition-colors">{reciter.translated_name?.name || reciter.reciter_name}</p>
            </div>
-           
-           {/* Spotify-like Add icon */}
-           <button className="hidden md:block ml-2 text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white transition-colors">
-             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-           </button>
          </div>
 
          {/* 3.2. Progress Bar & Controls (Center on Desktop) */}
@@ -199,9 +198,10 @@ export default function GlobalPlayer() {
            
            {/* Controls Row */}
            <div className="flex items-center gap-8 md:gap-6 text-[#1e354d] dark:text-white">
-             {/* Shuffle Button (Dummy) */}
-             <button className="hidden md:block text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white transition-colors">
+             {/* Shuffle Button */}
+             <button onClick={toggleShuffle} className={`hidden md:block transition-colors ${isShuffling ? "text-[#4ade80]" : "text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تبديل عشوائي">
                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12 5V2.5l5 4-5 4V8a6.002 6.002 0 00-6 6v1h-2v-1A8.003 8.003 0 0112 5zm-4 4.5l-5 4 5 4v-2.5a6.002 6.002 0 006-6v-1h2v1a8.003 8.003 0 01-8 8v-2.5z" clipRule="evenodd"/></svg>
+               {isShuffling && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
              </button>
 
              {/* Previous */}
@@ -223,9 +223,10 @@ export default function GlobalPlayer() {
                <svg className="w-8 h-8 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
              </button>
              
-             {/* Repeat Button (Dummy) */}
-             <button className="hidden md:block text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white transition-colors">
+             {/* Repeat Button */}
+             <button onClick={toggleRepeat} className={`hidden md:block transition-colors relative ${isRepeating ? "text-[#4ade80]" : "text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تكرار">
                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd"/></svg>
+               {isRepeating && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
              </button>
            </div>
            
@@ -242,8 +243,11 @@ export default function GlobalPlayer() {
          {/* 3.3. Right Side Actions (Maximize & Close) */}
          <div className="absolute top-4 right-4 md:static md:justify-self-end flex items-center justify-end gap-3 text-[#5a7b9c] dark:text-[#a1a1aa]">
            
-           {/* Volume icon dummy */}
-           <button className="hidden md:block hover:text-[#1e354d] dark:hover:text-white transition-colors">
+           {/* Volume icon toggle mute */}
+           <button 
+             onClick={() => { if (audioRef.current) audioRef.current.muted = !audioRef.current.muted; }} 
+             className="hidden md:block hover:text-[#1e354d] dark:hover:text-white transition-colors"
+           >
              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clipRule="evenodd"/></svg>
            </button>
            

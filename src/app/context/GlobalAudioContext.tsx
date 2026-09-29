@@ -28,6 +28,11 @@ interface GlobalAudioContextType {
   duration: number;
   audioRef: React.RefObject<HTMLAudioElement | null>;
   
+  isRepeating: boolean;
+  isShuffling: boolean;
+  toggleRepeat: () => void;
+  toggleShuffle: () => void;
+
   playSurah: (surah: Chapter, reciter: Reciter, surahs: Chapter[]) => void;
   closePlayer: () => void;
   togglePlay: () => void;
@@ -91,16 +96,40 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
     }
   };
 
+  const [isRepeating, setIsRepeating] = useState(false);
+  const [isShuffling, setIsShuffling] = useState(false);
+
+  const toggleRepeat = () => setIsRepeating(!isRepeating);
+  const toggleShuffle = () => setIsShuffling(!isShuffling);
+
   const playNext = () => {
-    if (activeSurahId === null || activeSurahId >= 114) return;
+    if (activeSurahId === null || !reciter || surahs.length === 0) return;
+    
+    if (isShuffling) {
+      const remainingSurahs = surahs.filter(s => s.id !== activeSurahId);
+      if (remainingSurahs.length > 0) {
+        const randomSurah = remainingSurahs[Math.floor(Math.random() * remainingSurahs.length)];
+        playSurah(randomSurah, reciter, surahs);
+      }
+      return;
+    }
+
+    if (activeSurahId >= 114) return;
     const nextSurah = surahs.find(s => s.id === activeSurahId + 1);
-    if (nextSurah && reciter) {
+    if (nextSurah) {
       playSurah(nextSurah, reciter, surahs);
     }
   };
 
   const playPrev = () => {
     if (activeSurahId === null || activeSurahId <= 1) return;
+    
+    // If we've played more than 3 seconds, previous button just restarts track
+    if (audioRef.current && audioRef.current.currentTime > 3) {
+      audioRef.current.currentTime = 0;
+      return;
+    }
+
     const prevSurah = surahs.find(s => s.id === activeSurahId - 1);
     if (prevSurah && reciter) {
       playSurah(prevSurah, reciter, surahs);
@@ -115,12 +144,20 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
   };
 
   const handleEnded = () => {
-    playNext();
+    if (isRepeating) {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+    } else {
+      playNext();
+    }
   };
 
   return (
     <GlobalAudioContext.Provider value={{
       activeSurahId, activeSurah, reciter, isPlaying, audioUrl, currentTime, duration, audioRef,
+      isRepeating, isShuffling, toggleRepeat, toggleShuffle,
       playSurah, closePlayer, togglePlay, playNext, playPrev, handleTimeUpdate, handleEnded, setIsPlaying
     }}>
       {children}
