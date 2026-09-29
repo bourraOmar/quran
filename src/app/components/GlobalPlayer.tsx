@@ -160,8 +160,8 @@ export default function GlobalPlayer() {
       {/* 3. ALWAYS-VISIBLE BOTTOM PLAYER BAR (Spotify standard player)         */}
       {/* ---------------------------------------------------------------------- */}
       <div 
-        className={`fixed bottom-[100px] left-1/2 -translate-x-1/2 w-11/12 max-w-[380px] bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-xl rounded-3xl border border-[#e2e8f0] dark:border-white/10 p-6 shadow-2xl z-40 flex-col items-center gap-6 
-          md:bottom-0 md:left-0 md:translate-x-0 md:w-full md:max-w-none md:rounded-none md:bg-[#f8fafc] md:dark:bg-black md:border-t md:border-[#e2e8f0] md:dark:border-[#27272a] md:px-6 md:py-3 md:h-[90px] md:grid md:grid-cols-[1fr_2fr_1fr] md:gap-4 md:shadow-none
+        className={`fixed bottom-[100px] left-1/2 -translate-x-1/2 w-11/12 max-w-[380px] bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-xl rounded-3xl border border-[#e2e8f0] dark:border-white/10 p-6 shadow-2xl z-40 flex-col items-center gap-6 
+          md:bottom-0 md:left-0 md:translate-x-0 md:w-full md:max-w-none md:rounded-none md:bg-[#f8fafc] md:dark:bg-[#0f172a] md:border-t md:border-[#e2e8f0] md:dark:border-white/10 md:px-6 md:py-3 md:h-[90px] md:grid md:grid-cols-[1fr_2fr_1fr] md:gap-4 md:shadow-none
           ${isMaximized ? 'hidden md:grid' : 'flex'}
         `} 
         dir="ltr"
