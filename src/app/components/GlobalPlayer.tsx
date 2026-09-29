@@ -31,7 +31,7 @@ export default function GlobalPlayer() {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
-  const [verses, setVerses] = useState<{ id: number; text_uthmani: string }[]>([]);
+  const [verses, setVerses] = useState<{ id: number; verse_key: string; text_uthmani: string }[]>([]);
   const lastActiveVerseId = React.useRef<number | null>(null);
 
   // Auto-scroll logic
@@ -40,16 +40,19 @@ export default function GlobalPlayer() {
     
     const currentTimeMs = currentTime * 1000;
     const activeVerse = verses.find(verse => {
-      const timing = verseTimings.find(t => t.verse_key === `${activeSurahId}:${verse.id}`);
+      const timing = verseTimings.find(t => t.verse_key === verse.verse_key);
       return timing && currentTimeMs >= timing.timestamp_from && currentTimeMs <= timing.timestamp_to;
     });
 
     if (activeVerse && activeVerse.id !== lastActiveVerseId.current) {
       lastActiveVerseId.current = activeVerse.id;
-      const el = document.getElementById(`verse-${activeVerse.id}`);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      // Slight delay to allow CSS class to apply before calculating scroll position
+      setTimeout(() => {
+        const el = document.getElementById(`verse-${activeVerse.id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
     }
   }, [currentTime, showLyrics, verses, verseTimings, activeSurahId]);
 
@@ -226,7 +229,7 @@ export default function GlobalPlayer() {
               >
                 {verses.length > 0 ? (
                   verses.map((verse) => {
-                    const timing = verseTimings.find(t => t.verse_key === `${activeSurahId}:${verse.id}`);
+                    const timing = verseTimings.find(t => t.verse_key === verse.verse_key);
                     const currentTimeMs = currentTime * 1000;
                     const isActive = timing && currentTimeMs >= timing.timestamp_from && currentTimeMs <= timing.timestamp_to;
                     
