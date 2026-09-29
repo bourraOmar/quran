@@ -142,7 +142,7 @@ export default async function Home() {
         <p className="text-[#5a7b9c] dark:text-[#94a3b8] mb-12">اكتشف أجمل الأصوات في تلاوة القرآن الكريم.</p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-           {recitations.filter((r: any) => r.style.includes('مجود')).slice(0, 6).map((r: any) => (
+           {recitations.slice(0, 6).map((r: any) => (
              <Link key={r.id} href={`/reciter/${r.id}`} className="bg-white dark:bg-[#1e293b] rounded-3xl overflow-hidden shadow-sm border border-[#e2e8f0] dark:border-[#334155] group cursor-pointer hover:shadow-xl transition-shadow block text-right">
                <div className="h-48 bg-[#f4f7f9] dark:bg-[#0f172a] flex items-center justify-center overflow-hidden relative">
                  <div className="w-full h-full bg-[#d8e2eb] dark:bg-[#334155] group-hover:scale-105 transition-transform duration-500 absolute inset-0 flex items-center justify-center">

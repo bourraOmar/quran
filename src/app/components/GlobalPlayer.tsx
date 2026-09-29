@@ -23,7 +23,8 @@ export default function GlobalPlayer() {
     isRepeating,
     isShuffling,
     toggleRepeat,
-    toggleShuffle
+    toggleShuffle,
+    verseTimings
   } = useGlobalAudio();
 
   const [isMaximized, setIsMaximized] = useState(false);
@@ -144,7 +145,7 @@ export default function GlobalPlayer() {
                <span className="font-quran text-7xl leading-none drop-shadow-xl z-10">{activeSurah.name_arabic.replace('سورة ', '')}</span>
             </div>
             <h1 className="text-3xl font-bold text-white mb-3 text-center">{activeSurah.name_simple}</h1>
-            <p className="text-lg text-white/70 text-center font-medium">{reciter.translated_name?.name || reciter.reciter_name}</p>
+            <p className="text-lg text-white/70 text-center font-medium">{reciter.translated_name?.name || reciter.name}</p>
           </div>
 
           {/* Bottom Controls */}
@@ -204,11 +205,20 @@ export default function GlobalPlayer() {
                 dir="rtl"
               >
                 {verses.length > 0 ? (
-                  verses.map((verse) => (
-                    <p key={verse.id} className="text-white/80 hover:text-white transition-colors font-quran text-4xl md:text-5xl lg:text-6xl text-center leading-[1.8] cursor-pointer max-w-4xl">
-                      {verse.text_uthmani}
-                    </p>
-                  ))
+                  verses.map((verse) => {
+                    const timing = verseTimings.find(t => t.verse_key === `${activeSurahId}:${verse.id}`);
+                    const currentTimeMs = currentTime * 1000;
+                    const isActive = timing && currentTimeMs >= timing.timestamp_from && currentTimeMs <= timing.timestamp_to;
+                    
+                    return (
+                      <p 
+                        key={verse.id} 
+                        className={`transition-all duration-300 font-quran text-center leading-[1.8] cursor-pointer max-w-4xl ${isActive ? 'text-white text-5xl md:text-6xl lg:text-7xl font-bold drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] scale-105' : 'text-white/40 hover:text-white/80 text-4xl md:text-5xl lg:text-6xl blur-[0.5px] hover:blur-none'}`}
+                      >
+                        {verse.text_uthmani}
+                      </p>
+                    );
+                  })
                 ) : (
                   <div className="flex items-center justify-center h-full text-white/50 text-xl font-medium animate-pulse">
                     جاري التحميل...
@@ -266,7 +276,7 @@ export default function GlobalPlayer() {
            {/* Title & Artist */}
            <div className="flex flex-col justify-center cursor-pointer group" onClick={toggleFullscreen}>
              <h4 className="font-bold text-[#1e354d] dark:text-white text-lg md:text-[14px] leading-tight group-hover:underline">{activeSurah.name_simple}</h4>
-             <p className="text-sm md:text-[11px] text-[#5a7b9c] dark:text-[#a1a1aa] mt-1 md:mt-0.5 group-hover:underline group-hover:text-white transition-colors">{reciter.translated_name?.name || reciter.reciter_name}</p>
+             <p className="text-sm md:text-[11px] text-[#5a7b9c] dark:text-[#a1a1aa] mt-1 md:mt-0.5 group-hover:underline group-hover:text-white transition-colors">{reciter.translated_name?.name || reciter.name}</p>
            </div>
          </div>
 

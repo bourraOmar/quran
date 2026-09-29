@@ -8,37 +8,15 @@ export const metadata = {
 };
 
 async function getAllReciters() {
-  const [resAr, resEn] = await Promise.all([
-    fetch("https://www.mp3quran.net/api/v3/reciters?language=ar", { next: { revalidate: 3600 } }),
-    fetch("https://www.mp3quran.net/api/v3/reciters?language=eng", { next: { revalidate: 3600 } })
-  ]);
-
-  if (!resAr.ok || !resEn.ok) return [];
-  
-  const jsonAr = await resAr.json();
-  const jsonEn = await resEn.json();
-  
-  const engNames = new Map();
-  if (jsonEn.reciters) {
-    jsonEn.reciters.forEach((r: any) => {
-      engNames.set(r.id, r.name);
-    });
-  }
-  
-  const recitersMap = new Map();
-  jsonAr.reciters.forEach((r: any) => {
-    if (r.moshaf && r.moshaf.length > 0) {
-      const bestMoshaf = r.moshaf.find((m: any) => m.name.includes('مجود')) || r.moshaf[0];
-      recitersMap.set(r.id, {
-        id: bestMoshaf.id,
-        reciter_name: r.name,
-        reciter_name_eng: engNames.get(r.id) || "",
-        style: bestMoshaf.name,
-      });
-    }
-  });
-  
-  return Array.from(recitersMap.values());
+  const res = await fetch("https://api.qurancdn.com/api/qdc/audio/reciters?locale=ar", { next: { revalidate: 3600 } });
+  if (!res.ok) return [];
+  const json = await res.json();
+  return json.reciters.map((r: any) => ({
+    id: r.id,
+    reciter_name: r.translated_name?.name || r.name,
+    reciter_name_eng: r.name,
+    style: r.style?.name || "",
+  }));
 }
 
 export default async function RecitersPage() {

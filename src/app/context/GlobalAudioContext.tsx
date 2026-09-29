@@ -12,10 +12,9 @@ export interface Chapter {
 
 export interface Reciter {
   id: number;
-  reciter_name: string;
-  style: string | null;
+  name: string;
+  style: { name: string } | null;
   translated_name?: { name: string };
-  server: string;
 }
 
 interface GlobalAudioContextType {
@@ -27,6 +26,7 @@ interface GlobalAudioContextType {
   currentTime: number;
   duration: number;
   audioRef: React.RefObject<HTMLAudioElement | null>;
+  verseTimings: { verse_key: string; timestamp_from: number; timestamp_to: number; duration: number }[];
   
   isRepeating: boolean;
   isShuffling: boolean;
@@ -56,6 +56,7 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
   const [duration, setDuration] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [verseTimings, setVerseTimings] = useState<{ verse_key: string; timestamp_from: number; timestamp_to: number; duration: number }[]>([]);
 
   useEffect(() => {
     if (!activeSurahId || !reciter) return;
@@ -63,11 +64,20 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
     setAudioUrl(null);
     setCurrentTime(0);
     setDuration(0);
+    setVerseTimings([]);
     setIsPlaying(false);
     if (audioRef.current) audioRef.current.pause();
 
-    const paddedId = activeSurahId.toString().padStart(3, "0");
-    setAudioUrl(`${reciter.server}${paddedId}.mp3`);
+    fetch(`https://api.qurancdn.com/api/qdc/audio/reciters/${reciter.id}/audio_files?chapter=${activeSurahId}&segments=true`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.audio_files && data.audio_files.length > 0) {
+          const file = data.audio_files[0];
+          setAudioUrl(file.audio_url);
+          setVerseTimings(file.verse_timings || []);
+        }
+      })
+      .catch(err => console.error("Failed to fetch audio info:", err));
   }, [activeSurahId, reciter]);
 
   const [surahs, setSurahs] = useState<Chapter[]>([]);
@@ -156,7 +166,7 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
 
   return (
     <GlobalAudioContext.Provider value={{
-      activeSurahId, activeSurah, reciter, isPlaying, audioUrl, currentTime, duration, audioRef,
+      activeSurahId, activeSurah, reciter, isPlaying, audioUrl, currentTime, duration, audioRef, verseTimings,
       isRepeating, isShuffling, toggleRepeat, toggleShuffle,
       playSurah, closePlayer, togglePlay, playNext, playPrev, handleTimeUpdate, handleEnded, setIsPlaying
     }}>
