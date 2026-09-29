@@ -61,13 +61,14 @@ export default function GlobalPlayer() {
 
   return (
     <>
-      {isMaximized ? (
-        <div className="fixed inset-0 w-full h-full bg-gradient-to-b from-[#4a6b8c] to-[#0f172a] z-[100] flex flex-col p-6 md:p-12 animate-in fade-in duration-300" dir="ltr">
+      {/* ---------------------------------------------------------------------- */}
+      {/* 1. MOBILE MAXIMIZED FULLSCREEN (Takes whole screen, huge controls) */}
+      {/* ---------------------------------------------------------------------- */}
+      {isMaximized && (
+        <div className="md:hidden fixed inset-0 w-full h-full bg-gradient-to-b from-[#4a6b8c] to-[#0f172a] z-[100] flex flex-col p-6 animate-in fade-in duration-300" dir="ltr">
           {/* Top Bar */}
           <div className="flex justify-between items-center w-full mb-auto text-white/80">
-            <div className="flex gap-4">
-               {/* Optional top-left tools */}
-            </div>
+            <div></div>
             <button onClick={toggleFullscreen} className="hover:text-white transition flex items-center gap-2 bg-black/20 hover:bg-black/40 px-4 py-2 rounded-full backdrop-blur-md">
               <span className="text-sm">تصغير</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 11l-4 4m0 0l4 4m-4-4h14m-14 0V3" /></svg>
@@ -76,117 +77,191 @@ export default function GlobalPlayer() {
 
           {/* Center huge art */}
           <div className="flex-1 flex flex-col items-center justify-center min-h-0 py-8">
-            <div className="w-[280px] h-[280px] md:w-[450px] md:h-[450px] bg-[#1e354d] rounded-2xl flex items-center justify-center text-white shadow-2xl mb-8 md:mb-12 border border-white/10 relative overflow-hidden">
+            <div className="w-[280px] h-[280px] bg-[#1e354d] rounded-2xl flex items-center justify-center text-white shadow-2xl mb-8 border border-white/10 relative overflow-hidden">
                <div className="absolute inset-0 bg-gradient-to-br from-[#6b8ba7]/20 to-transparent"></div>
-               <span className="font-quran text-7xl md:text-[150px] leading-none drop-shadow-xl z-10">{activeSurah.name_arabic.replace('سورة ', '')}</span>
+               <span className="font-quran text-7xl leading-none drop-shadow-xl z-10">{activeSurah.name_arabic.replace('سورة ', '')}</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-white mb-3 text-center">{activeSurah.name_simple}</h1>
-            <p className="text-lg md:text-2xl text-white/70 text-center font-medium">{reciter.translated_name?.name || reciter.reciter_name}</p>
+            <h1 className="text-3xl font-bold text-white mb-3 text-center">{activeSurah.name_simple}</h1>
+            <p className="text-lg text-white/70 text-center font-medium">{reciter.translated_name?.name || reciter.reciter_name}</p>
           </div>
 
           {/* Bottom Controls */}
-          <div className="w-full max-w-4xl mx-auto flex flex-col gap-8 md:gap-10 pb-4">
-            
+          <div className="w-full mx-auto flex flex-col gap-8 pb-4">
             {/* Progress */}
             <div className="flex items-center w-full gap-4 text-sm font-medium text-white/60">
-              <span className="w-12 text-right">{formatTime(currentTime)}</span>
-              <div 
-                className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden cursor-pointer relative group"
-                onClick={handleSeek}
-              >
+              <span className="w-10 text-right">{formatTime(currentTime)}</span>
+              <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden cursor-pointer relative group" onClick={handleSeek}>
                 <div className="absolute top-0 left-0 h-full bg-white rounded-full group-hover:bg-[#8ba7c0] transition-colors" style={{ width: progressPercent }}></div>
               </div>
-              <span className="w-12 text-left">{formatTime(duration)}</span>
+              <span className="w-10 text-left">{formatTime(duration)}</span>
             </div>
 
             {/* Buttons */}
-            <div className="flex items-center justify-center gap-8 md:gap-12 text-white">
+            <div className="flex items-center justify-center gap-8 text-white">
               <button onClick={playPrev} disabled={activeSurahId === 1} className="hover:text-white/70 disabled:opacity-30 transition-colors">
-                <svg className="w-10 h-10 md:w-12 md:h-12" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
+                <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
               </button>
               
-              <button onClick={togglePlay} className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white text-[#0f172a] flex items-center justify-center hover:scale-105 transition-all shadow-[0_4px_30px_rgba(255,255,255,0.2)]">
+              <button onClick={togglePlay} className="w-20 h-20 rounded-full bg-white text-[#0f172a] flex items-center justify-center hover:scale-105 transition-all shadow-[0_4px_30px_rgba(255,255,255,0.2)]">
                 {isPlaying ? (
-                  <svg className="w-10 h-10 md:w-12 md:h-12" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+                  <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
                 ) : (
-                  <svg className="w-10 h-10 md:w-12 md:h-12 ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
+                  <svg className="w-10 h-10 ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
                 )}
               </button>
               
               <button onClick={playNext} disabled={activeSurahId === 114} className="hover:text-white/70 disabled:opacity-30 transition-colors">
-                <svg className="w-10 h-10 md:w-12 md:h-12" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
+                <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
               </button>
             </div>
           </div>
         </div>
-      ) : (
-        <div className="fixed bottom-[100px] left-1/2 -translate-x-1/2 w-11/12 max-w-[380px] bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-xl md:bg-white md:dark:bg-[#1e293b] rounded-3xl md:rounded-none border border-[#e2e8f0] dark:border-white/10 md:bottom-0 md:left-0 md:translate-x-0 md:w-full md:max-w-none p-6 md:px-12 md:py-4 flex flex-col md:grid md:grid-cols-[1fr_2fr_1fr] items-center shadow-2xl z-40 gap-6 md:gap-4" dir="ltr">
-           {/* Mobile Album Art (Hidden on desktop) */}
-           <div className="md:hidden w-32 h-32 bg-gradient-to-br from-[#6b8ba7] to-[#4a6b8c] rounded-2xl flex items-center justify-center text-white shadow-lg mb-2 cursor-pointer" onClick={toggleFullscreen}>
-             <span className="font-quran text-5xl leading-none">{activeSurah.name_arabic.replace('سورة ', '')}</span>
-           </div>
+      )}
 
-           {/* Track Info */}
-           <div className="flex items-center justify-center md:justify-self-start gap-4 w-full md:w-auto text-center md:text-left">
-             <div className="hidden md:flex w-12 h-12 bg-[#6b8ba7] rounded-lg items-center justify-center text-white font-quran font-bold text-xl shrink-0 cursor-pointer hover:opacity-80 transition" onClick={toggleFullscreen} title="Full Screen">
-               {activeSurah.name_arabic.replace('سورة ', '')}
-             </div>
-             <div className="cursor-pointer" onClick={toggleFullscreen}>
-               <h4 className="font-bold text-[#1e354d] dark:text-[#f8fafc] text-xl md:text-lg leading-tight hover:underline">{activeSurah.name_simple}</h4>
-               <p className="text-sm text-[#5a7b9c] dark:text-[#94a3b8] mt-1 md:mt-0">{reciter.translated_name?.name || reciter.reciter_name}</p>
-             </div>
-           </div>
 
-           {/* Progress Bar (Mobile: below title, Desktop: inline) */}
-           <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 md:gap-2 md:justify-self-center">
-             
-             {/* Mobile Progress */}
-             <div className="flex md:hidden items-center w-full gap-3 text-xs font-medium text-[#5a7b9c] dark:text-[#94a3b8] mb-2">
-               <span>{formatTime(currentTime)}</span>
-               <div className="flex-1 h-2 bg-[#e2e8f0] dark:bg-[#334155] rounded-full overflow-hidden cursor-pointer relative" onClick={handleSeek}>
-                 <div className="absolute top-0 left-0 h-full bg-[#6b8ba7] rounded-full" style={{ width: progressPercent }}></div>
-               </div>
-               <span>{formatTime(duration)}</span>
-             </div>
+      {/* ---------------------------------------------------------------------- */}
+      {/* 2. DESKTOP MAXIMIZED OVERLAY (Spotify "Now Playing" view)             */}
+      {/* Sits right above the bottom player (bottom-[90px])                     */}
+      {/* ---------------------------------------------------------------------- */}
+      {isMaximized && (
+        <div className="hidden md:flex fixed inset-0 bottom-[90px] w-full bg-gradient-to-b from-[#8b4c3b] to-[#2a170f] dark:from-[#723b2b] dark:to-[#170a05] z-[30] flex-col p-6 px-8 animate-in fade-in duration-300" dir="ltr">
+          {/* Top Bar (Title on left, Minimize on right) */}
+          <div className="flex justify-between items-center w-full">
+            <h2 className="text-white font-bold text-[16px] drop-shadow-sm">{activeSurah.name_simple}</h2>
+            <button onClick={toggleFullscreen} className="text-white/70 hover:text-white transition-colors bg-black/10 hover:bg-black/30 p-2 rounded-full" title="Réduire la vue">
+              {/* Down-right arrow / Minimize icon */}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 11l-4 4m0 0l4 4m-4-4h14m-14 0V3" /></svg>
+            </button>
+          </div>
 
-             {/* Controls */}
-             <div className="flex items-center gap-8 md:gap-6 text-[#1e354d] dark:text-[#f8fafc]">
-               <button onClick={playPrev} disabled={activeSurahId === 1} className="hover:text-[#6b8ba7] dark:text-[#94a3b8] disabled:opacity-30 transition-colors">
-                 <svg className="w-8 h-8 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
-               </button>
-               <button onClick={togglePlay} className="w-16 h-16 md:w-12 md:h-12 rounded-full bg-[#6b8ba7] text-white flex items-center justify-center hover:bg-[#537592] hover:scale-105 transition-all shadow-[0_4px_20px_rgba(107,139,167,0.4)]">
-                 {isPlaying ? (
-                   <svg className="w-8 h-8 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
-                 ) : (
-                   <svg className="w-8 h-8 md:w-6 md:h-6 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
-                 )}
-               </button>
-               <button onClick={playNext} disabled={activeSurahId === 114} className="hover:text-[#6b8ba7] dark:text-[#94a3b8] disabled:opacity-30 transition-colors">
-                 <svg className="w-8 h-8 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
-               </button>
+          {/* Huge Album Art Centered */}
+          <div className="flex-1 flex flex-col items-center justify-center min-h-0 relative">
+             <div className="w-[350px] h-[350px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] bg-gradient-to-br from-[#1e354d] to-[#0f172a] rounded-xl flex flex-col items-center justify-center text-white shadow-2xl relative overflow-hidden border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                {/* Glowing ring mimicking the art in screenshot */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-500/20 via-transparent to-transparent opacity-50 blur-xl"></div>
+                
+                <span className="font-quran text-[100px] lg:text-[140px] xl:text-[160px] leading-none drop-shadow-2xl z-10 text-orange-100">
+                  {activeSurah.name_arabic.replace('سورة ', '')}
+                </span>
+                <span className="font-bold text-3xl mt-4 tracking-wider text-orange-200 z-10 drop-shadow-lg uppercase">
+                  {activeSurah.name_simple}
+                </span>
              </div>
-             
-             {/* Desktop Progress */}
-             <div className="hidden md:flex items-center w-full gap-4 text-xs font-medium text-[#5a7b9c] dark:text-[#94a3b8]">
-               <span>{formatTime(currentTime)}</span>
-               <div className="flex-1 h-1.5 bg-[#e2e8f0] dark:bg-[#334155] rounded-full overflow-hidden cursor-pointer relative" onClick={handleSeek}>
-                 <div className="absolute top-0 left-0 h-full bg-[#6b8ba7] rounded-full" style={{ width: progressPercent }}></div>
-               </div>
-               <span>{formatTime(duration)}</span>
-             </div>
-           </div>
-
-           {/* Side Actions (Fullscreen + Close) */}
-           <div className="absolute top-4 right-4 md:static md:justify-self-end flex items-center gap-2">
-             <button onClick={toggleFullscreen} className="hidden md:flex text-[#5a7b9c] dark:text-[#94a3b8] hover:text-[#1e354d] dark:text-[#f8fafc] transition-colors p-2 rounded-full" title="Full Screen">
-               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
-             </button>
-             <button onClick={closePlayer} className="text-[#5a7b9c] dark:text-[#94a3b8] hover:text-[#1e354d] dark:text-[#f8fafc] transition-colors p-2 bg-[#f4f7f9] dark:bg-[#334155] md:bg-transparent rounded-full">
-               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-             </button>
-           </div>
+          </div>
         </div>
       )}
+
+
+      {/* ---------------------------------------------------------------------- */}
+      {/* 3. ALWAYS-VISIBLE BOTTOM PLAYER BAR (Spotify standard player)         */}
+      {/* ---------------------------------------------------------------------- */}
+      <div 
+        className={`fixed bottom-[100px] left-1/2 -translate-x-1/2 w-11/12 max-w-[380px] bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-xl rounded-3xl border border-[#e2e8f0] dark:border-white/10 p-6 shadow-2xl z-40 flex-col items-center gap-6 
+          md:bottom-0 md:left-0 md:translate-x-0 md:w-full md:max-w-none md:rounded-none md:bg-[#f8fafc] md:dark:bg-black md:border-t md:border-[#e2e8f0] md:dark:border-[#27272a] md:px-6 md:py-3 md:h-[90px] md:grid md:grid-cols-[1fr_2fr_1fr] md:gap-4 md:shadow-none
+          ${isMaximized ? 'hidden md:grid' : 'flex'}
+        `} 
+        dir="ltr"
+      >
+         
+         {/* MOBILE ONLY: Clickable Album Art (Hidden on desktop) */}
+         <div className="md:hidden w-32 h-32 bg-gradient-to-br from-[#6b8ba7] to-[#4a6b8c] rounded-2xl flex items-center justify-center text-white shadow-lg mb-2 cursor-pointer" onClick={toggleFullscreen}>
+           <span className="font-quran text-5xl leading-none">{activeSurah.name_arabic.replace('سورة ', '')}</span>
+         </div>
+
+         {/* 3.1. Track Info (Left Side on Desktop) */}
+         <div className="flex items-center justify-center md:justify-self-start gap-3 w-full md:w-auto text-center md:text-left">
+           {/* Desktop Album Art Icon */}
+           <div 
+             className="hidden md:flex w-14 h-14 bg-gradient-to-br from-[#1e354d] to-[#0f172a] rounded items-center justify-center text-orange-100 font-quran font-bold text-2xl shrink-0 shadow-md cursor-pointer hover:opacity-80 transition relative overflow-hidden group" 
+             onClick={toggleFullscreen} 
+             title="Expand"
+           >
+             <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 bg-black/60 rounded-full p-0.5 transition-opacity">
+               <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" /></svg>
+             </div>
+             {activeSurah.name_arabic.replace('سورة ', '')}
+           </div>
+           
+           {/* Title & Artist */}
+           <div className="flex flex-col justify-center cursor-pointer group" onClick={toggleFullscreen}>
+             <h4 className="font-bold text-[#1e354d] dark:text-white text-lg md:text-[14px] leading-tight group-hover:underline">{activeSurah.name_simple}</h4>
+             <p className="text-sm md:text-[11px] text-[#5a7b9c] dark:text-[#a1a1aa] mt-1 md:mt-0.5 group-hover:underline group-hover:text-white transition-colors">{reciter.translated_name?.name || reciter.reciter_name}</p>
+           </div>
+           
+           {/* Spotify-like Add icon */}
+           <button className="hidden md:block ml-2 text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white transition-colors">
+             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+           </button>
+         </div>
+
+         {/* 3.2. Progress Bar & Controls (Center on Desktop) */}
+         <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 md:gap-1.5 md:justify-self-center">
+           
+           {/* Controls Row */}
+           <div className="flex items-center gap-8 md:gap-6 text-[#1e354d] dark:text-white">
+             {/* Shuffle Button (Dummy) */}
+             <button className="hidden md:block text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white transition-colors">
+               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12 5V2.5l5 4-5 4V8a6.002 6.002 0 00-6 6v1h-2v-1A8.003 8.003 0 0112 5zm-4 4.5l-5 4 5 4v-2.5a6.002 6.002 0 006-6v-1h2v1a8.003 8.003 0 01-8 8v-2.5z" clipRule="evenodd"/></svg>
+             </button>
+
+             {/* Previous */}
+             <button onClick={playPrev} disabled={activeSurahId === 1} className="text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
+               <svg className="w-8 h-8 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
+             </button>
+
+             {/* Play/Pause */}
+             <button onClick={togglePlay} className="w-16 h-16 md:w-8 md:h-8 rounded-full bg-[#1e354d] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-105 transition-transform shadow-md">
+               {isPlaying ? (
+                 <svg className="w-8 h-8 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+               ) : (
+                 <svg className="w-8 h-8 md:w-4 md:h-4 ml-1 md:ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
+               )}
+             </button>
+
+             {/* Next */}
+             <button onClick={playNext} disabled={activeSurahId === 114} className="text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
+               <svg className="w-8 h-8 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
+             </button>
+             
+             {/* Repeat Button (Dummy) */}
+             <button className="hidden md:block text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white transition-colors">
+               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd"/></svg>
+             </button>
+           </div>
+           
+           {/* Progress Line */}
+           <div className="flex items-center w-full gap-2 text-xs md:text-[11px] font-medium text-[#5a7b9c] dark:text-[#a1a1aa]">
+             <span className="w-10 md:w-8 text-right">{formatTime(currentTime)}</span>
+             <div className="flex-1 h-2 md:h-1 bg-[#e2e8f0] dark:bg-[#3f3f46] rounded-full overflow-hidden cursor-pointer relative group" onClick={handleSeek}>
+               <div className="absolute top-0 left-0 h-full bg-[#1e354d] dark:bg-white group-hover:bg-[#4ade80] transition-colors" style={{ width: progressPercent }}></div>
+             </div>
+             <span className="w-10 md:w-8 text-left">{formatTime(duration)}</span>
+           </div>
+         </div>
+
+         {/* 3.3. Right Side Actions (Maximize & Close) */}
+         <div className="absolute top-4 right-4 md:static md:justify-self-end flex items-center justify-end gap-3 text-[#5a7b9c] dark:text-[#a1a1aa]">
+           
+           {/* Volume icon dummy */}
+           <button className="hidden md:block hover:text-[#1e354d] dark:hover:text-white transition-colors">
+             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clipRule="evenodd"/></svg>
+           </button>
+           
+           {/* Maximize Toggle */}
+           <button onClick={toggleFullscreen} className="hidden md:flex hover:text-[#1e354d] dark:hover:text-white transition-colors" title={isMaximized ? "تصغير" : "تكبير"}>
+             {isMaximized ? (
+               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 5h4v2H5V5zm4 4H5v2h4V9zm6-4h-4v2h4V5zm-4 4h4v2h-4V9z" /></svg>
+             ) : (
+               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
+             )}
+           </button>
+           
+           {/* Close Button */}
+           <button onClick={closePlayer} className="hover:text-[#1e354d] dark:hover:text-white transition-colors p-2 md:p-0 bg-[#f4f7f9] dark:bg-[#334155] md:bg-transparent md:ml-2 rounded-full" title="إغلاق">
+             <svg className="w-5 h-5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+           </button>
+         </div>
+      </div>
 
       {audioUrl && (
         <audio
