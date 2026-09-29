@@ -47,12 +47,10 @@ export default function GlobalPlayer() {
     if (activeVerse && activeVerse.id !== lastActiveVerseId.current) {
       lastActiveVerseId.current = activeVerse.id;
       // Slight delay to allow CSS class to apply before calculating scroll position
-      setTimeout(() => {
-        const el = document.getElementById(`verse-${activeVerse.id}`);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 100);
+      const el = document.getElementById(`verse-${activeVerse.id}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
   }, [currentTime, showLyrics, verses, verseTimings, activeSurahId]);
 
@@ -221,7 +219,7 @@ export default function GlobalPlayer() {
           </div>
 
           {/* Huge Album Art OR Verses View */}
-          <div className="flex-1 flex flex-col items-center justify-center min-h-0 relative w-full max-w-5xl mx-auto overflow-hidden">
+          <div className="flex-1 flex flex-col items-center justify-center min-h-0 relative w-full max-w-[90%] mx-auto overflow-hidden">
             {showLyrics ? (
               <div 
                 className="w-full h-full overflow-y-auto px-4 py-8 flex flex-col gap-12 hide-scrollbar items-center mask-image-fade"
@@ -237,7 +235,7 @@ export default function GlobalPlayer() {
                       <p 
                         key={verse.id}
                         id={`verse-${verse.id}`} 
-                        className={`transition-all duration-300 font-quran text-center leading-[1.8] cursor-pointer max-w-4xl ${isActive ? 'text-white text-5xl md:text-6xl lg:text-7xl font-bold drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] scale-105' : 'text-white/40 hover:text-white/80 text-4xl md:text-5xl lg:text-6xl blur-[0.5px] hover:blur-none'}`}
+                        className={`transition-all duration-500 font-quran text-center leading-[1.8] cursor-pointer w-full text-5xl md:text-6xl lg:text-7xl ${isActive ? 'text-white font-bold drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-white/30 hover:text-white/60 blur-[1px] hover:blur-none'}`}
                       >
                         {verse.text_uthmani}
                       </p>
