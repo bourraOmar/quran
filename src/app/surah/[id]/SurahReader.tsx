@@ -52,8 +52,10 @@ export default function SurahReader({
       
       {/* Right Sidebar - Sticky */}
       <div className="w-full md:w-[350px] shrink-0">
-        <div className="bg-white dark:bg-[#1e293b] rounded-3xl border border-[#e2e8f0] dark:border-[#334155] p-6 shadow-sm sticky top-8 flex flex-col gap-6">
-           <div>
+        <div className="sticky top-8 flex flex-col gap-6">
+           
+           {/* Menu Box */}
+           <div className="bg-white dark:bg-[#1e293b] rounded-3xl border border-[#e2e8f0] dark:border-[#334155] p-6 shadow-sm">
              <h3 className="font-bold text-[#1e354d] dark:text-[#f8fafc] text-lg mb-4 text-right border-b border-[#e2e8f0] dark:border-[#334155] pb-4">فهرس السورة</h3>
              <ul className="flex flex-col gap-3 text-right">
                <li className="text-[#6b8ba7] dark:text-[#94a3b8] font-bold cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] p-2 rounded transition-colors">قراءة السورة</li>
@@ -69,12 +71,14 @@ export default function SurahReader({
              </ul>
            </div>
            
-           <div className="border-t border-[#e2e8f0] dark:border-[#334155] pt-6">
+           {/* Player Box */}
+           <div className="bg-white dark:bg-[#1e293b] rounded-3xl border border-[#e2e8f0] dark:border-[#334155] p-6 shadow-sm">
               <AudioPlayer 
                 chapterId={chapter.id.toString()} 
                 onVerseChange={handleVerseChange} 
               />
            </div>
+
         </div>
       </div>
 
