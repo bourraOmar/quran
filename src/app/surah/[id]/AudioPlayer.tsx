@@ -234,8 +234,8 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
       </div>
 
       {/* Audio Controls */}
-      <div className="w-full flex items-center gap-4 bg-[#f4f7f9] dark:bg-[#0f172a] rounded-full p-3 px-6 border border-[#e2e8f0] dark:border-[#334155]" dir="ltr">
-         <span className="text-sm font-medium text-[#5a7b9c] dark:text-[#94a3b8] shrink-0 w-12 text-center">
+      <div className="w-full flex items-center gap-2 bg-[#f4f7f9] dark:bg-[#0f172a] rounded-full p-2 px-4 border border-[#e2e8f0] dark:border-[#334155]" dir="ltr">
+         <span className="text-xs font-medium text-[#5a7b9c] dark:text-[#94a3b8] shrink-0 w-8 text-center">
             {audioMode === "verse" ? `${currentVerseIndex + 1}/${verseAudios.length || 0}` : formatTime(currentTime)}
          </span>
          
@@ -255,9 +255,11 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
             ></div>
          </div>
          
-         <span className="text-sm font-medium text-[#5a7b9c] dark:text-[#94a3b8] shrink-0 w-12 text-center">
-            {audioMode === "verse" ? "" : formatTime(duration)}
-         </span>
+         {audioMode === "full" && (
+           <span className="text-xs font-medium text-[#5a7b9c] dark:text-[#94a3b8] shrink-0 w-8 text-center">
+              {formatTime(duration)}
+           </span>
+         )}
          
          {/* Previous Verse Button (Murattal only) */}
          {audioMode === "verse" && (
@@ -277,7 +279,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
          <button 
            onClick={togglePlay}
            disabled={!currentAudioUrl}
-           className="w-12 h-12 bg-[#6b8ba7] rounded-full flex items-center justify-center text-white hover:bg-[#537592] transition-colors shrink-0 disabled:opacity-50 shadow-md shadow-[#6b8ba7]/20 mx-2"
+           className="w-10 h-10 bg-[#6b8ba7] rounded-full flex items-center justify-center text-white hover:bg-[#537592] transition-colors shrink-0 disabled:opacity-50 shadow-md shadow-[#6b8ba7]/20 mx-1"
          >
             {isPlaying ? (
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
