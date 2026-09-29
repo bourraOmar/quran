@@ -29,6 +29,22 @@ export default function GlobalPlayer() {
   const [isMaximized, setIsMaximized] = useState(false);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
+  const [showLyrics, setShowLyrics] = useState(false);
+  const [verses, setVerses] = useState<{ id: number; text_uthmani: string }[]>([]);
+
+  useEffect(() => {
+    if (showLyrics && activeSurahId && verses.length === 0) {
+      fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${activeSurahId}`)
+        .then(res => res.json())
+        .then(data => setVerses(data.verses || []))
+        .catch(err => console.error("Failed to fetch verses", err));
+    }
+  }, [showLyrics, activeSurahId]);
+
+  // Reset verses if surah changes
+  useEffect(() => {
+    setVerses([]);
+  }, [activeSurahId]);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -165,19 +181,38 @@ export default function GlobalPlayer() {
             </button>
           </div>
 
-          {/* Huge Album Art Centered */}
-          <div className="flex-1 flex flex-col items-center justify-center min-h-0 relative">
-             <div className="w-[350px] h-[350px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] bg-gradient-to-br from-[#1e354d] to-[#0f172a] rounded-xl flex flex-col items-center justify-center text-white shadow-2xl relative overflow-hidden border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                {/* Glowing ring mimicking the art in screenshot */}
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#6b8ba7]/30 via-transparent to-transparent opacity-50 blur-xl"></div>
-                
-                <span className="font-quran text-[100px] lg:text-[140px] xl:text-[160px] leading-none drop-shadow-2xl z-10 text-white">
-                  {activeSurah.name_arabic.replace('سورة ', '')}
-                </span>
-                <span className="font-bold text-3xl mt-4 tracking-wider text-[#f8fafc] z-10 drop-shadow-lg uppercase">
-                  {activeSurah.name_simple}
-                </span>
-             </div>
+          {/* Huge Album Art OR Verses View */}
+          <div className="flex-1 flex flex-col items-center justify-center min-h-0 relative w-full max-w-5xl mx-auto overflow-hidden">
+            {showLyrics ? (
+              <div 
+                className="w-full h-full overflow-y-auto px-4 py-8 flex flex-col gap-12 hide-scrollbar items-center mask-image-fade"
+                dir="rtl"
+              >
+                {verses.length > 0 ? (
+                  verses.map((verse) => (
+                    <p key={verse.id} className="text-white/80 hover:text-white transition-colors font-quran text-4xl md:text-5xl lg:text-6xl text-center leading-[1.8] cursor-pointer max-w-4xl">
+                      {verse.text_uthmani}
+                    </p>
+                  ))
+                ) : (
+                  <div className="flex items-center justify-center h-full text-white/50 text-xl font-medium animate-pulse">
+                    جاري التحميل...
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="w-[350px] h-[350px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] bg-gradient-to-br from-[#1e354d] to-[#0f172a] rounded-xl flex flex-col items-center justify-center text-white shadow-2xl relative overflow-hidden border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                 {/* Glowing ring mimicking the art in screenshot */}
+                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#6b8ba7]/30 via-transparent to-transparent opacity-50 blur-xl"></div>
+                 
+                 <span className="font-quran text-[100px] lg:text-[140px] xl:text-[160px] leading-none drop-shadow-2xl z-10 text-white">
+                   {activeSurah.name_arabic.replace('سورة ', '')}
+                 </span>
+                 <span className="font-bold text-3xl mt-4 tracking-wider text-[#f8fafc] z-10 drop-shadow-lg uppercase">
+                   {activeSurah.name_simple}
+                 </span>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -297,6 +332,19 @@ export default function GlobalPlayer() {
                ></div>
              </div>
            </div>
+           
+           {/* Lyrics Toggle */}
+           <button 
+             onClick={() => {
+               setShowLyrics(!showLyrics);
+               if (!isMaximized) setIsMaximized(true); // Auto-maximize if lyrics is clicked while minimized
+             }} 
+             className={`hidden md:flex transition-colors relative ${showLyrics ? "text-[#4ade80]" : "text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} 
+             title="الآيات"
+           >
+             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m12 8-9.04 9.06a2.82 2.82 0 1 0 3.98 3.98L16 12"/><circle cx="17" cy="7" r="5"/></svg>
+             {showLyrics && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2 top-4"></div>}
+           </button>
            
            {/* Maximize Toggle */}
            <button onClick={toggleFullscreen} className="hidden md:flex hover:text-[#1e354d] dark:hover:text-white transition-colors" title={isMaximized ? "تصغير" : "تكبير"}>
