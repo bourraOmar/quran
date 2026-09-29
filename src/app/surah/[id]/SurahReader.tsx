@@ -48,23 +48,49 @@ export default function SurahReader({
   }, [activeVerseKey]);
 
   return (
-    <div className="flex-1 text-right">
-      {/* Header Block */}
-      <div className="mb-10 text-center md:text-right">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4">
-          سورة {chapter.name_arabic}
-        </h1>
-        <div className="text-[#5a7b9c] dark:text-[#94a3b8] text-lg mb-8 font-medium">
-          {chapter.revelation_place === "makkah" ? "مكية" : "مدنية"} • رقم السورة: {chapter.id} • عدد آياتها: {chapter.verses_count}
+    <div className="flex flex-col md:flex-row gap-12 w-full">
+      
+      {/* Right Sidebar - Sticky */}
+      <div className="w-full md:w-[350px] shrink-0">
+        <div className="bg-white dark:bg-[#1e293b] rounded-3xl border border-[#e2e8f0] dark:border-[#334155] p-6 shadow-sm sticky top-8 flex flex-col gap-6">
+           <div>
+             <h3 className="font-bold text-[#1e354d] dark:text-[#f8fafc] text-lg mb-4 text-right border-b border-[#e2e8f0] dark:border-[#334155] pb-4">فهرس السورة</h3>
+             <ul className="flex flex-col gap-3 text-right">
+               <li className="text-[#6b8ba7] dark:text-[#94a3b8] font-bold cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] p-2 rounded transition-colors">قراءة السورة</li>
+               <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">استماع للسورة</li>
+               <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">
+                 <Link href={`/surah/${chapter.id}?showTranslation=${isTranslationEnabled ? 'false' : 'true'}`}>
+                   {isTranslationEnabled ? "إخفاء الترجمة" : "إظهار الترجمة"}
+                 </Link>
+               </li>
+               <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">
+                 <Link href="/">العودة للفهرس</Link>
+               </li>
+             </ul>
+           </div>
+           
+           <div className="border-t border-[#e2e8f0] dark:border-[#334155] pt-6">
+              <AudioPlayer 
+                chapterId={chapter.id.toString()} 
+                onVerseChange={handleVerseChange} 
+              />
+           </div>
         </div>
       </div>
 
-      <AudioPlayer 
-        chapterId={chapter.id.toString()} 
-        onVerseChange={handleVerseChange} 
-      />
+      {/* Main Content - Left Side (Scrolling) */}
+      <div className="flex-1 text-right min-w-0">
+        {/* Header Block */}
+        <div className="mb-10 text-center md:text-right">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4">
+            سورة {chapter.name_arabic}
+          </h1>
+          <div className="text-[#5a7b9c] dark:text-[#94a3b8] text-lg mb-8 font-medium">
+            {chapter.revelation_place === "makkah" ? "مكية" : "مدنية"} • رقم السورة: {chapter.id} • عدد آياتها: {chapter.verses_count}
+          </div>
+        </div>
 
-      {/* Surah Text Area */}
+        {/* Surah Text Area */}
       <div className={`text-center leading-[2.5] md:leading-[2.8] text-[#1e354d] dark:text-[#f8fafc] font-medium ${isTranslationEnabled ? "" : "text-2xl md:text-4xl"} mb-16 bg-white dark:bg-[#1e293b] p-6 md:p-12 rounded-3xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm`}>
         {chapter.id !== 1 && chapter.id !== 9 && (
           <div className="flex justify-center mb-12">
@@ -127,6 +153,7 @@ export default function SurahReader({
           })}
         </div>
       </div>
+    </div>
     </div>
   );
 }

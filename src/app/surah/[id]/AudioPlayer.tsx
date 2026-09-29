@@ -179,10 +179,10 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
   };
 
   return (
-    <div className="bg-white dark:bg-[#1e293b] rounded-3xl p-6 md:p-8 mb-12 flex flex-col items-center justify-between border border-[#e2e8f0] dark:border-[#334155] shadow-sm gap-6">
+    <div className="flex flex-col items-center justify-between gap-6 w-full">
       
       {/* Top Row: Style Toggle & Reciter Select */}
-      <div className="flex flex-col md:flex-row items-center gap-6 w-full justify-between">
+      <div className="flex flex-col items-center gap-6 w-full justify-between">
         
         {/* Style Toggle */}
         <div className="flex bg-[#f4f7f9] dark:bg-[#0f172a] p-1 rounded-full border border-[#e2e8f0] dark:border-[#334155]">

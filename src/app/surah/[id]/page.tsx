@@ -61,28 +61,7 @@ export default async function SurahPage({
   const surahName = `سورة ${chapter.name_arabic}`;
 
   return (
-    <div className="max-w-[1400px] mx-auto py-12 px-4 flex flex-col md:flex-row gap-12">
-      
-      {/* Sidebar - Right Side in RTL */}
-      <div className="w-full md:w-[300px] shrink-0">
-        <div className="bg-white dark:bg-[#1e293b] rounded-3xl border border-[#e2e8f0] dark:border-[#334155] p-6 shadow-sm sticky top-8">
-           <h3 className="font-bold text-[#1e354d] dark:text-[#f8fafc] text-lg mb-4 text-right border-b border-[#e2e8f0] dark:border-[#334155] pb-4">فهرس السورة</h3>
-           <ul className="flex flex-col gap-3 text-right">
-             <li className="text-[#6b8ba7] dark:text-[#94a3b8] font-bold cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] p-2 rounded transition-colors">قراءة السورة</li>
-             <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">استماع للسورة</li>
-             <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">
-               <Link href={`/surah/${id}?showTranslation=${isTranslationEnabled ? 'false' : 'true'}`}>
-                 {isTranslationEnabled ? "إخفاء الترجمة" : "إظهار الترجمة"}
-               </Link>
-             </li>
-             <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">
-               <Link href="/">العودة للفهرس</Link>
-             </li>
-           </ul>
-        </div>
-      </div>
-
-      {/* Main Content - Left Side in RTL */}
+    <div className="max-w-[1400px] mx-auto py-12 px-4">
       <SurahReader chapter={chapter} verses={verses} isTranslationEnabled={isTranslationEnabled} />
     </div>
   );
