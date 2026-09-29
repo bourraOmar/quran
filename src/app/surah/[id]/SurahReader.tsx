@@ -138,20 +138,28 @@ export default function SurahReader({
                 </div>
               );
             }
-            return (
-              <span 
-                key={verse.id} 
-                className={`font-quran font-normal ${highlightClass}`}
-                ref={isActive ? (activeVerseRef as React.RefObject<HTMLSpanElement>) : null}
-              >
-                {isFatihaBasmalah ? (
-                  <div className="flex items-center justify-center w-full mb-8 mt-2">
+            if (isFatihaBasmalah) {
+              return (
+                <div 
+                  key={verse.id}
+                  className={`flex flex-col items-center justify-center w-full mb-8 mt-2 py-4 ${highlightClass}`}
+                  ref={isActive ? (activeVerseRef as React.RefObject<HTMLDivElement>) : null}
+                >
+                  <div className="flex items-center justify-center w-full">
                     <img src="/img/basmalah.png" alt="بسم الله الرحمن الرحيم" className="max-w-[60%] md:max-w-[40%] dark:invert opacity-80" loading="lazy" />
                     <span className="text-[#6b8ba7] dark:text-[#94a3b8] mx-3 font-sans text-xl md:text-2xl">({ayahNumber})</span>
                   </div>
-                ) : (
-                  <>{verse.text_uthmani} <span className="text-[#6b8ba7] dark:text-[#94a3b8] mx-1 font-sans text-xl md:text-2xl">({ayahNumber})</span> </>
-                )}
+                </div>
+              );
+            }
+
+            return (
+              <span 
+                key={verse.id} 
+                className={`font-quran font-normal leading-[2.5] md:leading-[2.8] ${highlightClass}`}
+                ref={isActive ? (activeVerseRef as React.RefObject<HTMLSpanElement>) : null}
+              >
+                {verse.text_uthmani} <span className="text-[#6b8ba7] dark:text-[#94a3b8] mx-1 font-sans text-xl md:text-2xl">({ayahNumber})</span>{' '}
               </span>
             );
           })}
