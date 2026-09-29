@@ -27,6 +27,15 @@ export default function GlobalPlayer() {
   } = useGlobalAudio();
 
   const [isMaximized, setIsMaximized] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+      audioRef.current.muted = isMuted;
+    }
+  }, [volume, isMuted, audioUrl]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -58,6 +67,24 @@ export default function GlobalPlayer() {
       const rect = e.currentTarget.getBoundingClientRect();
       const pos = (e.clientX - rect.left) / rect.width;
       audioRef.current.currentTime = pos * duration;
+    }
+  };
+
+  const handleVolumeChange = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    let pos = (e.clientX - rect.left) / rect.width;
+    
+    // Support RTL by flipping the position if document is RTL
+    if (document.documentElement.dir === "rtl") {
+      pos = 1 - pos;
+    }
+    
+    const newVol = Math.max(0, Math.min(1, pos));
+    setVolume(newVol);
+    if (newVol > 0 && isMuted) {
+      setIsMuted(false);
+    } else if (newVol === 0 && !isMuted) {
+      setIsMuted(true);
     }
   };
 
@@ -243,13 +270,33 @@ export default function GlobalPlayer() {
          {/* 3.3. Right Side Actions (Maximize & Close) */}
          <div className="absolute top-4 right-4 md:static md:justify-self-end flex items-center justify-end gap-3 text-[#5a7b9c] dark:text-[#a1a1aa]">
            
-           {/* Volume icon toggle mute */}
-           <button 
-             onClick={() => { if (audioRef.current) audioRef.current.muted = !audioRef.current.muted; }} 
-             className="hidden md:block hover:text-[#1e354d] dark:hover:text-white transition-colors"
-           >
-             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clipRule="evenodd"/></svg>
-           </button>
+           {/* Volume Control */}
+           <div className="hidden md:flex items-center gap-2 mr-2">
+             <button 
+               onClick={() => {
+                 setIsMuted(!isMuted);
+                 if (isMuted && volume === 0) setVolume(1);
+               }} 
+               className="hover:text-[#1e354d] dark:hover:text-white transition-colors"
+               title={isMuted || volume === 0 ? "إلغاء كتم الصوت" : "كتم الصوت"}
+             >
+               {isMuted || volume === 0 ? (
+                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" clipRule="evenodd"/></svg>
+               ) : volume < 0.5 ? (
+                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414z" clipRule="evenodd"/></svg>
+               ) : (
+                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clipRule="evenodd"/></svg>
+               )}
+             </button>
+             
+             {/* Volume Slider */}
+             <div className="w-20 h-1 bg-[#e2e8f0] dark:bg-[#3f3f46] rounded-full overflow-hidden cursor-pointer relative group" onClick={handleVolumeChange}>
+               <div 
+                 className="absolute top-0 left-0 h-full bg-[#1e354d] dark:bg-white group-hover:bg-[#4ade80] transition-colors" 
+                 style={{ width: `${(isMuted ? 0 : volume) * 100}%` }}
+               ></div>
+             </div>
+           </div>
            
            {/* Maximize Toggle */}
            <button onClick={toggleFullscreen} className="hidden md:flex hover:text-[#1e354d] dark:hover:text-white transition-colors" title={isMaximized ? "تصغير" : "تكبير"}>
