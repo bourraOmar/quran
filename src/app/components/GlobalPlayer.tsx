@@ -31,6 +31,34 @@ export default function GlobalPlayer() {
   const [isMuted, setIsMuted] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
   const [verses, setVerses] = useState<{ id: number; text_uthmani: string }[]>([]);
+  
+  const lyricsContainerRef = React.useRef<HTMLDivElement>(null);
+  const [isAutoScrollPaused, setIsAutoScrollPaused] = useState(false);
+  const scrollTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  // Simulated auto-scroll based on track progress
+  useEffect(() => {
+    if (showLyrics && lyricsContainerRef.current && duration > 0 && verses.length > 0 && !isAutoScrollPaused) {
+      const container = lyricsContainerRef.current;
+      const progress = currentTime / duration;
+      const scrollableDistance = container.scrollHeight - container.clientHeight;
+      
+      if (scrollableDistance > 0) {
+        container.scrollTo({
+          top: progress * scrollableDistance,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [currentTime, duration, showLyrics, verses, isAutoScrollPaused]);
+
+  const handleManualScroll = () => {
+    setIsAutoScrollPaused(true);
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = setTimeout(() => {
+      setIsAutoScrollPaused(false);
+    }, 4000); // Resume auto-scroll after 4 seconds of inactivity
+  };
 
   useEffect(() => {
     if (showLyrics && activeSurahId && verses.length === 0) {
@@ -185,6 +213,9 @@ export default function GlobalPlayer() {
           <div className="flex-1 flex flex-col items-center justify-center min-h-0 relative w-full max-w-5xl mx-auto overflow-hidden">
             {showLyrics ? (
               <div 
+                ref={lyricsContainerRef}
+                onWheel={handleManualScroll}
+                onTouchMove={handleManualScroll}
                 className="w-full h-full overflow-y-auto px-4 py-8 flex flex-col gap-12 hide-scrollbar items-center mask-image-fade"
                 dir="rtl"
               >
