@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useGlobalAudio } from "../context/GlobalAudioContext";
 
 export default function ScrollToTop() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const pathname = usePathname();
+  const { activeSurahId } = useGlobalAudio();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,8 +29,8 @@ export default function ScrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const isReciterPage = pathname.startsWith("/reciter/");
-  const bottomClass = isReciterPage 
+  const isPlayerActive = activeSurahId !== null;
+  const bottomClass = isPlayerActive 
     ? "bottom-[320px] md:bottom-[110px]" 
     : "bottom-24 md:bottom-8";
 
