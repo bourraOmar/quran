@@ -32,6 +32,26 @@ export default function GlobalPlayer() {
   const [isMuted, setIsMuted] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
   const [verses, setVerses] = useState<{ id: number; text_uthmani: string }[]>([]);
+  const lastActiveVerseId = React.useRef<number | null>(null);
+
+  // Auto-scroll logic
+  useEffect(() => {
+    if (!showLyrics || verses.length === 0 || verseTimings.length === 0) return;
+    
+    const currentTimeMs = currentTime * 1000;
+    const activeVerse = verses.find(verse => {
+      const timing = verseTimings.find(t => t.verse_key === `${activeSurahId}:${verse.id}`);
+      return timing && currentTimeMs >= timing.timestamp_from && currentTimeMs <= timing.timestamp_to;
+    });
+
+    if (activeVerse && activeVerse.id !== lastActiveVerseId.current) {
+      lastActiveVerseId.current = activeVerse.id;
+      const el = document.getElementById(`verse-${activeVerse.id}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, [currentTime, showLyrics, verses, verseTimings, activeSurahId]);
 
   useEffect(() => {
     if (showLyrics && activeSurahId && verses.length === 0) {
@@ -212,7 +232,8 @@ export default function GlobalPlayer() {
                     
                     return (
                       <p 
-                        key={verse.id} 
+                        key={verse.id}
+                        id={`verse-${verse.id}`} 
                         className={`transition-all duration-300 font-quran text-center leading-[1.8] cursor-pointer max-w-4xl ${isActive ? 'text-white text-5xl md:text-6xl lg:text-7xl font-bold drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] scale-105' : 'text-white/40 hover:text-white/80 text-4xl md:text-5xl lg:text-6xl blur-[0.5px] hover:blur-none'}`}
                       >
                         {verse.text_uthmani}
