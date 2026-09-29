@@ -176,7 +176,7 @@ export default function ReciterPlaylist({ surahs, reciter }: ReciterPlaylistProp
 
       {/* Global Fixed Player */}
       {activeSurahId && activeSurah && (
-        <div className="fixed bottom-[100px] left-1/2 -translate-x-1/2 w-11/12 max-w-[380px] bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-xl md:bg-white md:dark:bg-[#1e293b] rounded-3xl md:rounded-none border border-[#e2e8f0] dark:border-white/10 md:bottom-0 md:left-0 md:translate-x-0 md:w-full md:max-w-none p-6 md:px-12 md:py-4 flex flex-col md:flex-row items-center justify-between shadow-2xl z-40 gap-6 md:gap-4" dir="ltr">
+        <div className="fixed bottom-[100px] left-1/2 -translate-x-1/2 w-11/12 max-w-[380px] bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-xl md:bg-white md:dark:bg-[#1e293b] rounded-3xl md:rounded-none border border-[#e2e8f0] dark:border-white/10 md:bottom-0 md:left-0 md:translate-x-0 md:w-full md:max-w-none p-6 md:px-12 md:py-4 flex flex-col md:grid md:grid-cols-[1fr_2fr_1fr] items-center shadow-2xl z-40 gap-6 md:gap-4" dir="ltr">
            
            {/* Mobile Album Art (Hidden on desktop) */}
            <div className="md:hidden w-32 h-32 bg-gradient-to-br from-[#6b8ba7] to-[#4a6b8c] rounded-2xl flex items-center justify-center text-white shadow-lg mb-2">
@@ -184,7 +184,7 @@ export default function ReciterPlaylist({ surahs, reciter }: ReciterPlaylistProp
            </div>
 
            {/* Track Info */}
-           <div className="flex items-center justify-center md:justify-start gap-4 w-full md:w-auto text-center md:text-left">
+           <div className="flex items-center justify-center md:justify-self-start gap-4 w-full md:w-auto text-center md:text-left">
              <div className="hidden md:flex w-12 h-12 bg-[#6b8ba7] rounded-lg items-center justify-center text-white font-quran font-bold text-xl shrink-0">
                {activeSurah.name_arabic.replace('سورة ', '')}
              </div>
@@ -195,7 +195,7 @@ export default function ReciterPlaylist({ surahs, reciter }: ReciterPlaylistProp
            </div>
 
            {/* Progress Bar (Mobile: below title, Desktop: inline) */}
-           <div className="flex-1 w-full max-w-2xl flex flex-col items-center gap-4 md:gap-2">
+           <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 md:gap-2 md:justify-self-center">
              
              {/* Mobile Progress */}
              <div className="flex md:hidden items-center w-full gap-3 text-xs font-medium text-[#5a7b9c] dark:text-[#94a3b8] mb-2">
@@ -252,7 +252,7 @@ export default function ReciterPlaylist({ surahs, reciter }: ReciterPlaylistProp
            </div>
 
            {/* Close Button Mobile (top right absolute) and Desktop (flex inline) */}
-           <div className="absolute top-4 right-4 md:static">
+           <div className="absolute top-4 right-4 md:static md:justify-self-end">
              <button onClick={() => setActiveSurahId(null)} className="text-[#5a7b9c] dark:text-[#94a3b8] hover:text-[#1e354d] dark:text-[#f8fafc] transition-colors p-2 bg-[#f4f7f9] dark:bg-[#334155] md:bg-transparent rounded-full">
                <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
              </button>
