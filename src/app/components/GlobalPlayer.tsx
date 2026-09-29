@@ -22,28 +22,20 @@ export default function GlobalPlayer() {
     setIsPlaying
   } = useGlobalAudio();
 
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isMaximized) {
+        setIsMaximized(false);
+      }
     };
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMaximized]);
 
-  const toggleFullscreen = async () => {
-    if (!document.fullscreenElement) {
-      try {
-        await document.documentElement.requestFullscreen();
-      } catch (err) {
-        console.error("Error attempting to enable fullscreen:", err);
-      }
-    } else {
-      if (document.exitFullscreen) {
-        await document.exitFullscreen();
-      }
-    }
+  const toggleFullscreen = () => {
+    setIsMaximized(!isMaximized);
   };
 
   if (!activeSurahId || !activeSurah || !reciter) {
@@ -69,7 +61,7 @@ export default function GlobalPlayer() {
 
   return (
     <>
-      {isFullscreen ? (
+      {isMaximized ? (
         <div className="fixed inset-0 w-full h-full bg-gradient-to-b from-[#4a6b8c] to-[#0f172a] z-[100] flex flex-col p-6 md:p-12 animate-in fade-in duration-300" dir="ltr">
           {/* Top Bar */}
           <div className="flex justify-between items-center w-full mb-auto text-white/80">
