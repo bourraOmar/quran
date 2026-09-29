@@ -161,7 +161,7 @@ export default function GlobalPlayer() {
             <h2 className="text-white font-bold text-[16px] drop-shadow-sm">{activeSurah.name_simple}</h2>
             <button onClick={toggleFullscreen} className="text-white/70 hover:text-white transition-colors bg-black/10 hover:bg-black/30 p-2 rounded-full" title="Réduire la vue">
               {/* Down-right arrow / Minimize icon */}
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 11l-4 4m0 0l4 4m-4-4h14m-14 0V3" /></svg>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M3 21l7-7"/></svg>
             </button>
           </div>
 
@@ -227,7 +227,7 @@ export default function GlobalPlayer() {
            <div className="flex items-center gap-8 md:gap-6 text-[#1e354d] dark:text-white">
              {/* Shuffle Button */}
              <button onClick={toggleShuffle} className={`hidden md:block transition-colors ${isShuffling ? "text-[#4ade80]" : "text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تبديل عشوائي">
-               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12 5V2.5l5 4-5 4V8a6.002 6.002 0 00-6 6v1h-2v-1A8.003 8.003 0 0112 5zm-4 4.5l-5 4 5 4v-2.5a6.002 6.002 0 006-6v-1h2v1a8.003 8.003 0 01-8 8v-2.5z" clipRule="evenodd"/></svg>
+               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
                {isShuffling && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
              </button>
 
@@ -252,7 +252,7 @@ export default function GlobalPlayer() {
              
              {/* Repeat Button */}
              <button onClick={toggleRepeat} className={`hidden md:block transition-colors relative ${isRepeating ? "text-[#4ade80]" : "text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تكرار">
-               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd"/></svg>
+               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
                {isRepeating && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
              </button>
            </div>
@@ -301,9 +301,9 @@ export default function GlobalPlayer() {
            {/* Maximize Toggle */}
            <button onClick={toggleFullscreen} className="hidden md:flex hover:text-[#1e354d] dark:hover:text-white transition-colors" title={isMaximized ? "تصغير" : "تكبير"}>
              {isMaximized ? (
-               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 5h4v2H5V5zm4 4H5v2h4V9zm6-4h-4v2h4V5zm-4 4h4v2h-4V9z" /></svg>
+               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M3 21l7-7"/></svg>
              ) : (
-               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
+               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
              )}
            </button>
            
