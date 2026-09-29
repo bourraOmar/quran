@@ -109,6 +109,70 @@ export default async function Home() {
          </div>
       </div>
 
+      {/* Features Section */}
+      <section className="max-w-[1200px] mx-auto px-4 py-20 text-center">
+        <h2 className="text-4xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4">مميزات المنصة</h2>
+        <p className="text-[#5a7b9c] dark:text-[#94a3b8] mb-12">تجربة قرآنية متكاملة مصممة خصيصاً لراحتك</p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
+          
+          {/* Feature 1 */}
+          <div className="bg-white dark:bg-[#1e293b] p-8 rounded-3xl shadow-sm border border-[#e2e8f0] dark:border-[#334155] hover:shadow-md transition-shadow">
+            <div className="w-14 h-14 bg-[#e8edf2] dark:bg-[#334155] text-[#6b8ba7] dark:text-[#94a3b8] rounded-2xl flex items-center justify-center mb-6">
+               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+            </div>
+            <h3 className="text-xl font-bold text-[#1e354d] dark:text-[#f8fafc] mb-3">تتبع الآيات صوتياً</h3>
+            <p className="text-[#5a7b9c] dark:text-[#94a3b8] leading-relaxed">استمع للقرآن الكريم مع خاصية تظليل الآية المقروءة تلقائياً والانتقال مع القارئ آية بآية.</p>
+          </div>
+
+          {/* Feature 2 */}
+          <div className="bg-white dark:bg-[#1e293b] p-8 rounded-3xl shadow-sm border border-[#e2e8f0] dark:border-[#334155] hover:shadow-md transition-shadow">
+            <div className="w-14 h-14 bg-[#e8edf2] dark:bg-[#334155] text-[#6b8ba7] dark:text-[#94a3b8] rounded-2xl flex items-center justify-center mb-6">
+               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </div>
+            <h3 className="text-xl font-bold text-[#1e354d] dark:text-[#f8fafc] mb-3">بحث متقدم وسريع</h3>
+            <p className="text-[#5a7b9c] dark:text-[#94a3b8] leading-relaxed">ابحث عن السور والقراء بكل سهولة وسرعة باللغتين العربية والإنجليزية في وقت فعلي.</p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="bg-white dark:bg-[#1e293b] p-8 rounded-3xl shadow-sm border border-[#e2e8f0] dark:border-[#334155] hover:shadow-md transition-shadow">
+            <div className="w-14 h-14 bg-[#e8edf2] dark:bg-[#334155] text-[#6b8ba7] dark:text-[#94a3b8] rounded-2xl flex items-center justify-center mb-6">
+               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            </div>
+            <h3 className="text-xl font-bold text-[#1e354d] dark:text-[#f8fafc] mb-3">واجهة مريحة للعين</h3>
+            <p className="text-[#5a7b9c] dark:text-[#94a3b8] leading-relaxed">تصميم عصري يدعم الوضع الليلي والنهاري مع خطوط عثمانية واضحة ومقروءة على جميع الأجهزة.</p>
+          </div>
+
+          {/* Feature 4 */}
+          <div className="bg-white dark:bg-[#1e293b] p-8 rounded-3xl shadow-sm border border-[#e2e8f0] dark:border-[#334155] hover:shadow-md transition-shadow">
+            <div className="w-14 h-14 bg-[#e8edf2] dark:bg-[#334155] text-[#6b8ba7] dark:text-[#94a3b8] rounded-2xl flex items-center justify-center mb-6">
+               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+            </div>
+            <h3 className="text-xl font-bold text-[#1e354d] dark:text-[#f8fafc] mb-3">تجربة الهاتف الذكي</h3>
+            <p className="text-[#5a7b9c] dark:text-[#94a3b8] leading-relaxed">تصفح الموقع كأنه تطبيق في هاتفك بفضل القائمة العائمة ومشغل الصوت المدمج.</p>
+          </div>
+
+          {/* Feature 5 */}
+          <div className="bg-white dark:bg-[#1e293b] p-8 rounded-3xl shadow-sm border border-[#e2e8f0] dark:border-[#334155] hover:shadow-md transition-shadow">
+            <div className="w-14 h-14 bg-[#e8edf2] dark:bg-[#334155] text-[#6b8ba7] dark:text-[#94a3b8] rounded-2xl flex items-center justify-center mb-6">
+               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+            </div>
+            <h3 className="text-xl font-bold text-[#1e354d] dark:text-[#f8fafc] mb-3">مئات القراء</h3>
+            <p className="text-[#5a7b9c] dark:text-[#94a3b8] leading-relaxed">مكتبة صوتية ضخمة تضم تلاوات لمئات القراء المشاهير بروايات متعددة (مرتل ومجود).</p>
+          </div>
+
+          {/* Feature 6 */}
+          <div className="bg-white dark:bg-[#1e293b] p-8 rounded-3xl shadow-sm border border-[#e2e8f0] dark:border-[#334155] hover:shadow-md transition-shadow">
+            <div className="w-14 h-14 bg-[#e8edf2] dark:bg-[#334155] text-[#6b8ba7] dark:text-[#94a3b8] rounded-2xl flex items-center justify-center mb-6">
+               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
+            </div>
+            <h3 className="text-xl font-bold text-[#1e354d] dark:text-[#f8fafc] mb-3">ترجمة وتفسير</h3>
+            <p className="text-[#5a7b9c] dark:text-[#94a3b8] leading-relaxed">اقرأ الآيات مع ترجمة المعاني، مما يسهل فهم وتدبر القرآن الكريم لغير الناطقين بالعربية.</p>
+          </div>
+
+        </div>
+      </section>
+
       {/* Surah Grid Section */}
       <section id="surahs" className="max-w-[1200px] mx-auto px-4 py-20 text-center">
         <h2 className="text-4xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-12">ابدأ رحلة<br/>التنوير</h2>
