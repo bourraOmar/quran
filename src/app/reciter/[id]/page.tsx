@@ -43,6 +43,29 @@ async function getReciterInfo(id: string) {
   return reciter;
 }
 
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const { id } = params;
+  try {
+    const res = await fetch(`https://www.mp3quran.net/api/v3/reciters?language=ar&reciter=${id}`);
+    const data = await res.json();
+    const reciterName = data.reciters[0].name;
+    
+    return {
+      title: `تلاوات ${reciterName}`,
+      description: `استمع إلى جميع سور القرآن الكريم بصوت القارئ ${reciterName}.`,
+      openGraph: {
+        title: `القارئ ${reciterName} | القرآن الكريم`,
+        description: `القرآن الكريم كاملاً بصوت ${reciterName}.`,
+      },
+    };
+  } catch (error) {
+    return {
+      title: `القارئ`,
+    };
+  }
+}
+
 export default async function ReciterPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   const surahs = await getSurahs();

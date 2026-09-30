@@ -46,6 +46,29 @@ async function getSurahData(id: string) {
   return { chapter, verses };
 }
 
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const { id } = params;
+  try {
+    const chapterRes = await fetch(`https://api.quran.com/api/v4/chapters/${id}`);
+    const chapterJson = await chapterRes.json();
+    const chapterName = chapterJson.chapter.name_arabic;
+    
+    return {
+      title: `سورة ${chapterName}`,
+      description: `اقرأ واستمع إلى سورة ${chapterName} مع التفسير الميسر والمزامنة التلقائية.`,
+      openGraph: {
+        title: `سورة ${chapterName} | القرآن الكريم`,
+        description: `اقرأ واستمع إلى سورة ${chapterName} من القرآن الكريم.`,
+      },
+    };
+  } catch (error) {
+    return {
+      title: `سورة ${id}`,
+    };
+  }
+}
+
 export default async function SurahPage({
   params,
   searchParams,
