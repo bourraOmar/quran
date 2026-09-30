@@ -40,9 +40,6 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // Track if audio has been interacted with (to show mobile sticky bar)
-  const [hasStarted, setHasStarted] = useState(false);
-
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // 1. Fetch Reciters
@@ -71,7 +68,6 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
     setCurrentTime(0);
     setDuration(0);
     setIsPlaying(false);
-    setHasStarted(false);
     if (onVerseChange) onVerseChange(null);
     
     if (audioRef.current) {
@@ -123,7 +119,6 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      setHasStarted(true);
       setIsPlaying(true);
       audioRef.current.play().catch(() => {
         // Silently ignore browser audio play exceptions (AbortError, NotSupportedError)
@@ -163,190 +158,112 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  // Get the current reciter name
-  const currentReciter = allReciters.find(r => r.id === selectedReciterId);
-  const reciterName = currentReciter?.translated_name?.name || "القارئ";
-
   return (
-    <>
-      {/* ===== SIDEBAR PLAYER (visible on desktop, hidden on mobile when playing) ===== */}
-      <div className="flex flex-col items-center justify-between gap-6 w-full">
+    <div className="flex flex-col items-center justify-between gap-6 w-full">
+      
+      {/* Top Row: Style Toggle & Reciter Select */}
+      <div className="flex flex-col items-center gap-6 w-full justify-between">
         
-        {/* Top Row: Reciter Select */}
-        <div className="flex flex-col items-center gap-6 w-full justify-between">
-          
 
-          {/* Reciter Dropdown */}
-          <div className="text-right w-full md:w-auto flex-1 md:flex-none">
-            <p className="text-sm text-[#4a6b8c] dark:text-[#94a3b8] font-medium mb-1">القارئ</p>
-            <div className="relative inline-block w-full md:w-64">
-              <select
-                className="bg-transparent text-[#1e354d] dark:text-[#f8fafc] font-bold text-lg md:text-xl outline-none cursor-pointer border-b border-[#e2e8f0] dark:border-[#334155] pb-1 pr-8 w-full hover:border-[#6b8ba7] transition-colors appearance-none text-right"
-                value={selectedReciterId}
-                onChange={(e) => setSelectedReciterId(Number(e.target.value))}
-                disabled={availableReciters.length === 0}
-                dir="rtl"
-              >
-                {allReciters.length === 0 && <option className="bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-[#f8fafc]">جاري التحميل...</option>}
-                {availableReciters.map((r) => {
-                  return (
-                    <option key={r.id} value={r.id} className="bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-[#f8fafc]">
-                      {r.translated_name.name}
-                    </option>
-                  );
-                })}
-              </select>
-              {/* Dropdown arrow */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-[#395675] dark:text-[#94a3b8]">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-              </div>
+
+        {/* Reciter Dropdown */}
+        <div className="text-right w-full md:w-auto flex-1 md:flex-none">
+          <p className="text-sm text-[#4a6b8c] dark:text-[#94a3b8] font-medium mb-1">القارئ</p>
+          <div className="relative inline-block w-full md:w-64">
+            <select
+              className="bg-transparent text-[#1e354d] dark:text-[#f8fafc] font-bold text-lg md:text-xl outline-none cursor-pointer border-b border-[#e2e8f0] dark:border-[#334155] pb-1 pr-8 w-full hover:border-[#6b8ba7] transition-colors appearance-none text-right"
+              value={selectedReciterId}
+              onChange={(e) => setSelectedReciterId(Number(e.target.value))}
+              disabled={availableReciters.length === 0}
+              dir="rtl"
+            >
+              {allReciters.length === 0 && <option className="bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-[#f8fafc]">جاري التحميل...</option>}
+              {availableReciters.map((r) => {
+                return (
+                  <option key={r.id} value={r.id} className="bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-[#f8fafc]">
+                    {r.translated_name.name}
+                  </option>
+                );
+              })}
+            </select>
+            {/* Dropdown arrow */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-[#395675] dark:text-[#94a3b8]">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </div>
           </div>
         </div>
-
-        {/* Audio Controls (always visible in sidebar on desktop) */}
-        <div className="w-full flex items-center gap-2 bg-[#f4f7f9] dark:bg-[#0f172a] rounded-full p-2 px-4 border border-[#e2e8f0] dark:border-[#334155]" dir="ltr">
-           <span className="text-xs font-medium text-[#4a6b8c] dark:text-[#94a3b8] shrink-0 w-8 text-center">
-              {audioMode === "verse" ? `${currentVerseIndex + 1}/${verseAudios.length || 0}` : formatTime(currentTime)}
-           </span>
-           
-           <div 
-              className={`flex-1 h-2 bg-[#d8e2eb] dark:bg-[#334155] rounded-full relative overflow-hidden ${audioMode === "full" ? "cursor-pointer" : ""}`}
-              onClick={(e) => {
-                if (audioMode === "full" && audioRef.current && duration) {
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  const pos = (e.clientX - rect.left) / rect.width;
-                  audioRef.current.currentTime = pos * duration;
-                }
-              }}
-           >
-              <div 
-                className="absolute left-0 top-0 h-full bg-[#4a6b8c] rounded-full transition-all duration-100"
-                style={{ width: audioMode === "full" ? (duration ? `${(currentTime / duration) * 100}%` : '0%') : (verseAudios.length ? `${((currentVerseIndex) / verseAudios.length) * 100}%` : '0%') }}
-              ></div>
-           </div>
-           
-           {audioMode === "full" && (
-             <span className="text-xs font-medium text-[#4a6b8c] dark:text-[#94a3b8] shrink-0 w-8 text-center">
-                {formatTime(duration)}
-             </span>
-           )}
-           
-           {/* Previous Verse Button (Murattal only) */}
-           {audioMode === "verse" && (
-             <button 
-               onClick={() => {
-                 if (currentVerseIndex > 0) {
-                   setCurrentVerseIndex(prev => prev - 1);
-                 }
-               }}
-               disabled={currentVerseIndex === 0}
-               className="text-[#395675] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
-             >
-               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
-             </button>
-           )}
-
-           <button 
-             onClick={togglePlay}
-             disabled={!currentAudioUrl}
-             className="w-10 h-10 bg-[#4a6b8c] rounded-full flex items-center justify-center text-white hover:bg-[#537592] transition-colors shrink-0 disabled:opacity-50 shadow-md shadow-[#6b8ba7]/20 mx-1"
-           >
-              {isPlaying ? (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
-              ) : (
-                <svg className="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
-              )}
-           </button>
-
-           {/* Next Verse Button (Murattal only) */}
-           {audioMode === "verse" && (
-             <button 
-               onClick={() => {
-                 if (currentVerseIndex < verseAudios.length - 1) {
-                   setCurrentVerseIndex(prev => prev + 1);
-                 }
-               }}
-               disabled={currentVerseIndex === verseAudios.length - 1 || verseAudios.length === 0}
-               className="text-[#395675] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
-             >
-               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
-             </button>
-           )}
-        </div>
       </div>
 
-      {/* ===== MOBILE STICKY BOTTOM PLAYER (only when playing/started) ===== */}
-      {hasStarted && (
-        <div 
-          className="md:hidden fixed bottom-[90px] left-1/2 -translate-x-1/2 w-11/12 max-w-[350px] bg-[#1e293b]/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-lg z-[45] flex items-center gap-3 px-3 py-2 h-[60px]"
-          dir="ltr"
-        >
-          {/* Progress bar at top */}
-          <div className="absolute top-0 left-2 right-2 h-0.5 bg-white/10 rounded-full overflow-hidden">
+      {/* Audio Controls */}
+      <div className="w-full flex items-center gap-2 bg-[#f4f7f9] dark:bg-[#0f172a] rounded-full p-2 px-4 border border-[#e2e8f0] dark:border-[#334155]" dir="ltr">
+         <span className="text-xs font-medium text-[#4a6b8c] dark:text-[#94a3b8] shrink-0 w-8 text-center">
+            {audioMode === "verse" ? `${currentVerseIndex + 1}/${verseAudios.length || 0}` : formatTime(currentTime)}
+         </span>
+         
+         <div 
+            className={`flex-1 h-2 bg-[#d8e2eb] dark:bg-[#334155] rounded-full relative overflow-hidden ${audioMode === "full" ? "cursor-pointer" : ""}`}
+            onClick={(e) => {
+              if (audioMode === "full" && audioRef.current && duration) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                audioRef.current.currentTime = pos * duration;
+              }
+            }}
+         >
             <div 
-              className="h-full bg-[#4a6b8c]" 
-              style={{ width: verseAudios.length ? `${((currentVerseIndex + 1) / verseAudios.length) * 100}%` : '0%' }}
+              className="absolute left-0 top-0 h-full bg-[#4a6b8c] rounded-full transition-all duration-100"
+              style={{ width: audioMode === "full" ? (duration ? `${(currentTime / duration) * 100}%` : '0%') : (verseAudios.length ? `${((currentVerseIndex) / verseAudios.length) * 100}%` : '0%') }}
             ></div>
-          </div>
+         </div>
+         
+         {audioMode === "full" && (
+           <span className="text-xs font-medium text-[#4a6b8c] dark:text-[#94a3b8] shrink-0 w-8 text-center">
+              {formatTime(duration)}
+           </span>
+         )}
+         
+         {/* Previous Verse Button (Murattal only) */}
+         {audioMode === "verse" && (
+           <button 
+             onClick={() => {
+               if (currentVerseIndex > 0) {
+                 setCurrentVerseIndex(prev => prev - 1);
+               }
+             }}
+             disabled={currentVerseIndex === 0}
+             className="text-[#395675] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
+           >
+             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
+           </button>
+         )}
 
-          {/* Verse Counter */}
-          <span className="text-xs font-medium text-white/50 shrink-0 w-10 text-center">
-            {currentVerseIndex + 1}/{verseAudios.length || 0}
-          </span>
-
-          {/* Reciter Name */}
-          <div className="flex-1 truncate text-right">
-            <p className="text-xs text-white/70 truncate font-medium">{reciterName}</p>
-            <p className="text-[10px] text-white/40 truncate">مرتل (مع التتبع)</p>
-          </div>
-
-          {/* Prev */}
-          <button 
-            onClick={() => { if (currentVerseIndex > 0) setCurrentVerseIndex(prev => prev - 1); }}
-            disabled={currentVerseIndex === 0}
-            className="text-white/70 hover:text-white disabled:opacity-30 transition-colors shrink-0"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
-          </button>
-
-          {/* Play/Pause */}
-          <button 
-            onClick={togglePlay}
-            disabled={!currentAudioUrl}
-            className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#0f172a] hover:scale-105 transition-all shrink-0 shadow-md disabled:opacity-50"
-          >
+         <button 
+           onClick={togglePlay}
+           disabled={!currentAudioUrl}
+           className="w-10 h-10 bg-[#4a6b8c] rounded-full flex items-center justify-center text-white hover:bg-[#537592] transition-colors shrink-0 disabled:opacity-50 shadow-md shadow-[#6b8ba7]/20 mx-1"
+         >
             {isPlaying ? (
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
             ) : (
               <svg className="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
             )}
-          </button>
+         </button>
 
-          {/* Next */}
-          <button 
-            onClick={() => { if (currentVerseIndex < verseAudios.length - 1) setCurrentVerseIndex(prev => prev + 1); }}
-            disabled={currentVerseIndex === verseAudios.length - 1 || verseAudios.length === 0}
-            className="text-white/70 hover:text-white disabled:opacity-30 transition-colors shrink-0"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
-          </button>
-
-          {/* Close */}
-          <button 
-            onClick={() => {
-              setIsPlaying(false);
-              setHasStarted(false);
-              setCurrentVerseIndex(0);
-              if (audioRef.current) audioRef.current.pause();
-              if (onVerseChange) onVerseChange(null);
-            }}
-            className="text-white/40 hover:text-white/70 transition-colors shrink-0"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-        </div>
-      )}
+         {/* Next Verse Button (Murattal only) */}
+         {audioMode === "verse" && (
+           <button 
+             onClick={() => {
+               if (currentVerseIndex < verseAudios.length - 1) {
+                 setCurrentVerseIndex(prev => prev + 1);
+               }
+             }}
+             disabled={currentVerseIndex === verseAudios.length - 1 || verseAudios.length === 0}
+             className="text-[#395675] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
+           >
+             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
+           </button>
+         )}
+      </div>
 
       {/* Hidden Audio Tag */}
       {currentAudioUrl && (
@@ -364,6 +281,6 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
           onLoadedMetadata={handleTimeUpdate}
         />
       )}
-    </>
+    </div>
   );
 }

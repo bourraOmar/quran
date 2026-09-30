@@ -48,20 +48,10 @@ export default function SurahReader({
   }, [activeVerseKey]);
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 md:gap-12 w-full">
+    <div className="flex flex-col md:flex-row gap-12 w-full">
       
-      {/* MOBILE ONLY: Sticky Audio Player at top */}
-      <div className="md:hidden sticky top-0 z-30 bg-[#f4f7f9]/95 dark:bg-[#0f172a]/95 backdrop-blur-md -mx-4 px-4 py-3 border-b border-[#e2e8f0] dark:border-[#334155]">
-        <div className="bg-white dark:bg-[#1e293b] rounded-2xl border border-[#e2e8f0] dark:border-[#334155] p-4 shadow-sm">
-          <AudioPlayer 
-            chapterId={chapter.id.toString()} 
-            onVerseChange={handleVerseChange} 
-          />
-        </div>
-      </div>
-
-      {/* Right Sidebar - Sticky (DESKTOP ONLY) */}
-      <div className="hidden md:block w-[350px] shrink-0">
+      {/* Right Sidebar - Sticky */}
+      <div className="w-full md:w-[350px] shrink-0">
         <div className="sticky top-8 flex flex-col gap-6">
            
            {/* Menu Box */}
