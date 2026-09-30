@@ -31,7 +31,7 @@ export default function ScrollToTop() {
 
   const isPlayerActive = activeSurahId !== null;
   const bottomClass = isPlayerActive 
-    ? "bottom-[320px] md:bottom-[110px]" 
+    ? "bottom-[170px] md:bottom-[110px]" 
     : "bottom-24 md:bottom-8";
 
   return (

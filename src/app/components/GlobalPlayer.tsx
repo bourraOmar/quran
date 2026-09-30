@@ -363,11 +363,11 @@ export default function GlobalPlayer() {
       {/* 3. ALWAYS-VISIBLE BOTTOM PLAYER BAR (Spotify standard player)         */}
       {/* ---------------------------------------------------------------------- */}
       <div 
-        className={`fixed bottom-[80px] md:bottom-0 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-[95%] md:w-full max-w-[450px] md:max-w-none 
+        className={`fixed bottom-[90px] md:bottom-0 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-11/12 md:w-full max-w-[350px] md:max-w-none 
           bg-[#f8fafc] dark:bg-[#1e293b] md:dark:bg-[#0f172a] 
           rounded-xl md:rounded-none border border-[#e2e8f0] dark:border-white/10 md:border-t md:border-x-0 md:border-b-0
           shadow-lg md:shadow-none z-40 
-          h-[60px] md:h-[90px]
+          h-[65px] md:h-[90px]
           flex items-center px-3 md:px-6 py-2 md:py-3
           md:grid md:grid-cols-[1fr_2fr_1fr] md:gap-4
           ${isMaximized ? 'hidden md:grid' : 'flex'}
@@ -401,7 +401,7 @@ export default function GlobalPlayer() {
          </div>
 
          {/* MOBILE ONLY: Play & Close Buttons (Right side of mini player) */}
-         <div className="md:hidden flex items-center gap-3 ml-auto shrink-0 text-[#1e354d] dark:text-white">
+         <div className="md:hidden flex items-center gap-5 ml-auto shrink-0 text-[#1e354d] dark:text-white">
            <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity">
              {isPlaying ? (
                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
