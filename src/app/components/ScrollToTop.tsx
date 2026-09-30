@@ -30,7 +30,9 @@ export default function ScrollToTop() {
   };
 
   const isPlayerActive = activeSurahId !== null;
-  const bottomClass = isPlayerActive 
+  const isSurahPage = pathname.startsWith('/surah/');
+  
+  const bottomClass = (isPlayerActive || isSurahPage)
     ? "bottom-[170px] md:bottom-[110px]" 
     : "bottom-24 md:bottom-8";
 
