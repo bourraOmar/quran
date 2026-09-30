@@ -7,7 +7,7 @@ export default function FloatingMobileMenu() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/90 dark:bg-[#0f172a]/95 backdrop-blur-md px-6 py-3 rounded-full flex items-center justify-between shadow-2xl border border-[#e2e8f0] dark:border-white/10 z-50 md:hidden w-11/12 max-w-[350px]">
+    <div className="fixed bottom-6 left-4 right-[76px] md:left-1/2 md:right-auto md:-translate-x-1/2 bg-white/90 dark:bg-[#0f172a]/95 backdrop-blur-md px-6 py-3 rounded-full flex items-center justify-between shadow-2xl border border-[#e2e8f0] dark:border-white/10 z-50 md:hidden w-auto md:w-11/12 md:max-w-[350px]">
       
       {/* Home */}
       <Link href="/" aria-label="الرئيسية" className={`p-2 rounded-full flex items-center justify-center transition-all ${pathname === "/" ? "bg-[#4a6b8c] text-white" : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"}`}>
