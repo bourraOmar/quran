@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://quran-project.vercel.app'; // Replace with actual domain later
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://quran-al-karim.vercel.app';
 
   // 1. Static Routes
   const staticRoutes = [

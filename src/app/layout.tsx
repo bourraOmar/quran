@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'القرآن الكريم - استماع وقراءة وتفسير',
     description: 'استمع واقرأ القرآن الكريم مع خاصية التتبع الآلي والتفسير الميسر.',
-    url: 'https://quran-project.vercel.app',
+    url: 'https://quran-al-karim.vercel.app',
     siteName: 'القرآن الكريم',
     locale: 'ar_SA',
     type: 'website',

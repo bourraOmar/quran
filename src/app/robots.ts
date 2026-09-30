@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://quran-project.vercel.app'; // Replace with actual domain later
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://quran-al-karim.vercel.app';
 
   return {
     rules: {
