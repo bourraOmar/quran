@@ -32,7 +32,7 @@ async function getReciterInfo(id: string) {
         reciter = {
           id: m.id,
           reciter_id: r.id,
-          name: r.name,
+          reciter_name: r.name,
           style: m.name,
           server: m.server,
           surah_list: m.surah_list

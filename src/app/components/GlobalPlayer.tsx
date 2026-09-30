@@ -33,6 +33,14 @@ export default function GlobalPlayer() {
   const [showLyrics, setShowLyrics] = useState(false);
   const [verses, setVerses] = useState<{ id: number; verse_key: string; text_uthmani: string }[]>([]);
   const lastActiveVerseId = React.useRef<number | null>(null);
+  const activeVerseRef = React.useRef<any>(null);
+
+  
+  React.useEffect(() => {
+    if (activeVerseRef.current && showLyrics) {
+      activeVerseRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [currentTime, showLyrics]);
 
   // Auto-scroll logic
   useEffect(() => {
@@ -41,7 +49,13 @@ export default function GlobalPlayer() {
     const currentTimeMs = currentTime * 1000;
     const activeVerse = verses.find(verse => {
       const timing = verseTimings.find(t => t.verse_key === verse.verse_key);
-      return timing && currentTimeMs >= timing.timestamp_from && currentTimeMs <= timing.timestamp_to;
+      const index = verseTimings.findIndex(t => t.verse_key === verse.verse_key);
+      const nextTiming = verseTimings[index + 1];
+      
+      if (!timing) return false;
+      
+      // Active if current time is past this verse's start, AND (there is no next verse, or current time is before next verse's start)
+      return currentTimeMs >= timing.timestamp_from && (!nextTiming || currentTimeMs < nextTiming.timestamp_from);
     });
 
     if (activeVerse && activeVerse.id !== lastActiveVerseId.current) {
@@ -228,13 +242,16 @@ export default function GlobalPlayer() {
                 {verses.length > 0 ? (
                   verses.map((verse) => {
                     const timing = verseTimings.find(t => t.verse_key === verse.verse_key);
+                    const index = verseTimings.findIndex(t => t.verse_key === verse.verse_key);
+                    const nextTiming = verseTimings[index + 1];
                     const currentTimeMs = currentTime * 1000;
-                    const isActive = timing && currentTimeMs >= timing.timestamp_from && currentTimeMs <= timing.timestamp_to;
+                    
+                    const isActive = timing && currentTimeMs >= timing.timestamp_from && (!nextTiming || currentTimeMs < nextTiming.timestamp_from);
                     
                     return (
                       <p 
                         key={verse.id}
-                        id={`verse-${verse.id}`} 
+                        id={`verse-${verse.id}`} ref={isActive ? (activeVerseRef as any) : null} 
                         className={`transition-all duration-500 font-quran text-center leading-[1.8] cursor-pointer w-full text-5xl md:text-6xl lg:text-7xl ${isActive ? 'text-white font-bold drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-white/30 hover:text-white/60 blur-[1px] hover:blur-none'}`}
                       >
                         {verse.text_uthmani}
