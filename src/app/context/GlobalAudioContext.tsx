@@ -29,6 +29,7 @@ interface GlobalAudioContextType {
   duration: number;
   audioRef: React.RefObject<HTMLAudioElement | null>;
   verseTimings: { verse_key: string; timestamp_from: number; timestamp_to: number; duration: number }[];
+  isTimingLoading: boolean;
   
   isRepeating: boolean;
   isShuffling: boolean;
@@ -59,6 +60,7 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [verseTimings, setVerseTimings] = useState<{ verse_key: string; timestamp_from: number; timestamp_to: number; duration: number }[]>([]);
+  const [isTimingLoading, setIsTimingLoading] = useState(false);
 
   useEffect(() => {
     if (!activeSurahId || !reciter) return;
@@ -74,6 +76,7 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
     setAudioUrl(`${reciter.server}${paddedId}.mp3`);
     
     // Fetch mp3quran timing
+    setIsTimingLoading(true);
     fetch(`https://www.mp3quran.net/api/v3/ayat_timing?read=${reciter.id}&surah=${activeSurahId}`)
       .then(res => res.json())
       .then(data => {
@@ -87,7 +90,8 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
           setVerseTimings(mappedTimings);
         }
       })
-      .catch(err => console.error("Failed to fetch timing:", err));
+      .catch(err => console.error("Failed to fetch timing:", err))
+      .finally(() => setIsTimingLoading(false));
   }, [activeSurahId, reciter]);
 
   const [surahs, setSurahs] = useState<Chapter[]>([]);
@@ -176,7 +180,7 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
 
   return (
     <GlobalAudioContext.Provider value={{
-      activeSurahId, activeSurah, reciter, isPlaying, audioUrl, currentTime, duration, audioRef, verseTimings,
+      activeSurahId, activeSurah, reciter, isPlaying, audioUrl, currentTime, duration, audioRef, verseTimings, isTimingLoading,
       isRepeating, isShuffling, toggleRepeat, toggleShuffle,
       playSurah, closePlayer, togglePlay, playNext, playPrev, handleTimeUpdate, handleEnded, setIsPlaying
     }}>

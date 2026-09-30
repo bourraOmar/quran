@@ -24,7 +24,8 @@ export default function GlobalPlayer() {
     isShuffling,
     toggleRepeat,
     toggleShuffle,
-    verseTimings
+    verseTimings,
+    isTimingLoading
   } = useGlobalAudio();
 
   const [isMaximized, setIsMaximized] = useState(false);
@@ -36,7 +37,16 @@ export default function GlobalPlayer() {
   const activeVerseRef = React.useRef<any>(null);
 
   
-  React.useEffect(() => {
+  const hasTimings = verseTimings.length > 0;
+  const showLyricsButton = hasTimings || isTimingLoading;
+
+  useEffect(() => {
+    if (!showLyricsButton && showLyrics) {
+      setShowLyrics(false);
+    }
+  }, [showLyricsButton, showLyrics]);
+
+  useEffect(() => {
     if (activeVerseRef.current && showLyrics) {
       activeVerseRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
