@@ -236,7 +236,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
              disabled={currentVerseIndex === 0}
              className="text-[#395675] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
            >
-             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" /></svg>
+             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
            </button>
          )}
 
@@ -246,9 +246,9 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
            className="w-10 h-10 bg-[#4a6b8c] rounded-full flex items-center justify-center text-white hover:bg-[#537592] transition-colors shrink-0 disabled:opacity-50 shadow-md shadow-[#6b8ba7]/20 mx-1"
          >
             {isPlaying ? (
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
             ) : (
-              <svg className="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg className="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
             )}
          </button>
 
@@ -263,7 +263,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
              disabled={currentVerseIndex === verseAudios.length - 1 || verseAudios.length === 0}
              className="text-[#395675] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
            >
-             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16 6h2v12h-2zm-10 6l8.5-6v12z" /></svg>
+             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
            </button>
          )}
       </div>
@@ -310,7 +310,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
             disabled={currentVerseIndex === 0}
             className="text-[#395675] dark:text-[#94a3b8] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
           >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" /></svg>
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
           </button>
 
           {/* Play/Pause */}
@@ -320,9 +320,9 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
             className="w-10 h-10 bg-[#4a6b8c] rounded-full flex items-center justify-center text-white hover:bg-[#537592] transition-colors shrink-0 disabled:opacity-50 shadow-md shadow-[#6b8ba7]/20 mx-1"
           >
             {isPlaying ? (
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
             ) : (
-              <svg className="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg className="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
             )}
           </button>
 
@@ -332,7 +332,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
             disabled={currentVerseIndex === verseAudios.length - 1 || verseAudios.length === 0}
             className="text-[#395675] dark:text-[#94a3b8] hover:text-[#537592] disabled:opacity-30 transition-colors shrink-0"
           >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16 6h2v12h-2zm-10 6l8.5-6v12z" /></svg>
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
           </button>
         </div>
       )}
