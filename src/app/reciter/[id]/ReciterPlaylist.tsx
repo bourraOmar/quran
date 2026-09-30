@@ -13,9 +13,11 @@ interface Chapter {
 
 interface Reciter {
   id: number;
-  name: string;
-  style: { name: string } | null;
-  translated_name?: { name: string };
+  reciter_id: number;
+  reciter_name: string;
+  style: string;
+  server: string;
+  surah_list: string;
 }
 
 interface ReciterPlaylistProps {
@@ -36,10 +38,10 @@ export default function ReciterPlaylist({ surahs, reciter }: ReciterPlaylistProp
         <div className="text-right flex-1">
           <p className="uppercase text-sm font-bold text-[#1e354d] dark:text-[#f8fafc]/80 mb-2">قائمة التشغيل</p>
           <h1 className="text-5xl md:text-7xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4 drop-shadow-sm leading-tight">
-            {reciter.translated_name?.name || reciter.name}
+            {reciter.reciter_name}
           </h1>
           <p className="text-[#1e354d] dark:text-[#f8fafc]/80 text-lg font-medium">
-            برواية {(reciter.style?.name) || "حفص عن عاصم"} • {surahs.length} سورة
+            برواية {reciter.style || 'حفص عن عاصم'} • {surahs.length} سورة
           </p>
         </div>
       </div>

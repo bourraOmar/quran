@@ -19,21 +19,28 @@ async function getSurahs(): Promise<Chapter[]> {
 }
 
 async function getReciterInfo(id: string) {
-  const res = await fetch("https://api.qurancdn.com/api/qdc/audio/reciters?locale=ar", {
+  const res = await fetch("https://www.mp3quran.net/api/v3/reciters?language=ar", {
     next: { revalidate: 3600 },
   });
   if (!res.ok) return null;
   const json = await res.json();
   
-  const reciterData = json.reciters.find((r: any) => r.id.toString() === id);
-  if (!reciterData) return null;
-
-  return {
-    id: reciterData.id,
-    name: reciterData.translated_name?.name || reciterData.name,
-    style: reciterData.style || null,
-    translated_name: reciterData.translated_name
-  };
+  let reciter: any = null;
+  json.reciters.forEach((r: any) => {
+    r.moshaf.forEach((m: any) => {
+      if (m.id.toString() === id) {
+        reciter = {
+          id: m.id,
+          reciter_id: r.id,
+          name: r.name,
+          style: m.name,
+          server: m.server,
+          surah_list: m.surah_list
+        };
+      }
+    });
+  });
+  return reciter;
 }
 
 export default async function ReciterPage({ params }: { params: Promise<{ id: string }> }) {

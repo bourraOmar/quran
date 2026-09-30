@@ -166,7 +166,7 @@ export default function GlobalPlayer() {
                <span className="font-quran text-7xl leading-none drop-shadow-xl z-10">{activeSurah.name_arabic.replace('سورة ', '')}</span>
             </div>
             <h1 className="text-3xl font-bold text-white mb-3 text-center">{activeSurah.name_simple}</h1>
-            <p className="text-lg text-white/70 text-center font-medium">{reciter.translated_name?.name || reciter.name}</p>
+            <p className="text-lg text-white/70 text-center font-medium">{reciter.reciter_name}</p>
           </div>
 
           {/* Bottom Controls */}
@@ -298,7 +298,7 @@ export default function GlobalPlayer() {
            {/* Title & Artist */}
            <div className="flex flex-col justify-center cursor-pointer group" onClick={toggleFullscreen}>
              <h4 className="font-bold text-[#1e354d] dark:text-white text-lg md:text-[14px] leading-tight group-hover:underline">{activeSurah.name_simple}</h4>
-             <p className="text-sm md:text-[11px] text-[#5a7b9c] dark:text-[#a1a1aa] mt-1 md:mt-0.5 group-hover:underline group-hover:text-white transition-colors">{reciter.translated_name?.name || reciter.name}</p>
+             <p className="text-sm md:text-[11px] text-[#5a7b9c] dark:text-[#a1a1aa] mt-1 md:mt-0.5 group-hover:underline group-hover:text-white transition-colors">{reciter.reciter_name}</p>
            </div>
          </div>
 

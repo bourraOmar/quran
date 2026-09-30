@@ -12,9 +12,11 @@ export interface Chapter {
 
 export interface Reciter {
   id: number;
-  name: string;
-  style: { name: string } | null;
-  translated_name?: { name: string };
+  reciter_id: number;
+  reciter_name: string;
+  style: string;
+  server: string;
+  surah_list: string;
 }
 
 interface GlobalAudioContextType {
@@ -68,16 +70,24 @@ export function GlobalAudioProvider({ children }: { children: React.ReactNode })
     setIsPlaying(false);
     if (audioRef.current) audioRef.current.pause();
 
-    fetch(`https://api.qurancdn.com/api/qdc/audio/reciters/${reciter.id}/audio_files?chapter=${activeSurahId}&segments=true`)
+    const paddedId = activeSurahId.toString().padStart(3, "0");
+    setAudioUrl(`${reciter.server}${paddedId}.mp3`);
+    
+    // Fetch mp3quran timing
+    fetch(`https://www.mp3quran.net/api/v3/ayat_timing?read=${reciter.id}&surah=${activeSurahId}`)
       .then(res => res.json())
       .then(data => {
-        if (data.audio_files && data.audio_files.length > 0) {
-          const file = data.audio_files[0];
-          setAudioUrl(file.audio_url);
-          setVerseTimings(file.verse_timings || []);
+        if (Array.isArray(data) && data.length > 0) {
+          const mappedTimings = data.map((t: any) => ({
+            verse_key: `${activeSurahId}:${t.ayah}`,
+            timestamp_from: t.start_time,
+            timestamp_to: t.end_time,
+            duration: t.end_time - t.start_time
+          }));
+          setVerseTimings(mappedTimings);
         }
       })
-      .catch(err => console.error("Failed to fetch audio info:", err));
+      .catch(err => console.error("Failed to fetch timing:", err));
   }, [activeSurahId, reciter]);
 
   const [surahs, setSurahs] = useState<Chapter[]>([]);
