@@ -33,12 +33,12 @@ async function getSurahData(id: string) {
   const versesJson = await versesRes.json();
   const verses: Verse[] = versesJson.verses;
 
-  const transRes = await fetch(`https://api.quran.com/api/v4/quran/translations/131?chapter_number=${id}`, { next: { revalidate: 3600 } });
+  const transRes = await fetch(`https://api.quran.com/api/v4/tafsirs/16/by_chapter/${id}`, { next: { revalidate: 3600 } });
   if (transRes.ok) {
     const transJson = await transRes.json();
     verses.forEach((verse, index) => {
-      if (transJson.translations[index]) {
-        verse.translation = transJson.translations[index].text;
+      if (transJson.tafsirs[index]) {
+        verse.translation = transJson.tafsirs[index].text;
       }
     });
   }

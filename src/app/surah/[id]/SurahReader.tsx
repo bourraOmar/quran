@@ -62,7 +62,7 @@ export default function SurahReader({
                <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">استماع للسورة</li>
                <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">
                  <Link href={`/surah/${chapter.id}?showTranslation=${isTranslationEnabled ? 'false' : 'true'}`}>
-                   {isTranslationEnabled ? "إخفاء الترجمة" : "إظهار الترجمة"}
+                   {isTranslationEnabled ? "إخفاء التفسير" : "إظهار التفسير"}
                  </Link>
                </li>
                <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">
@@ -133,7 +133,7 @@ export default function SurahReader({
                     )}
                   </div>
                   {verse.translation && (
-                    <div className="text-lg text-[#5a7b9c] dark:text-[#94a3b8] font-sans pt-4" dir="ltr" dangerouslySetInnerHTML={{ __html: verse.translation }} />
+                    <div className="text-lg text-[#5a7b9c] dark:text-[#94a3b8] font-sans pt-4" dir="rtl" dangerouslySetInnerHTML={{ __html: verse.translation }} />
                   )}
                 </div>
               );
