@@ -37,14 +37,7 @@ export default function GlobalPlayer() {
   const activeVerseRef = React.useRef<any>(null);
 
   
-  const hasTimings = verseTimings.length > 0;
-  const showLyricsButton = hasTimings || isTimingLoading;
-
-  useEffect(() => {
-    if (!showLyricsButton && showLyrics) {
-      setShowLyrics(false);
-    }
-  }, [showLyricsButton, showLyrics]);
+  
 
   useEffect(() => {
     if (activeVerseRef.current && showLyrics) {
