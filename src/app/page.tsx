@@ -109,15 +109,15 @@ export default async function Home() {
       </div>
 
       {/* Surah Grid Section */}
-      <section id="surahs" className="max-w-[1200px] mx-auto px-4 py-20 text-center">
-        <h2 className="text-4xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-12">ابدأ رحلة<br/>التنوير</h2>
+      <section id="surahs" className="max-w-[1200px] mx-auto py-20 text-center px-0 md:px-4">
+        <h2 className="text-4xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-12 px-4 md:px-0">ابدأ رحلة<br/>التنوير</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10 text-right">
+        <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 pb-4 mb-10 text-right w-full px-4 md:px-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-4 md:pb-0">
           {topSurahs.map((surah) => (
             <Link
               key={surah.id}
               href={`/surah/${surah.id}`}
-              className="bg-white dark:bg-[#1e293b] rounded-xl p-5 shadow-sm border border-[#e2e8f0] dark:border-[#334155] hover:border-[#6b8ba7] hover:shadow-md transition-all group flex items-center justify-between"
+              className="min-w-[280px] w-[80vw] md:w-auto md:min-w-0 snap-center bg-white dark:bg-[#1e293b] rounded-xl p-5 shadow-sm border border-[#e2e8f0] dark:border-[#334155] hover:border-[#6b8ba7] hover:shadow-md transition-all group flex items-center justify-between shrink-0"
             >
               <div className="text-left" dir="ltr">
                 <span className="block font-bold text-[#1e354d] dark:text-[#f8fafc] group-hover:text-[#395675] dark:text-[#94a3b8]">{surah.id}. {surah.name_simple}</span>
@@ -137,13 +137,13 @@ export default async function Home() {
       </section>
 
       {/* Reciters Section */}
-      <section className="max-w-[1200px] mx-auto px-4 py-20 text-center">
-        <h2 className="text-4xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4">استمع للقرآن بصوت<br/>مقرئك المفضل</h2>
-        <p className="text-[#4a6b8c] dark:text-[#94a3b8] mb-12">اكتشف أجمل الأصوات في تلاوة القرآن الكريم.</p>
+      <section className="max-w-[1200px] mx-auto py-20 text-center px-0 md:px-4">
+        <h2 className="text-4xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4 px-4 md:px-0">استمع للقرآن بصوت<br/>مقرئك المفضل</h2>
+        <p className="text-[#4a6b8c] dark:text-[#94a3b8] mb-12 px-4 md:px-0">اكتشف أجمل الأصوات في تلاوة القرآن الكريم.</p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 pb-6 w-full px-4 md:px-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:pb-0">
            {recitations.slice(0, 6).map((r: any) => (
-             <Link key={r.id} href={`/reciter/${r.id}`} className="bg-white dark:bg-[#1e293b] rounded-3xl overflow-hidden shadow-sm border border-[#e2e8f0] dark:border-[#334155] group cursor-pointer hover:shadow-xl transition-shadow block text-right">
+             <Link key={r.id} href={`/reciter/${r.id}`} className="min-w-[300px] w-[85vw] md:w-auto md:min-w-0 snap-center bg-white dark:bg-[#1e293b] rounded-3xl overflow-hidden shadow-sm border border-[#e2e8f0] dark:border-[#334155] group cursor-pointer hover:shadow-xl transition-shadow block text-right shrink-0">
                <div className="h-48 bg-[#f4f7f9] dark:bg-[#0f172a] flex items-center justify-center overflow-hidden relative">
                  <div className="w-full h-full bg-[#d8e2eb] dark:bg-[#334155] group-hover:scale-105 transition-transform duration-500 absolute inset-0 flex items-center justify-center">
                    <svg className="w-20 h-20 text-[#395675] dark:text-[#94a3b8] opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
