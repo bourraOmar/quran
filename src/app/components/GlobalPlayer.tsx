@@ -157,6 +157,20 @@ export default function GlobalPlayer() {
 
   const progressPercent = duration ? `${(currentTime / duration) * 100}%` : "0%";
 
+  
+  let currentActiveKey = null;
+  if (showLyrics && verses.length > 0 && verseTimings.length > 0) {
+    const currentTimeMs = currentTime * 1000;
+    for (let i = 0; i < verseTimings.length; i++) {
+      const current = verseTimings[i];
+      const next = verseTimings[i+1];
+      if (currentTimeMs >= current.timestamp_from && (!next || currentTimeMs < next.timestamp_from)) {
+        currentActiveKey = current.verse_key;
+        break;
+      }
+    }
+  }
+
   return (
     <>
       {/* ---------------------------------------------------------------------- */}
@@ -241,12 +255,7 @@ export default function GlobalPlayer() {
               >
                 {verses.length > 0 ? (
                   verses.map((verse) => {
-                    const timing = verseTimings.find(t => t.verse_key === verse.verse_key);
-                    const index = verseTimings.findIndex(t => t.verse_key === verse.verse_key);
-                    const nextTiming = verseTimings[index + 1];
-                    const currentTimeMs = currentTime * 1000;
-                    
-                    const isActive = timing && currentTimeMs >= timing.timestamp_from && (!nextTiming || currentTimeMs < nextTiming.timestamp_from);
+                    const isActive = currentActiveKey === verse.verse_key;
                     
                     return (
                       <p 
