@@ -43,12 +43,12 @@ export default function RecitersGrid({ initialReciters }: { initialReciters: Rec
             >
               {/* Circular Avatar */}
               <div className="w-32 h-32 md:w-36 md:h-36 rounded-full bg-[#f4f7f9] dark:bg-[#0f172a] shadow-inner flex items-center justify-center relative overflow-hidden group-hover:bg-[#d8e2eb] dark:bg-[#334155] transition-colors duration-300">
-                <svg className="w-16 h-16 text-[#6b8ba7] dark:text-[#94a3b8] opacity-40 group-hover:scale-110 group-hover:opacity-60 transition-all duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                <svg className="w-16 h-16 text-[#4a6b8c] dark:text-[#94a3b8] opacity-40 group-hover:scale-110 group-hover:opacity-60 transition-all duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
               </div>
 
               {/* Text Info */}
               <div className="w-full">
-                <h3 className="font-bold text-[#1e354d] dark:text-[#f8fafc] text-base truncate w-full group-hover:text-[#6b8ba7] dark:text-[#94a3b8] transition-colors">{reciter.reciter_name}</h3>
+                <h3 className="font-bold text-[#1e354d] dark:text-[#f8fafc] text-base truncate w-full group-hover:text-[#4a6b8c] dark:text-[#94a3b8] transition-colors">{reciter.reciter_name}</h3>
                 <p className="text-xs text-[#5a7b9c] dark:text-[#94a3b8] mt-1 truncate w-full">{reciter.style}</p>
               </div>
             </Link>

@@ -56,7 +56,7 @@ export default function ReciterPlaylist({ surahs, reciter }: ReciterPlaylistProp
               togglePlay();
             }
           }} 
-          className="w-16 h-16 rounded-full bg-[#6b8ba7] text-white flex items-center justify-center hover:bg-[#537592] hover:scale-105 transition-all shadow-xl"
+          className="w-16 h-16 rounded-full bg-[#4a6b8c] text-white flex items-center justify-center hover:bg-[#537592] hover:scale-105 transition-all shadow-xl"
         >
           {isPlaying && activeSurahId && surahs.find(s => s.id === activeSurahId) ? (
             <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
@@ -83,14 +83,14 @@ export default function ReciterPlaylist({ surahs, reciter }: ReciterPlaylistProp
                 key={surah.id}
                 onClick={() => playSurah(surah, reciter, surahs)}
                 className={`grid grid-cols-[40px_minmax(0,1fr)_100px_100px] gap-4 px-4 py-3 rounded-lg cursor-pointer transition-colors group items-center ${
-                  isActive ? "bg-[#6b8ba7]/10" : "hover:bg-black/5"
+                  isActive ? "bg-[#4a6b8c]/10" : "hover:bg-black/5"
                 }`}
               >
                 <div className="text-center flex items-center justify-center w-6 h-6 mx-auto">
                   {isActive && isPlaying ? (
-                    <svg className="w-4 h-4 text-[#6b8ba7] dark:text-[#94a3b8] animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M6 5h2v14H6V5zm10 0h2v14h-2V5z"/></svg>
+                    <svg className="w-4 h-4 text-[#4a6b8c] dark:text-[#94a3b8] animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M6 5h2v14H6V5zm10 0h2v14h-2V5z"/></svg>
                   ) : isActive ? (
-                    <span className="text-[#6b8ba7] dark:text-[#94a3b8] font-bold">{surah.id}</span>
+                    <span className="text-[#4a6b8c] dark:text-[#94a3b8] font-bold">{surah.id}</span>
                   ) : (
                     <>
                       <span className="text-[#5a7b9c] dark:text-[#94a3b8] group-hover:hidden">{surah.id}</span>
@@ -100,7 +100,7 @@ export default function ReciterPlaylist({ surahs, reciter }: ReciterPlaylistProp
                 </div>
                 
                 <div className="flex flex-col">
-                  <span className={`font-bold text-lg ${isActive ? "text-[#6b8ba7] dark:text-[#94a3b8]" : "text-[#1e354d] dark:text-[#f8fafc]"}`}>
+                  <span className={`font-bold text-lg ${isActive ? "text-[#4a6b8c] dark:text-[#94a3b8]" : "text-[#1e354d] dark:text-[#f8fafc]"}`}>
                     {surah.name_arabic}
                   </span>
                   <span className="text-sm text-[#5a7b9c] dark:text-[#94a3b8]">{surah.name_simple}</span>

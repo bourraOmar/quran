@@ -34,12 +34,12 @@ export default function Navbar() {
         
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.jpg" alt="Quran Logo" width={40} height={40} className="rounded-full shadow-sm" />
+          <Image src="/logo.jpg" alt="Quran Logo" width={40} height={40} className="rounded-full shadow-sm" priority />
           <span className="text-xl font-bold tracking-tight text-[#4a6b8c] dark:text-[#8ba7c0]">Quran.co</span>
         </Link>
 
         {/* Navigation Links */}
-        <div className="hidden lg:flex items-center gap-8 text-[16px] font-semibold text-[#5a7b9c] dark:text-[#94a3b8]">
+        <div className="hidden lg:flex items-center gap-8 text-[16px] font-semibold text-[#4a6b8c] dark:text-[#94a3b8]">
           <Link href="/" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">الرئيسية</Link>
           <Link href="/surahs" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">قراءة القرآن</Link>
           <Link href="/reciters" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">استماع للقرآن</Link>
@@ -49,7 +49,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center justify-end w-[120px]">
            <button 
             onClick={toggleTheme} 
-            className="p-2 rounded-full text-[#5a7b9c] dark:text-[#94a3b8] hover:bg-[#e2e8f0] dark:text-[#94a3b8] dark:hover:bg-[#1e293b] transition-colors"
+            className="p-2 rounded-full text-[#4a6b8c] dark:text-[#94a3b8] hover:bg-[#e2e8f0] dark:text-[#94a3b8] dark:hover:bg-[#1e293b] transition-colors"
             aria-label="Toggle Dark Mode"
            >
              {isDarkMode ? (
@@ -68,7 +68,7 @@ export default function Navbar() {
 
         {/* Mobile Menu & Theme */}
         <div className="flex items-center gap-4 lg:hidden">
-          <button onClick={toggleTheme} className="p-2 text-[#5a7b9c] dark:text-[#94a3b8]">
+          <button onClick={toggleTheme} className="p-2 text-[#4a6b8c] dark:text-[#94a3b8]" aria-label="Toggle Dark Mode Mobile">
             {isDarkMode ? (
                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />

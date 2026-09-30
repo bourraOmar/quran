@@ -334,7 +334,7 @@ export default function GlobalPlayer() {
            {/* Title & Artist */}
            <div className="flex flex-col justify-center cursor-pointer group" onClick={toggleFullscreen}>
              <h4 className="font-bold text-[#1e354d] dark:text-white text-lg md:text-[14px] leading-tight group-hover:underline">{activeSurah.name_simple}</h4>
-             <p className="text-sm md:text-[11px] text-[#5a7b9c] dark:text-[#a1a1aa] mt-1 md:mt-0.5 group-hover:underline group-hover:text-white transition-colors">{reciter.reciter_name}</p>
+             <p className="text-sm md:text-[11px] text-[#4a6b8c] dark:text-[#a1a1aa] mt-1 md:mt-0.5 group-hover:underline group-hover:text-white transition-colors">{reciter.reciter_name}</p>
            </div>
          </div>
 
@@ -344,13 +344,13 @@ export default function GlobalPlayer() {
            {/* Controls Row */}
            <div className="flex items-center gap-8 md:gap-6 text-[#1e354d] dark:text-white">
              {/* Shuffle Button */}
-             <button onClick={toggleShuffle} className={`hidden md:block transition-colors ${isShuffling ? "text-[#4ade80]" : "text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تبديل عشوائي">
+             <button onClick={toggleShuffle} className={`hidden md:block transition-colors ${isShuffling ? "text-[#4ade80]" : "text-[#4a6b8c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تبديل عشوائي">
                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
                {isShuffling && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
              </button>
 
              {/* Previous */}
-             <button onClick={playPrev} disabled={activeSurahId === 1} className="text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
+             <button onClick={playPrev} disabled={activeSurahId === 1} className="text-[#4a6b8c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
                <svg className="w-8 h-8 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
              </button>
 
@@ -364,19 +364,19 @@ export default function GlobalPlayer() {
              </button>
 
              {/* Next */}
-             <button onClick={playNext} disabled={activeSurahId === 114} className="text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
+             <button onClick={playNext} disabled={activeSurahId === 114} className="text-[#4a6b8c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
                <svg className="w-8 h-8 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
              </button>
              
              {/* Repeat Button */}
-             <button onClick={toggleRepeat} className={`hidden md:block transition-colors relative ${isRepeating ? "text-[#4ade80]" : "text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تكرار">
+             <button onClick={toggleRepeat} className={`hidden md:block transition-colors relative ${isRepeating ? "text-[#4ade80]" : "text-[#4a6b8c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تكرار">
                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
                {isRepeating && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
              </button>
            </div>
            
            {/* Progress Line */}
-           <div className="flex items-center w-full gap-2 text-xs md:text-[11px] font-medium text-[#5a7b9c] dark:text-[#a1a1aa]">
+           <div className="flex items-center w-full gap-2 text-xs md:text-[11px] font-medium text-[#4a6b8c] dark:text-[#a1a1aa]">
              <span className="w-10 md:w-8 text-right">{formatTime(currentTime)}</span>
              <div className="flex-1 h-2 md:h-1 bg-[#e2e8f0] dark:bg-[#3f3f46] rounded-full overflow-hidden cursor-pointer relative group" onClick={handleSeek}>
                <div className="absolute top-0 left-0 h-full bg-[#1e354d] dark:bg-white group-hover:bg-[#4ade80] transition-colors" style={{ width: progressPercent }}></div>
@@ -386,7 +386,7 @@ export default function GlobalPlayer() {
          </div>
 
          {/* 3.3. Right Side Actions (Maximize & Close) */}
-         <div className="absolute top-4 right-4 md:static md:justify-self-end flex items-center justify-end gap-3 text-[#5a7b9c] dark:text-[#a1a1aa]">
+         <div className="absolute top-4 right-4 md:static md:justify-self-end flex items-center justify-end gap-3 text-[#4a6b8c] dark:text-[#a1a1aa]">
            
            {/* Volume Control */}
            <div className="hidden md:flex items-center gap-2 mr-2">
@@ -422,7 +422,7 @@ export default function GlobalPlayer() {
                setShowLyrics(!showLyrics);
                if (!isMaximized) setIsMaximized(true); // Auto-maximize if lyrics is clicked while minimized
              }} 
-             className={`hidden md:flex transition-colors relative ${showLyrics ? "text-[#4ade80]" : "text-[#5a7b9c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} 
+             className={`hidden md:flex transition-colors relative ${showLyrics ? "text-[#4ade80]" : "text-[#4a6b8c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} 
              title="الآيات"
            >
              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m12 8-9.04 9.06a2.82 2.82 0 1 0 3.98 3.98L16 12"/><circle cx="17" cy="7" r="5"/></svg>

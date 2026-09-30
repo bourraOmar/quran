@@ -58,14 +58,14 @@ export default function SurahReader({
            <div className="bg-white dark:bg-[#1e293b] rounded-3xl border border-[#e2e8f0] dark:border-[#334155] p-6 shadow-sm">
              <h3 className="font-bold text-[#1e354d] dark:text-[#f8fafc] text-lg mb-4 text-right border-b border-[#e2e8f0] dark:border-[#334155] pb-4">فهرس السورة</h3>
              <ul className="flex flex-col gap-3 text-right">
-               <li className="text-[#6b8ba7] dark:text-[#94a3b8] font-bold cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] p-2 rounded transition-colors">قراءة السورة</li>
-               <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">استماع للسورة</li>
-               <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">
+               <li className="text-[#395675] dark:text-[#94a3b8] font-bold cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] p-2 rounded transition-colors">قراءة السورة</li>
+               <li className="text-[#4a6b8c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#395675] dark:text-[#94a3b8] p-2 rounded transition-colors">استماع للسورة</li>
+               <li className="text-[#4a6b8c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#395675] dark:text-[#94a3b8] p-2 rounded transition-colors">
                  <Link href={`/surah/${chapter.id}?showTranslation=${isTranslationEnabled ? 'false' : 'true'}`}>
                    {isTranslationEnabled ? "إخفاء التفسير" : "إظهار التفسير"}
                  </Link>
                </li>
-               <li className="text-[#5a7b9c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#6b8ba7] dark:text-[#94a3b8] p-2 rounded transition-colors">
+               <li className="text-[#4a6b8c] dark:text-[#94a3b8] cursor-pointer hover:bg-[#e8edf2] dark:bg-[#1e293b] hover:text-[#395675] dark:text-[#94a3b8] p-2 rounded transition-colors">
                  <Link href="/">العودة للفهرس</Link>
                </li>
              </ul>
@@ -89,7 +89,7 @@ export default function SurahReader({
           <h1 className="text-4xl md:text-5xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4">
             سورة {chapter.name_arabic}
           </h1>
-          <div className="text-[#5a7b9c] dark:text-[#94a3b8] text-lg mb-8 font-medium">
+          <div className="text-[#4a6b8c] dark:text-[#94a3b8] text-lg mb-8 font-medium">
             {chapter.revelation_place === "makkah" ? "مكية" : "مدنية"} • رقم السورة: {chapter.id} • عدد آياتها: {chapter.verses_count}
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function SurahReader({
             
             // Highlight styling
             const highlightClass = isActive 
-              ? "text-[#6b8ba7] dark:text-[#8ba7c0] bg-[#e8edf2] dark:bg-[#334155] rounded-xl px-2 py-1 transition-all duration-300" 
+              ? "text-[#395675] dark:text-[#8ba7c0] bg-[#e8edf2] dark:bg-[#334155] rounded-xl px-2 py-1 transition-all duration-300" 
               : "transition-all duration-300";
 
             if (isTranslationEnabled) {
@@ -124,16 +124,16 @@ export default function SurahReader({
                     {isFatihaBasmalah ? (
                       <>
                         <img src="/img/basmalah.png" alt="بسم الله الرحمن الرحيم" className="max-w-[70%] dark:invert opacity-80 inline-block" loading="lazy" />
-                        <span className="text-[#6b8ba7] dark:text-[#94a3b8] mx-1 text-xl md:text-2xl">({ayahNumber})</span>
+                        <span className="text-[#395675] dark:text-[#94a3b8] mx-1 text-xl md:text-2xl">({ayahNumber})</span>
                       </>
                     ) : (
                       <>
-                        {verse.text_uthmani} <span className="text-[#6b8ba7] dark:text-[#94a3b8] mx-1 font-sans text-2xl">({ayahNumber})</span>
+                        {verse.text_uthmani} <span className="text-[#395675] dark:text-[#94a3b8] mx-1 font-sans text-2xl">({ayahNumber})</span>
                       </>
                     )}
                   </div>
                   {verse.translation && (
-                    <div className="text-lg text-[#5a7b9c] dark:text-[#94a3b8] font-sans pt-4" dir="rtl" dangerouslySetInnerHTML={{ __html: verse.translation }} />
+                    <div className="text-lg text-[#4a6b8c] dark:text-[#94a3b8] font-sans pt-4" dir="rtl" dangerouslySetInnerHTML={{ __html: verse.translation }} />
                   )}
                 </div>
               );
@@ -147,7 +147,7 @@ export default function SurahReader({
                 >
                   <div className="flex items-center justify-center w-full">
                     <img src="/img/basmalah.png" alt="بسم الله الرحمن الرحيم" className="max-w-[60%] md:max-w-[40%] dark:invert opacity-80" loading="lazy" />
-                    <span className="text-[#6b8ba7] dark:text-[#94a3b8] mx-3 font-sans text-xl md:text-2xl">({ayahNumber})</span>
+                    <span className="text-[#395675] dark:text-[#94a3b8] mx-3 font-sans text-xl md:text-2xl">({ayahNumber})</span>
                   </div>
                 </div>
               );
@@ -159,7 +159,7 @@ export default function SurahReader({
                 className={`font-quran font-normal leading-[2.5] md:leading-[2.8] ${highlightClass}`}
                 ref={isActive ? (activeVerseRef as React.RefObject<HTMLSpanElement>) : null}
               >
-                {verse.text_uthmani} <span className="text-[#6b8ba7] dark:text-[#94a3b8] mx-1 font-sans text-xl md:text-2xl">({ayahNumber})</span>{' '}
+                {verse.text_uthmani} <span className="text-[#395675] dark:text-[#94a3b8] mx-1 font-sans text-xl md:text-2xl">({ayahNumber})</span>{' '}
               </span>
             );
           })}

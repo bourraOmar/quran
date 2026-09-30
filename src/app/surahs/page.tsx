@@ -30,7 +30,7 @@ export default async function AllSurahsPage() {
         <h1 className="text-4xl md:text-5xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-6">
           فهرس سور القرآن الكريم
         </h1>
-        <p className="text-[#5a7b9c] dark:text-[#94a3b8] text-lg max-w-2xl mx-auto">
+        <p className="text-[#4a6b8c] dark:text-[#94a3b8] text-lg max-w-2xl mx-auto">
           تصفح جميع سور القرآن الكريم المائة وأربع عشرة سورة، مكتوبة بالتشكيل مع إمكانية الاستماع والترجمة.
         </p>
       </div>

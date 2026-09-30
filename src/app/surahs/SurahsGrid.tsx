@@ -43,11 +43,11 @@ export default function SurahsGrid({ initialSurahs }: { initialSurahs: Chapter[]
               className="bg-white dark:bg-[#1e293b] rounded-xl p-5 shadow-sm border border-[#e2e8f0] dark:border-[#334155] hover:border-[#6b8ba7] dark:hover:border-[#6b8ba7] hover:shadow-md transition-all group flex items-center justify-between"
             >
               <div className="text-left" dir="ltr">
-                <span className="block font-bold text-[#1e354d] dark:text-[#f8fafc] group-hover:text-[#6b8ba7] transition-colors">{surah.id}. {surah.name_simple}</span>
+                <span className="block font-bold text-[#1e354d] dark:text-[#f8fafc] group-hover:text-[#4a6b8c] transition-colors">{surah.id}. {surah.name_simple}</span>
                 <span className="block text-xs text-[#5a7b9c] dark:text-[#94a3b8] uppercase mt-1">{surah.revelation_place === "makkah" ? "مكية" : "مدنية"}</span>
               </div>
               <div className="text-right">
-                <span className="block font-serif text-xl font-bold text-[#6b8ba7] dark:text-[#94a3b8]">{surah.name_arabic}</span>
+                <span className="block font-serif text-xl font-bold text-[#4a6b8c] dark:text-[#94a3b8]">{surah.name_arabic}</span>
                 <span className="block text-xs text-[#5a7b9c] dark:text-[#94a3b8] mt-1">{surah.verses_count} آية</span>
               </div>
             </Link>
