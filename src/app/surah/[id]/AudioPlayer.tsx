@@ -288,7 +288,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
       {/* ===== MOBILE STICKY BOTTOM PLAYER (appears when audio started) ===== */}
       {hasStarted && (
         <div 
-          className="md:hidden fixed bottom-24 left-1/2 -translate-x-1/2 w-11/12 max-w-[350px] bg-[#f8fafc] dark:bg-[#1e293b] backdrop-blur-xl rounded-full border border-[#e2e8f0] dark:border-white/10 shadow-lg z-[45] flex items-center gap-2 px-4 py-2 h-[50px]"
+          className="md:hidden fixed bottom-[120px] left-1/2 -translate-x-1/2 w-11/12 max-w-[350px] bg-[#f8fafc] dark:bg-[#1e293b] backdrop-blur-xl rounded-full border border-[#e2e8f0] dark:border-white/10 shadow-lg z-[45] flex items-center gap-2 px-4 py-2 h-[50px]"
           dir="ltr"
         >
           {/* Verse Counter */}
