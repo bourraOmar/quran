@@ -24,6 +24,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
   const reciterParam = searchParams.get("reciter");
 
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   
   // Reciter & Style State
   const [allReciters, setAllReciters] = useState<Reciter[]>([]);
@@ -68,6 +69,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
     setCurrentTime(0);
     setDuration(0);
     setIsPlaying(false);
+    setHasStarted(false);
     if (onVerseChange) onVerseChange(null);
     
     if (audioRef.current) {
@@ -119,6 +121,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
+      setHasStarted(true);
       setIsPlaying(true);
       audioRef.current.play().catch(() => {
         // Silently ignore browser audio play exceptions (AbortError, NotSupportedError)
@@ -280,6 +283,64 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
           onEnded={handleEnded}
           onLoadedMetadata={handleTimeUpdate}
         />
+      )}
+
+      {/* ===== MOBILE STICKY BOTTOM PLAYER (appears when audio started) ===== */}
+      {hasStarted && (
+        <div 
+          className="md:hidden fixed bottom-24 left-1/2 -translate-x-1/2 w-11/12 max-w-[350px] bg-[#f8fafc] dark:bg-[#1e293b] backdrop-blur-xl rounded-xl border border-[#e2e8f0] dark:border-white/10 shadow-lg z-[45] flex items-center gap-3 px-3 py-2 h-[65px]"
+          dir="ltr"
+        >
+          {/* Progress bar at bottom edge */}
+          <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#e2e8f0] dark:bg-[#334155] rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-[#1e354d] dark:bg-white" 
+              style={{ width: verseAudios.length ? `${((currentVerseIndex + 1) / verseAudios.length) * 100}%` : '0%' }}
+            ></div>
+          </div>
+
+          {/* Mini Album Art */}
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6b8c] to-[#0f172a] rounded flex items-center justify-center text-white font-quran font-bold text-lg shrink-0 shadow-sm">
+            {chapterId}
+          </div>
+
+          {/* Title & Info */}
+          <div className="flex flex-col justify-center truncate flex-1">
+            <h4 className="font-bold text-[#1e354d] dark:text-white text-[14px] leading-tight truncate">
+              {allReciters.find(r => r.id === selectedReciterId)?.translated_name?.name || "القارئ"}
+            </h4>
+            <p className="text-[11px] text-[#4a6b8c] dark:text-[#a1a1aa] truncate mt-0.5">
+              آية {currentVerseIndex + 1} / {verseAudios.length || 0} • مرتل (مع التتبع)
+            </p>
+          </div>
+
+          {/* Play/Pause */}
+          <button 
+            onClick={togglePlay}
+            disabled={!currentAudioUrl}
+            className="w-8 h-8 flex items-center justify-center text-[#1e354d] dark:text-white hover:opacity-70 transition-opacity shrink-0 disabled:opacity-50"
+          >
+            {isPlaying ? (
+              <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+            ) : (
+              <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
+            )}
+          </button>
+
+          {/* Close */}
+          <button 
+            onClick={() => {
+              setIsPlaying(false);
+              setHasStarted(false);
+              setCurrentVerseIndex(0);
+              if (audioRef.current) audioRef.current.pause();
+              if (onVerseChange) onVerseChange(null);
+            }}
+            className="w-8 h-8 flex items-center justify-center text-[#4a6b8c] dark:text-[#a1a1aa] hover:opacity-70 transition-opacity shrink-0"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
       )}
     </div>
   );
