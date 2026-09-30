@@ -27,7 +27,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
   
   // Reciter & Style State
   const [allReciters, setAllReciters] = useState<Reciter[]>([]);
-  const [selectedStyle, setSelectedStyle] = useState<"Murattal" | "Mujawwad">("Murattal");
+
   const [selectedReciterId, setSelectedReciterId] = useState<number>(reciterParam ? Number(reciterParam) : 2); // default AbdulBaset Murattal
   
   // Playback State
@@ -57,15 +57,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
   // No longer filtering by style, all reciters are available in both modes
   const availableReciters = allReciters;
 
-  // Auto-select first reciter if current selection doesn't match style
-  useEffect(() => {
-    if (availableReciters.length > 0) {
-      const exists = availableReciters.find(r => r.id === selectedReciterId);
-      if (!exists) {
-        setSelectedReciterId(availableReciters[0].id);
-      }
-    }
-  }, [selectedStyle, availableReciters, selectedReciterId]);
+
 
   // 2. Fetch Audio (Full or Verse-by-Verse depending on style)
   useEffect(() => {
@@ -82,29 +74,17 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
       audioRef.current.pause();
     }
 
-    if (selectedStyle === "Mujawwad") {
-      setAudioMode("full");
-      // Fetch full chapter audio
-      fetch(`https://api.quran.com/api/v4/chapter_recitations/${selectedReciterId}/${chapterId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.audio_file) {
-            setFullAudioUrl(data.audio_file.audio_url);
-          }
-        });
-    } else {
-      setAudioMode("verse");
-      // Fetch verse-by-verse audio for highlighting
-      // Note: we fetch up to 300 verses (per_page is usually capped, so we might need all if it's a long surah, but quran.com allows large per_page)
-      fetch(`https://api.quran.com/api/v4/recitations/${selectedReciterId}/by_chapter/${chapterId}?per_page=300`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.audio_files) {
-            setVerseAudios(data.audio_files);
-          }
-        });
-    }
-  }, [chapterId, selectedReciterId, selectedStyle, onVerseChange]);
+    setAudioMode("verse");
+    // Fetch verse-by-verse audio for highlighting
+    // Note: we fetch up to 300 verses (per_page is usually capped, so we might need all if it's a long surah, but quran.com allows large per_page)
+    fetch(`https://api.quran.com/api/v4/recitations/${selectedReciterId}/by_chapter/${chapterId}?per_page=300`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.audio_files) {
+          setVerseAudios(data.audio_files);
+        }
+      });
+  }, [chapterId, selectedReciterId, onVerseChange]);
 
   let currentAudioUrl = null;
   if (audioMode === "full") {
@@ -184,21 +164,7 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
       {/* Top Row: Style Toggle & Reciter Select */}
       <div className="flex flex-col items-center gap-6 w-full justify-between">
         
-        {/* Style Toggle */}
-        <div className="flex bg-[#f4f7f9] dark:bg-[#0f172a] p-1 rounded-full border border-[#e2e8f0] dark:border-[#334155]">
-          <button
-            onClick={() => setSelectedStyle("Murattal")}
-            className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${selectedStyle === "Murattal" ? "bg-[#6b8ba7] text-white shadow-md" : "text-[#5a7b9c] dark:text-[#94a3b8] hover:text-[#1e354d] dark:hover:text-[#f8fafc]"}`}
-          >
-            مرتل (مع التتبع)
-          </button>
-          <button
-            onClick={() => setSelectedStyle("Mujawwad")}
-            className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${selectedStyle === "Mujawwad" ? "bg-[#6b8ba7] text-white shadow-md" : "text-[#5a7b9c] dark:text-[#94a3b8] hover:text-[#1e354d] dark:hover:text-[#f8fafc]"}`}
-          >
-            مجود
-          </button>
-        </div>
+
 
         {/* Reciter Dropdown */}
         <div className="text-right w-full md:w-auto flex-1 md:flex-none">
@@ -213,14 +179,9 @@ export default function AudioPlayer({ chapterId, onVerseChange }: AudioPlayerPro
             >
               {allReciters.length === 0 && <option className="bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-[#f8fafc]">جاري التحميل...</option>}
               {availableReciters.map((r) => {
-                let styleLabel = "";
-                if (r.style === "Mujawwad") styleLabel = " (مجود)";
-                if (r.style === "Murattal") styleLabel = " (مرتل)";
-                if (r.style === "Muallim") styleLabel = " (معلم)";
-                
                 return (
                   <option key={r.id} value={r.id} className="bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-[#f8fafc]">
-                    {r.translated_name.name}{styleLabel}
+                    {r.translated_name.name}
                   </option>
                 );
               })}
