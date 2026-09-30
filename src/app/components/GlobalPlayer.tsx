@@ -254,7 +254,13 @@ export default function GlobalPlayer() {
                 dir="rtl"
               >
                 {verses.length > 0 ? (
-                  verses.map((verse) => {
+                  <>
+                    {verseTimings.length === 0 && (
+                      <div className="text-white/50 text-sm text-center mb-8 px-4 py-2 bg-white/5 rounded-full backdrop-blur-sm border border-white/10 mx-auto w-max">
+                        المزامنة التلقائية غير متوفرة لهذا القارئ
+                      </div>
+                    )}
+                    {verses.map((verse) => {
                     const isActive = currentActiveKey === verse.verse_key;
                     
                     return (
@@ -266,7 +272,8 @@ export default function GlobalPlayer() {
                         {verse.text_uthmani}
                       </p>
                     );
-                  })
+                  })}
+                  </>
                 ) : (
                   <div className="flex items-center justify-center h-full text-white/50 text-xl font-medium animate-pulse">
                     جاري التحميل...
