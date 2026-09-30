@@ -363,7 +363,7 @@ export default function GlobalPlayer() {
       {/* 3. ALWAYS-VISIBLE BOTTOM PLAYER BAR (Spotify standard player)         */}
       {/* ---------------------------------------------------------------------- */}
       <div 
-        className={`fixed bottom-[90px] md:bottom-0 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-11/12 md:w-full max-w-[350px] md:max-w-none 
+        className={`fixed bottom-24 md:bottom-0 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-11/12 md:w-full max-w-[350px] md:max-w-none 
           bg-[#f8fafc] dark:bg-[#1e293b] md:dark:bg-[#0f172a] 
           rounded-xl md:rounded-none border border-[#e2e8f0] dark:border-white/10 md:border-t md:border-x-0 md:border-b-0
           shadow-lg md:shadow-none z-40 
