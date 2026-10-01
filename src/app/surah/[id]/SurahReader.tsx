@@ -33,6 +33,7 @@ export default function SurahReader({
   isTranslationEnabled: boolean
 }) {
   const [activeVerseKey, setActiveVerseKey] = useState<string | null>(null);
+  const [isReadingMode, setIsReadingMode] = useState(false);
 
   const handleVerseChange = useCallback((verseKey: string | null) => {
     setActiveVerseKey(verseKey);
@@ -51,7 +52,7 @@ export default function SurahReader({
     <div className="flex flex-col md:flex-row gap-12 w-full">
       
       {/* Right Sidebar - Sticky */}
-      <div className="w-full md:w-[350px] shrink-0">
+      <div className={`w-full md:w-[350px] shrink-0 ${isReadingMode ? "hidden" : "block"}`}>
         <div className="sticky top-8 flex flex-col gap-6">
            
            {/* Menu Box */}
@@ -83,15 +84,34 @@ export default function SurahReader({
       </div>
 
       {/* Main Content - Left Side (Scrolling) */}
-      <div className="flex-1 text-right min-w-0">
+      <div className={`flex-1 text-right min-w-0 transition-all duration-300 ${isReadingMode ? "max-w-4xl mx-auto" : ""}`}>
         {/* Header Block */}
-        <div className="mb-10 text-center md:text-right">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4">
-            سورة {chapter.name_arabic}
-          </h1>
-          <div className="text-[#4a6b8c] dark:text-[#94a3b8] text-lg mb-8 font-medium">
-            {chapter.revelation_place === "makkah" ? "مكية" : "مدنية"} • رقم السورة: {chapter.id} • عدد آياتها: {chapter.verses_count}
+        <div className="mb-10 text-center md:text-right flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+          <div>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4">
+              سورة {chapter.name_arabic}
+            </h1>
+            <div className="text-[#4a6b8c] dark:text-[#94a3b8] text-lg font-medium">
+              {chapter.revelation_place === "makkah" ? "مكية" : "مدنية"} • رقم السورة: {chapter.id} • عدد آياتها: {chapter.verses_count}
+            </div>
           </div>
+          
+          <button 
+            onClick={() => setIsReadingMode(!isReadingMode)}
+            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#1e293b] border border-[#e2e8f0] dark:border-[#334155] rounded-xl text-[#395675] dark:text-[#94a3b8] hover:bg-[#f4f7f9] dark:hover:bg-[#334155] transition-colors"
+          >
+            {isReadingMode ? (
+              <>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
+                <span className="text-sm font-bold">الوضع العادي</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
+                <span className="text-sm font-bold">وضع القراءة</span>
+              </>
+            )}
+          </button>
         </div>
 
         {/* Surah Text Area */}
