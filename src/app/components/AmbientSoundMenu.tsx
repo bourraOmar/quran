@@ -39,14 +39,12 @@ export default function AmbientSoundMenu() {
       {/* Main Toggle Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`p-2 rounded-full transition-all ${activeSound !== "none" ? "text-[#4a6b8c] dark:text-[#94a3b8]" : "text-[#4a6b8c] dark:text-[#94a3b8] hover:bg-[#e2e8f0] dark:hover:bg-[#1e293b]"}`}
+        className={`p-2 rounded-full transition-all ${activeSound !== "none" ? "bg-[#e2e8f0] dark:bg-[#1e293b] text-[#4a6b8c] dark:text-white" : "text-[#4a6b8c] dark:text-[#94a3b8] hover:bg-[#e2e8f0] dark:hover:bg-[#1e293b]"}`}
         aria-label="أصوات الطبيعة"
       >
-        {activeSound !== "none" ? (
-          <svg className="w-6 h-6 animate-[spin_4s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-        ) : (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
-        )}
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>
       </button>
 
       {/* Menu Popup */}
