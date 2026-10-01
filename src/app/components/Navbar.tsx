@@ -36,7 +36,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           <Image src="/logo.jpg" alt="Quran Logo" width={40} height={40} className="rounded-full shadow-sm" priority />
-          <span className="text-xl font-bold tracking-tight text-[#4a6b8c] dark:text-[#8ba7c0]" style={{ fontFamily: 'var(--font-aref-ruqaa)' }}>أُنس</span>
+          <span className="text-3xl font-bold tracking-tight text-[#1e354d] dark:text-white" style={{ fontFamily: 'var(--font-aref-ruqaa)' }}>أُنس</span>
         </Link>
 
         {/* Navigation Links */}
