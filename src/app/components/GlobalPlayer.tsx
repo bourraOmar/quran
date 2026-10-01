@@ -291,7 +291,7 @@ export default function GlobalPlayer() {
       {/* Sits right above the bottom player (bottom-[90px])                     */}
       {/* ---------------------------------------------------------------------- */}
       {isMaximized && (
-        <div className="hidden md:flex fixed inset-0 bottom-[90px] w-full bg-gradient-to-b from-[#6b8ba7] to-[#1e354d] dark:from-[#33506b] dark:to-[#0f172a] z-[30] flex-col p-6 px-8 animate-in fade-in duration-300" dir="ltr">
+        <div className="hidden md:flex fixed inset-0 bottom-[90px] w-full bg-gradient-to-b from-[#6b8ba7] to-[#1e354d] dark:from-[#33506b] dark:to-[#0f172a] z-[60] flex-col p-6 px-8 animate-in fade-in duration-300" dir="ltr">
           {/* Top Bar (Title on left, Minimize on right) */}
           <div className="flex justify-between items-center w-full">
             <h2 className="text-white font-bold text-[16px] drop-shadow-sm">{activeSurah.name_simple}</h2>
