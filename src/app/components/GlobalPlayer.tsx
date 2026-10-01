@@ -142,12 +142,7 @@ export default function GlobalPlayer() {
 
   const handleVolumeChange = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    let pos = (e.clientX - rect.left) / rect.width;
-    
-    // Support RTL by flipping the position if document is RTL
-    if (document.documentElement.dir === "rtl") {
-      pos = 1 - pos;
-    }
+    const pos = (e.clientX - rect.left) / rect.width;
     
     const newVol = Math.max(0, Math.min(1, pos));
     setVolume(newVol);
