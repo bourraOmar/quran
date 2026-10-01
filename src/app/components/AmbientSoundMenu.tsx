@@ -49,7 +49,7 @@ export default function AmbientSoundMenu() {
 
       {/* Menu Popup */}
       <div 
-        className={`absolute top-full left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 mt-2 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md border border-[#e2e8f0] dark:border-[#334155] p-4 rounded-2xl shadow-xl w-[200px] transition-all origin-top ${isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-4 pointer-events-none"}`}
+        className={`absolute top-full left-0 mt-2 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md border border-[#e2e8f0] dark:border-[#334155] p-4 rounded-2xl shadow-xl w-[200px] transition-all origin-top-left ${isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-4 pointer-events-none"}`}
       >
         <h4 className="text-sm font-bold text-[#1e354d] dark:text-white mb-3 text-center">أصوات الطبيعة</h4>
         
