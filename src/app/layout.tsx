@@ -78,7 +78,6 @@ export default function RootLayout({
           <ScrollToTop />
           <FloatingMobileMenu />
           <GlobalPlayer />
-          <AmbientSoundMenu />
           <Footer />
         </GlobalAudioProvider>
         </AmbientAudioProvider>

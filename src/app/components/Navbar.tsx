@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import AmbientSoundMenu from "./AmbientSoundMenu";
 
 export default function Navbar() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -29,7 +30,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] py-6 px-4 md:px-12 border-b border-[#e2e8f0] dark:bg-[#0f172a] dark:border-[#1e293b] transition-colors">
+    <nav className="bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] py-6 px-4 md:px-12 border-b border-[#e2e8f0] dark:bg-[#0f172a] dark:border-[#1e293b] transition-colors relative z-50">
       <div className="max-w-[1400px] mx-auto flex items-center justify-between">
         
         {/* Logo */}
@@ -46,7 +47,8 @@ export default function Navbar() {
         </div>
 
         {/* Theme Toggle Button */}
-        <div className="hidden md:flex items-center justify-end w-[120px]">
+        <div className="hidden md:flex items-center justify-end w-[120px] gap-2">
+           <AmbientSoundMenu />
            <button 
             onClick={toggleTheme} 
             className="p-2 rounded-full text-[#4a6b8c] dark:text-[#94a3b8] hover:bg-[#e2e8f0] dark:text-[#94a3b8] dark:hover:bg-[#1e293b] transition-colors"
@@ -67,7 +69,8 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu & Theme */}
-        <div className="flex items-center gap-4 lg:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
+          <AmbientSoundMenu />
           <button onClick={toggleTheme} className="p-2 text-[#4a6b8c] dark:text-[#94a3b8]" aria-label="Toggle Dark Mode Mobile">
             {isDarkMode ? (
                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

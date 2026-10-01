@@ -33,20 +33,25 @@ export default function AmbientSoundMenu() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const isPlayerActive = activeSurahId !== null;
-  const isSurahPage = pathname.startsWith('/surah/');
-  
-  // Opposite positioning to ScrollToTop
-  const bottomClass = (isPlayerActive || isSurahPage)
-    ? "bottom-6 md:bottom-[110px]" 
-    : "bottom-6 md:bottom-8";
-
   return (
-    <div ref={menuRef} className={`fixed left-4 md:left-auto md:right-8 z-50 flex flex-col items-center gap-3 transition-all ${bottomClass}`}>
+    <div ref={menuRef} className="relative z-50 flex items-center">
       
+      {/* Main Toggle Button */}
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`p-2 rounded-full transition-all ${activeSound !== "none" ? "text-[#4a6b8c] dark:text-[#94a3b8]" : "text-[#4a6b8c] dark:text-[#94a3b8] hover:bg-[#e2e8f0] dark:hover:bg-[#1e293b]"}`}
+        aria-label="أصوات الطبيعة"
+      >
+        {activeSound !== "none" ? (
+          <svg className="w-6 h-6 animate-[spin_4s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+        ) : (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+        )}
+      </button>
+
       {/* Menu Popup */}
       <div 
-        className={`bg-white/90 dark:bg-[#0f172a]/95 backdrop-blur-md border border-[#e2e8f0] dark:border-[#334155] p-4 rounded-2xl shadow-xl w-[200px] transition-all origin-bottom ${isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4 pointer-events-none"}`}
+        className={`absolute top-full left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 mt-2 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md border border-[#e2e8f0] dark:border-[#334155] p-4 rounded-2xl shadow-xl w-[200px] transition-all origin-top ${isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-4 pointer-events-none"}`}
       >
         <h4 className="text-sm font-bold text-[#1e354d] dark:text-white mb-3 text-center">أصوات الطبيعة</h4>
         
@@ -81,19 +86,6 @@ export default function AmbientSoundMenu() {
           </div>
         )}
       </div>
-
-      {/* Main Toggle Button */}
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className={`w-[52px] h-[52px] md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-2xl transition-all ${activeSound !== "none" ? "bg-[#4a6b8c] text-white hover:bg-[#395675] animate-pulse-slow" : "bg-white dark:bg-[#1e293b] text-[#395675] dark:text-[#94a3b8] border border-[#e2e8f0] dark:border-[#334155] hover:bg-gray-50 dark:hover:bg-[#334155]"} hover:scale-110`}
-        aria-label="أصوات الطبيعة"
-      >
-        {activeSound !== "none" ? (
-          <svg className="w-6 h-6 animate-[spin_4s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-        ) : (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
-        )}
-      </button>
     </div>
   );
 }
