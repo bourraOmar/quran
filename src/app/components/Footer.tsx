@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="lg:w-1/3">
             <Link href="/" className="flex items-center gap-3 mb-6">
               <Image src="/logo.jpg" alt="Quran Logo" width={40} height={40} className="rounded-full shadow-sm" />
-              <span className="text-2xl font-bold tracking-tight text-[#1e354d] dark:text-[#f8fafc]">Quran.co</span>
+              <span className="text-2xl font-bold tracking-tight text-[#1e354d] dark:text-[#f8fafc] font-sans">أُنس</span>
             </Link>
             <p className="text-[#4a6b8c] dark:text-[#94a3b8] leading-relaxed mb-8 font-medium">
               المكان الذي تبدأ منه رحلتك الإيمانية عبر قراءة واستماع كتاب الله الكريم.
@@ -53,7 +53,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-[#e2e8f0] dark:border-[#334155] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[#4a6b8c] dark:text-[#94a3b8] font-medium text-sm">حقوق النشر © 2026 Quran.co</p>
+          <p className="text-[#4a6b8c] dark:text-[#94a3b8] font-medium text-sm">حقوق النشر © 2026 أُنس</p>
           
           <div className="flex items-center gap-6 text-[#4a6b8c] dark:text-[#94a3b8] font-medium text-sm">
             <Link href="#" className="hover:text-[#395675] dark:text-[#94a3b8] transition-colors">الشروط</Link>

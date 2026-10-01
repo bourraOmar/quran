@@ -3,7 +3,7 @@ import Link from "next/link";
 import RecitersGrid from "./RecitersGrid";
 
 export const metadata = {
-  title: 'جميع القراء - Quran.co',
+  title: 'جميع القراء - أُنس',
   description: 'استمع إلى القرآن الكريم بصوت نخبة من القراء',
 };
 
