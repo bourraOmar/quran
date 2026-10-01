@@ -8,26 +8,34 @@ import "./globals.css";
 
 const cairo = Cairo({
   subsets: ["arabic"],
-  weight: ["300", "400", "600", "700"],
+  weight: ["400", "600", "700"],
   variable: "--font-cairo",
+  display: "swap",
+  preload: true,
 });
 
 const amiri = Amiri({
   subsets: ["arabic"],
   weight: ["400", "700"],
   variable: "--font-amiri",
+  display: "swap",
+  preload: false,
 });
 
 const amiriQuran = Amiri_Quran({
   subsets: ["arabic"],
   weight: ["400"],
   variable: "--font-amiri-quran",
+  display: "swap",
+  preload: false,
 });
 
 const arefRuqaaInk = Aref_Ruqaa_Ink({
   subsets: ["arabic"],
-  weight: ["400", "700"],
+  weight: ["700"],
   variable: "--font-aref-ruqaa",
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -64,9 +72,17 @@ export const metadata: Metadata = {
   },
 };
 
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f7f9" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
+};
 import { GlobalAudioProvider } from "./context/GlobalAudioContext";
 import { AmbientAudioProvider } from "./context/AmbientAudioContext";
-import AmbientSoundMenu from "./components/AmbientSoundMenu";
 import GlobalPlayer from "./components/GlobalPlayer";
 
 export default function RootLayout({

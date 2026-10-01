@@ -90,7 +90,7 @@ export default async function Home() {
 
       {/* Ticker Banner */}
       <div className="w-full bg-[#e8edf2] dark:bg-[#1e293b] text-[#395675] dark:text-[#94a3b8] border-y border-[#d8e2eb] dark:border-[#334155] py-4 overflow-hidden whitespace-nowrap text-2xl font-serif flex relative" dir="ltr">
-         <div className="animate-[scroll_40s_linear_infinite] flex shrink-0">
+         <div className="animate-[scroll_40s_linear_infinite] flex shrink-0" style={{ willChange: 'transform' }}>
             {Array(4).fill(0).map((_, i) => (
               <span key={`first-${i}`} className="flex items-center">
                 <span className="mx-8 font-bold" dir="rtl">كتاب أنزلناه إليك مبارك ليدبروا آياته وليتذكر أولوا الألباب</span>
@@ -98,7 +98,7 @@ export default async function Home() {
               </span>
             ))}
          </div>
-         <div className="animate-[scroll_40s_linear_infinite] flex shrink-0">
+         <div className="animate-[scroll_40s_linear_infinite] flex shrink-0" style={{ willChange: 'transform' }}>
             {Array(4).fill(0).map((_, i) => (
               <span key={`second-${i}`} className="flex items-center">
                 <span className="mx-8 font-bold" dir="rtl">كتاب أنزلناه إليك مبارك ليدبروا آياته وليتذكر أولوا الألباب</span>
