@@ -60,10 +60,10 @@ export default async function Home() {
         {/* Left Side: Images */}
         <div className="w-full md:flex-1 relative flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 md:mt-0 md:h-[500px]">
            <div className="w-full sm:w-1/2 h-64 md:absolute md:left-10 md:top-10 md:w-2/3 md:h-64 bg-gray-200 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] dark:border-[#0f172a] z-10 relative">
-              <Image src="/hero1.jpg" alt="Quran 1" fill className="object-cover" />
+              <Image src="/hero1.jpg" alt="Quran 1" fill className="object-cover" priority />
            </div>
            <div className="w-full sm:w-1/2 h-64 md:absolute md:right-10 md:bottom-10 md:w-2/3 md:h-72 bg-gray-300 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#f4f7f9] dark:border-[#0f172a] z-20 relative">
-              <Image src="/hero2.jpg" alt="Quran 2" fill className="object-cover" />
+              <Image src="/hero2.jpg" alt="Quran 2" fill className="object-cover" priority />
            </div>
         </div>
 
