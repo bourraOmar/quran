@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="lg:w-1/3">
             <Link href="/" className="flex items-center gap-3 mb-6">
               <Image src="/logo.jpg" alt="Quran Logo" width={40} height={40} className="rounded-full shadow-sm" />
-              <span className="text-2xl font-bold tracking-tight text-[#1e354d] dark:text-[#f8fafc] font-sans">أُنس</span>
+              <span className="text-2xl font-bold tracking-tight text-[#1e354d] dark:text-[#f8fafc]" style={{ fontFamily: 'var(--font-aref-ruqaa)' }}>أُنس</span>
             </Link>
             <p className="text-[#4a6b8c] dark:text-[#94a3b8] leading-relaxed mb-8 font-medium">
               المكان الذي تبدأ منه رحلتك الإيمانية عبر قراءة واستماع كتاب الله الكريم.
