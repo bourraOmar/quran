@@ -14,11 +14,11 @@ interface AmbientAudioContextType {
 const AmbientAudioContext = createContext<AmbientAudioContextType | undefined>(undefined);
 
 const SOUND_URLS: Record<Exclude<AmbientSoundType, "none">, string> = {
-  rain: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Rain_on_a_Tin_Roof.ogg",
-  birds: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Bird_song_in_the_morning.ogg",
-  fire: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Campfire_sound.ogg",
-  waves: "https://upload.wikimedia.org/wikipedia/commons/2/25/Ocean_waves.ogg",
-  wind: "https://upload.wikimedia.org/wikipedia/commons/8/87/Wind_in_trees.ogg",
+  rain: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/rain/light-rain.mp3",
+  birds: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/animals/birds.mp3",
+  fire: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/nature/campfire.mp3",
+  waves: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/nature/waves.mp3",
+  wind: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/nature/wind.mp3",
 };
 
 export const AmbientAudioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -26,30 +26,18 @@ export const AmbientAudioProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [volume, setVolume] = useState(0.5);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Initialize audio element
-  useEffect(() => {
-    const audio = new Audio();
-    audio.loop = true;
-    audioRef.current = audio;
-
-    return () => {
-      audio.pause();
-      audio.src = "";
-    };
-  }, []);
-
-  // Handle sound change
-  useEffect(() => {
+  const handleSetSound = (sound: AmbientSoundType) => {
+    setActiveSound(sound);
     if (!audioRef.current) return;
 
-    if (activeSound === "none") {
+    if (sound === "none") {
       audioRef.current.pause();
     } else {
-      audioRef.current.src = SOUND_URLS[activeSound];
+      audioRef.current.src = SOUND_URLS[sound];
       audioRef.current.volume = volume;
       audioRef.current.play().catch(e => console.log("Ambient audio play blocked:", e));
     }
-  }, [activeSound]);
+  };
 
   // Handle volume change
   useEffect(() => {
@@ -59,8 +47,10 @@ export const AmbientAudioProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }, [volume]);
 
   return (
-    <AmbientAudioContext.Provider value={{ activeSound, setActiveSound, volume, setVolume }}>
+    <AmbientAudioContext.Provider value={{ activeSound, setActiveSound: handleSetSound, volume, setVolume }}>
       {children}
+      {/* Attach audio element to DOM for iOS Safari support */}
+      <audio ref={audioRef} loop crossOrigin="anonymous" preload="none" />
     </AmbientAudioContext.Provider>
   );
 };
