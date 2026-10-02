@@ -14,11 +14,11 @@ interface AmbientAudioContextType {
 const AmbientAudioContext = createContext<AmbientAudioContextType | undefined>(undefined);
 
 const SOUND_URLS: Record<Exclude<AmbientSoundType, "none">, string> = {
-  rain: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/rain/light-rain.mp3",
-  birds: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/animals/birds.mp3",
-  fire: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/nature/campfire.mp3",
-  waves: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/nature/waves.mp3",
-  wind: "https://raw.githubusercontent.com/remvze/moodist/main/public/sounds/nature/wind.mp3",
+  rain: "/sounds/rain.mp3",
+  birds: "/sounds/forest.mp3",
+  fire: "/sounds/fire.mp3",
+  waves: "/sounds/beach.mp3",
+  wind: "/sounds/wind.mp3",
 };
 
 export const AmbientAudioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
