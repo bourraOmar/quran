@@ -26,16 +26,28 @@ export const AmbientAudioProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [volume, setVolume] = useState(0.5);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const handleSetSound = (sound: AmbientSoundType) => {
+  const handleSetSound = async (sound: AmbientSoundType) => {
     setActiveSound(sound);
     if (!audioRef.current) return;
 
-    if (sound === "none") {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.src = SOUND_URLS[sound];
-      audioRef.current.volume = volume;
-      audioRef.current.play().catch(e => console.log("Ambient audio play blocked:", e));
+    try {
+      if (sound === "none") {
+        audioRef.current.pause();
+      } else {
+        // Force pause the current track to prevent "interrupted by new load" errors
+        audioRef.current.pause();
+        
+        audioRef.current.src = SOUND_URLS[sound];
+        audioRef.current.volume = volume;
+        
+        // Wait for the browser to successfully start playing the large file
+        await audioRef.current.play();
+      }
+    } catch (error: any) {
+      // Ignore normal AbortErrors caused by clicking quickly
+      if (error.name !== "AbortError") {
+        console.error("Ambient audio play blocked:", error);
+      }
     }
   };
 
