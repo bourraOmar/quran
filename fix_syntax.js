@@ -1,7 +1,11 @@
 const fs = require('fs');
+let code = fs.readFileSync('src/app/surah/[id]/SurahReader.tsx', 'utf8');
 
-let player = fs.readFileSync('src/app/components/GlobalPlayer.tsx', 'utf8');
-
-player = player.replace('React.\n  const hasTimings', 'const hasTimings');
-
-fs.writeFileSync('src/app/components/GlobalPlayer.tsx', player);
+// The file currently ends with the injected modal block. I just need to append `\n  );\n}\n` to the end.
+if (!code.endsWith('  );\n}\n')) {
+  code += '\n  );\n}\n';
+  fs.writeFileSync('src/app/surah/[id]/SurahReader.tsx', code);
+  console.log('Fixed syntax error.');
+} else {
+  console.log('Already fixed.');
+}
