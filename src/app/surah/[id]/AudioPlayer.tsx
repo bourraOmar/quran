@@ -47,7 +47,10 @@ const AudioPlayer = forwardRef<AudioPlayerRef, AudioPlayerProps>(({ chapterId, o
 
   useImperativeHandle(ref, () => ({
     playVerse: (verseKey: string) => {
+      console.log("playVerse called with:", verseKey);
+      console.log("verseAudios length:", verseAudios.length);
       const index = verseAudios.findIndex(v => v.verse_key === verseKey);
+      console.log("Found index:", index);
       if (index !== -1) {
         setCurrentVerseIndex(index);
         setAudioMode("verse");
@@ -145,6 +148,18 @@ const AudioPlayer = forwardRef<AudioPlayerRef, AudioPlayerProps>(({ chapterId, o
       onVerseChange(null); // No highlighting for Mujawwad
     }
   }, [currentVerseIndex, verseAudios, audioMode, isPlaying, onVerseChange]);
+
+
+  useEffect(() => {
+    if (audioRef.current && currentAudioUrl) {
+      // Create a temporary anchor to resolve absolute URL for comparison
+      const a = document.createElement('a');
+      a.href = currentAudioUrl;
+      if (audioRef.current.src !== a.href) {
+        audioRef.current.src = currentAudioUrl;
+      }
+    }
+  }, [currentAudioUrl]);
 
   const togglePlay = () => {
     if (!audioRef.current || !currentAudioUrl) return;
@@ -304,7 +319,7 @@ const AudioPlayer = forwardRef<AudioPlayerRef, AudioPlayerProps>(({ chapterId, o
       {currentAudioUrl && (
         <audio 
           ref={audioRef} 
-          src={currentAudioUrl}
+          
           autoPlay={isPlaying}
           onCanPlay={() => {
             if (isPlaying && audioRef.current) {

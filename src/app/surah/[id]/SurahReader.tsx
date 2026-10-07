@@ -238,7 +238,13 @@ export default function SurahReader({
         >
            <button 
              onClick={() => {
-               if (playerRef.current) playerRef.current.playVerse(popupMenu.verseKey);
+               console.log("Listen clicked. verseKey:", popupMenu.verseKey);
+               console.log("playerRef current:", playerRef.current);
+               if (playerRef.current) {
+                 playerRef.current.playVerse(popupMenu.verseKey);
+               } else {
+                 alert("Player reference is missing!");
+               }
                setPopupMenu(null);
              }}
              className="p-3 bg-[#f4f7f9] dark:bg-[#0f172a] hover:bg-[#e8edf2] dark:hover:bg-[#334155] rounded-xl text-[#395675] dark:text-[#94a3b8] transition-colors shadow-sm"
