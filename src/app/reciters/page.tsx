@@ -8,37 +8,17 @@ export const metadata = {
 };
 
 async function getAllReciters() {
-  const [resAr, resEn] = await Promise.all([
-    fetch("https://www.mp3quran.net/api/v3/reciters?language=ar", { next: { revalidate: 3600 } }),
-    fetch("https://www.mp3quran.net/api/v3/reciters?language=eng", { next: { revalidate: 3600 } })
-  ]);
-
-  if (!resAr.ok || !resEn.ok) return [];
+  const res = await fetch("https://mp3quran.net/api/v3/ayat_timing/reads", { next: { revalidate: 3600 } });
+  if (!res.ok) return [];
   
-  const jsonAr = await resAr.json();
-  const jsonEn = await resEn.json();
+  const json = await res.json();
   
-  const engNames = new Map();
-  if (jsonEn.reciters) {
-    jsonEn.reciters.forEach((r: any) => {
-      engNames.set(r.id, r.name);
-    });
-  }
-  
-  const recitersMap = new Map();
-  jsonAr.reciters.forEach((r: any) => {
-    if (r.moshaf && r.moshaf.length > 0) {
-      const bestMoshaf = r.moshaf.find((m: any) => m.name.includes('مجود')) || r.moshaf[0];
-      recitersMap.set(r.id, {
-        id: bestMoshaf.id,
-        reciter_name: r.name,
-        reciter_name_eng: engNames.get(r.id) || "",
-        style: bestMoshaf.name,
-      });
-    }
-  });
-  
-  return Array.from(recitersMap.values());
+  return json.map((r: any) => ({
+    id: r.id,
+    reciter_name: r.name,
+    reciter_name_eng: "", // English name not provided by this endpoint, fallback to empty
+    style: r.rewaya
+  }));
 }
 
 export default async function RecitersPage() {

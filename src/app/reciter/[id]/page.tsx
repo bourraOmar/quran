@@ -19,28 +19,23 @@ async function getSurahs(): Promise<Chapter[]> {
 }
 
 async function getReciterInfo(id: string) {
-  const res = await fetch("https://www.mp3quran.net/api/v3/reciters?language=ar", {
+  const res = await fetch("https://mp3quran.net/api/v3/ayat_timing/reads", {
     next: { revalidate: 3600 },
   });
   if (!res.ok) return null;
   const json = await res.json();
   
-  let reciter: any = null;
-  json.reciters.forEach((r: any) => {
-    r.moshaf.forEach((m: any) => {
-      if (m.id.toString() === id) {
-        reciter = {
-          id: m.id,
-          reciter_id: r.id,
-          reciter_name: r.name,
-          style: m.name,
-          server: m.server,
-          surah_list: m.surah_list
-        };
-      }
-    });
-  });
-  return reciter;
+  const r = json.find((r: any) => r.id.toString() === id);
+  if (!r) return null;
+
+  return {
+    id: r.id,
+    reciter_id: r.id,
+    reciter_name: r.name,
+    style: r.rewaya,
+    server: r.folder_url,
+    surah_list: Array.from({length: r.soar_count}, (_, i) => (i + 1).toString()).join(",")
+  };
 }
 
 
