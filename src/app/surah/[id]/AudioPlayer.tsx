@@ -49,16 +49,24 @@ const AudioPlayer = forwardRef<AudioPlayerRef, AudioPlayerProps>(({ chapterId, o
     playVerse: (verseKey: string) => {
       const index = verseAudios.findIndex(v => v.verse_key === verseKey);
       if (index !== -1) {
-        // Just update state. React will re-render, change the <audio src> 
-        // and the onCanPlay handler will automatically call .play()
         setCurrentVerseIndex(index);
         setAudioMode("verse");
         setIsPlaying(true);
         setHasStarted(true);
         
-        // Force a pause on the current track so the browser doesn't block the next play
-        if (audioRef.current) {
-          audioRef.current.pause();
+        // On mobile devices, .play() MUST be called synchronously inside the onClick handler.
+        // If we wait for React to re-render and trigger onCanPlay, iOS Safari will block it.
+        if (audioRef.current && verseAudios[index].url) {
+          const rawUrl = verseAudios[index].url;
+          const newSrc = rawUrl.startsWith("http") || rawUrl.startsWith("//") 
+            ? (rawUrl.startsWith("//") ? `https:${rawUrl}` : rawUrl) 
+            : `https://verses.quran.com/${rawUrl}`;
+          
+          if (audioRef.current.src !== newSrc) {
+            audioRef.current.src = newSrc;
+            audioRef.current.load();
+          }
+          audioRef.current.play().catch(e => console.error("Mobile play blocked:", e));
         }
       }
     }

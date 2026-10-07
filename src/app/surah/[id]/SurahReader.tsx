@@ -156,7 +156,7 @@ export default function SurahReader({
           </div>
         )}
 
-        <div className={isTranslationEnabled ? "flex flex-col gap-8 text-right" : "inline-block text-center"}>
+        <div className={isTranslationEnabled ? "flex flex-col gap-8 text-right select-none" : "inline-block text-center select-none"}>
           {verses.map((verse) => {
             const ayahNumber = verse.verse_key.split(":")[1];
             const isFatihaBasmalah = chapter.id === 1 && ayahNumber === "1";
