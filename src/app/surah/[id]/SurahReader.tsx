@@ -109,6 +109,7 @@ export default function SurahReader({
            {/* Player Box */}
            <div className="bg-white dark:bg-[#1e293b] rounded-3xl border border-[#e2e8f0] dark:border-[#334155] p-6 shadow-sm">
               <AudioPlayer 
+                ref={playerRef}
                 chapterId={chapter.id.toString()} 
                 onVerseChange={handleVerseChange} 
               />
@@ -238,12 +239,8 @@ export default function SurahReader({
         >
            <button 
              onClick={() => {
-               console.log("Listen clicked. verseKey:", popupMenu.verseKey);
-               console.log("playerRef current:", playerRef.current);
                if (playerRef.current) {
                  playerRef.current.playVerse(popupMenu.verseKey);
-               } else {
-                 alert("Player reference is missing!");
                }
                setPopupMenu(null);
              }}
