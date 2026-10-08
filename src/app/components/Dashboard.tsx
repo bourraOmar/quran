@@ -24,7 +24,22 @@ export default function Dashboard() {
   
   const [currentTime, setCurrentTime] = useState(new Date());
   
-  // Default to Makkah if geolocation fails
+  // Track prayed status
+  const [prayedStatus, setPrayedStatus] = useState<Record<string, boolean>>({
+    "الفجر": false,
+    "الظهر": false,
+    "العصر": false,
+    "المغرب": false,
+    "العشاء": false,
+  });
+  
+  const togglePrayed = (prayerName: string) => {
+    setPrayedStatus(prev => ({
+      ...prev,
+      [prayerName]: !prev[prayerName]
+    }));
+  };
+
   const fetchPrayerData = async (lat: number = 21.4225, lng: number = 39.8262) => {
     try {
       const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4`);
@@ -44,7 +59,6 @@ export default function Dashboard() {
         year: data.data.date.hijri.year,
       });
 
-      // Simple reverse geocoding to get City/Country using BigDataCloud free API
       const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=ar`);
       const geoData = await geoRes.json();
       if (geoData.city && geoData.countryName) {
@@ -59,29 +73,45 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    // Start clock
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     
-    // Get Location
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           fetchPrayerData(pos.coords.latitude, pos.coords.longitude);
         },
         () => {
-          fetchPrayerData(); // fallback to Makkah
+          fetchPrayerData(); 
         }
       );
     } else {
       fetchPrayerData();
     }
 
+    // Load prayed status from localStorage if exists
+    const savedStatus = localStorage.getItem('prayedStatus');
+    const savedDate = localStorage.getItem('prayedDate');
+    const today = new Date().toDateString();
+    
+    if (savedStatus && savedDate === today) {
+      setPrayedStatus(JSON.parse(savedStatus));
+    } else {
+      // New day, reset
+      localStorage.setItem('prayedDate', today);
+    }
+
     return () => clearInterval(timer);
   }, []);
 
-  // Helper to get next prayer
+  // Save to local storage whenever it changes
+  useEffect(() => {
+    if (Object.keys(prayedStatus).length > 0) {
+      localStorage.setItem('prayedStatus', JSON.stringify(prayedStatus));
+    }
+  }, [prayedStatus]);
+
   const getNextPrayer = () => {
-    if (!timings) return { name: "جاري التحميل", time: "", countdown: "" };
+    if (!timings) return { name: "جاري التحميل", time: "", countdown: "", isPrayed: false };
     
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
@@ -101,19 +131,18 @@ export default function Dashboard() {
 
     let next = schedule.find(p => p.mins > currentMinutes);
     if (!next) {
-      // Next is Fajr tomorrow
       next = schedule[0];
       const diffMins = (24 * 60 - currentMinutes) + next.mins;
       const h = Math.floor(diffMins / 60);
       const m = diffMins % 60;
-      return { name: next.name, time: next.time, countdown: `${h}س ${m}د` };
+      return { name: next.name, time: next.time, countdown: `${h}س ${m}د`, isPrayed: prayedStatus[next.name] };
     }
 
     const diffMins = next.mins - currentMinutes;
     const h = Math.floor(diffMins / 60);
     const m = diffMins % 60;
     
-    return { name: next.name, time: next.time, countdown: `${h > 0 ? h + 'س ' : ''}${m}د` };
+    return { name: next.name, time: next.time, countdown: `${h > 0 ? h + 'س ' : ''}${m}د`, isPrayed: prayedStatus[next.name] };
   };
 
   const nextPrayer = getNextPrayer();
@@ -121,9 +150,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] pb-32 text-[#1e354d] dark:text-[#f8fafc] font-sans" dir="rtl">
       
-      {/* Top Section - Dynamic Arc & Location */}
       <div className="bg-gradient-to-b from-[#8ba7c0]/30 to-[#f4f7f9] dark:from-[#1e293b] dark:to-[#0f172a] pt-12 pb-8 px-6 rounded-b-[40px] shadow-sm relative overflow-hidden">
-        {/* Decorative Mosque Silhouettes (abstract) */}
         <div className="absolute bottom-0 left-0 right-0 h-32 opacity-10 pointer-events-none" style={{ backgroundImage: 'url(/img/mosque-pattern.png)', backgroundSize: 'contain', backgroundPosition: 'bottom' }}></div>
 
         <div className="flex justify-between items-center mb-8 relative z-10">
@@ -138,7 +165,6 @@ export default function Dashboard() {
 
         <div className="relative flex flex-col items-center mt-6 z-10">
           <div className="w-64 h-32 border-t-2 border-dashed border-[#4a6b8c] dark:border-[#8ba7c0] rounded-t-full relative flex flex-col items-center justify-end pb-4">
-             {/* Indicator dot */}
              <div className="absolute top-0 left-1/2 w-4 h-4 -translate-x-1/2 bg-[#4a6b8c] dark:bg-[#8ba7c0] rounded-full -translate-y-1/2 shadow-lg shadow-[#4a6b8c]/50"></div>
              
              <h2 className="text-4xl font-extrabold text-[#4a6b8c] dark:text-[#8ba7c0]">{nextPrayer.name}</h2>
@@ -146,16 +172,17 @@ export default function Dashboard() {
              <p className="text-sm opacity-80 mt-1">{nextPrayer.name} بعد {nextPrayer.countdown}</p>
           </div>
           
-          <button className="mt-6 bg-[#4a6b8c] text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-[#4a6b8c]/30 hover:bg-[#395675] transition-all">
-            سجل صلاتك
+          <button 
+            onClick={() => togglePrayed(nextPrayer.name)}
+            className={`mt-6 px-8 py-3 rounded-full font-bold shadow-lg transition-all ${nextPrayer.isPrayed ? 'bg-[#8ba7c0] text-white opacity-80 shadow-none' : 'bg-[#4a6b8c] text-white hover:bg-[#395675] shadow-[#4a6b8c]/30'}`}
+          >
+            {nextPrayer.isPrayed ? 'تمت الصلاة بفضل الله' : 'سجل صلاتك'}
           </button>
         </div>
       </div>
 
-      {/* Main Content Dashboard */}
       <div className="px-4 mt-[-20px] relative z-20 space-y-4">
         
-        {/* Prayer Times Row */}
         <div className="bg-white dark:bg-[#1e293b] p-5 rounded-[30px] shadow-sm flex justify-between items-center overflow-x-auto gap-4 hide-scrollbar">
           {[
             { name: "الفجر", time: timings?.Fajr || "--:--" },
@@ -163,34 +190,38 @@ export default function Dashboard() {
             { name: "العصر", time: timings?.Asr || "--:--" },
             { name: "المغرب", time: timings?.Maghrib || "--:--" },
             { name: "العشاء", time: timings?.Isha || "--:--" },
-          ].map((p, i) => (
+          ].map((p, i) => {
+            const isChecked = prayedStatus[p.name];
+            return (
             <div key={i} className={`flex flex-col items-center min-w-[60px] ${nextPrayer.name === p.name ? 'bg-[#f4f7f9] dark:bg-[#0f172a] p-2 rounded-2xl border border-[#e2e8f0] dark:border-[#334155]' : ''}`}>
                <span className="text-xs opacity-70 mb-1">{p.name}</span>
                <span className="font-bold text-sm">{p.time}</span>
-               {/* Toggle switch visual */}
-               <div className={`mt-2 w-11 h-6 rounded-full p-1 transition-colors flex items-center cursor-pointer shadow-inner ${i === 4 ? 'bg-[#4a6b8c]' : 'bg-[#e2e8f0] dark:bg-[#334155]'}`}>
-                 <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${i === 4 ? 'translate-x-5' : 'translate-x-0'}`}></div>
+               
+               <div 
+                 onClick={() => togglePrayed(p.name)}
+                 className={`mt-2 w-11 h-6 rounded-full p-1 transition-colors flex items-center cursor-pointer shadow-inner ${isChecked ? 'bg-[#4a6b8c]' : 'bg-[#e2e8f0] dark:bg-[#334155]'}`}
+               >
+                 <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${isChecked ? 'translate-x-[-20px]' : 'translate-x-0'}`}></div>
                </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Action Grid */}
         <div className="grid grid-cols-4 gap-3">
            {[
-             { name: "الحديث", icon: "📖", href: "/hadith" },
-             { name: "الدعاء", icon: "🤲", href: "/dua" },
-             { name: "الذكر", icon: "📿", href: "/dhikr" },
-             { name: "القبلة", icon: "🧭", href: "/qibla" },
+             { name: "الحديث", svg: <svg className="w-8 h-8 text-[#4a6b8c] dark:text-[#8ba7c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>, href: "/hadith" },
+             { name: "الدعاء", svg: <svg className="w-8 h-8 text-[#4a6b8c] dark:text-[#8ba7c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>, href: "/dua" },
+             { name: "الذكر", svg: <svg className="w-8 h-8 text-[#4a6b8c] dark:text-[#8ba7c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 11V9a2 2 0 00-2-2m2 4v4a2 2 0 104 0v-1m-4-3H9m2 0h4m6 1a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>, href: "/dhikr" },
+             { name: "القبلة", svg: <svg className="w-8 h-8 text-[#4a6b8c] dark:text-[#8ba7c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>, href: "/qibla" },
            ].map((item, i) => (
-             <Link href={item.href} key={i} className="bg-white dark:bg-[#1e293b] p-4 rounded-3xl shadow-sm flex flex-col items-center justify-center gap-2 hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] transition-colors border border-transparent hover:border-[#e2e8f0] dark:hover:border-[#334155]">
-               <span className="text-3xl">{item.icon}</span>
-               <span className="text-xs font-bold text-[#4a6b8c] dark:text-[#94a3b8]">{item.name}</span>
+             <Link href={item.href} key={i} className="bg-white dark:bg-[#1e293b] py-5 px-2 rounded-3xl shadow-sm flex flex-col items-center justify-center gap-3 hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] transition-all border border-transparent hover:border-[#e2e8f0] dark:hover:border-[#334155]">
+               {item.svg}
+               <span className="text-[11px] font-bold text-[#4a6b8c] dark:text-[#94a3b8]">{item.name}</span>
              </Link>
            ))}
         </div>
 
-        {/* Two Columns Info */}
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex flex-col justify-center">
              <span className="text-xs opacity-70 mb-1">التاريخ الهجري</span>
@@ -206,7 +237,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Hadith of the Day */}
         <div className="bg-white dark:bg-[#1e293b] p-6 rounded-3xl shadow-sm border border-[#e2e8f0] dark:border-[#334155] relative overflow-hidden">
            <div className="absolute top-0 right-0 w-32 h-32 opacity-5" style={{ backgroundImage: 'url(/img/pattern.png)' }}></div>
            <span className="text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0] mb-3 block text-center">حديث اليوم</span>
