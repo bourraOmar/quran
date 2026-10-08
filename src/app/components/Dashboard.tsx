@@ -24,7 +24,6 @@ export default function Dashboard() {
   
   const [currentTime, setCurrentTime] = useState(new Date());
   
-  // Track prayed status
   const [prayedStatus, setPrayedStatus] = useState<Record<string, boolean>>({
     "الفجر": false,
     "الظهر": false,
@@ -32,8 +31,55 @@ export default function Dashboard() {
     "المغرب": false,
     "العشاء": false,
   });
-  
-  const togglePrayed = (prayerName: string) => {
+
+  const parseTime = (timeStr: string) => {
+    const [h, m] = timeStr.split(":");
+    return parseInt(h) * 60 + parseInt(m);
+  };
+
+  const getPrayerDayId = () => {
+    const now = new Date();
+    if (!timings) return now.toDateString();
+    
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const fajrMinutes = parseTime(timings.Fajr);
+    
+    // If we are before Fajr, we are still technically in the "previous" Islamic day for prayer tracking
+    if (currentMinutes < fajrMinutes) {
+      const yesterday = new Date(now);
+      yesterday.setDate(yesterday.getDate() - 1);
+      return yesterday.toDateString();
+    }
+    return now.toDateString();
+  };
+
+  const canCheckPrayer = (prayerTimeStr: string) => {
+    if (!timings) return false;
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const prayerMinutes = parseTime(prayerTimeStr);
+    const fajrMinutes = parseTime(timings.Fajr);
+
+    // If current time is before Fajr (e.g. 2 AM), then ALL prayers from the previous day (which this schedule represents if fetched yesterday, or if we consider Isha from yesterday) are checkable.
+    // Wait, the timings object is for the current calendar day. 
+    // If it's 2 AM, currentMinutes (120) < fajrMinutes (300).
+    // They are checking Isha. prayerMinutes is 1170.
+    // In this case, 120 < 1170. But they SHOULD be able to check it because it's from yesterday.
+    if (currentMinutes < fajrMinutes) {
+      // Before Fajr: you can check ANY prayer (because they are from yesterday)
+      return true; 
+    }
+
+    // After Fajr: you can only check prayers whose time has passed today
+    return currentMinutes >= prayerMinutes;
+  };
+
+  const togglePrayed = (prayerName: string, prayerTimeStr: string) => {
+    if (!canCheckPrayer(prayerTimeStr)) {
+      // Could show a small toast here: "لم يحن وقت الصلاة بعد"
+      alert("لا يمكن تسجيل الصلاة قبل دخول وقتها");
+      return;
+    }
     setPrayedStatus(prev => ({
       ...prev,
       [prayerName]: !prev[prayerName]
@@ -88,39 +134,52 @@ export default function Dashboard() {
       fetchPrayerData();
     }
 
-    // Load prayed status from localStorage if exists
-    const savedStatus = localStorage.getItem('prayedStatus');
-    const savedDate = localStorage.getItem('prayedDate');
-    const today = new Date().toDateString();
-    
-    if (savedStatus && savedDate === today) {
-      setPrayedStatus(JSON.parse(savedStatus));
-    } else {
-      // New day, reset
-      localStorage.setItem('prayedDate', today);
-    }
-
     return () => clearInterval(timer);
   }, []);
 
+  // Effect to handle initialization and resetting based on Fajr
+  useEffect(() => {
+    if (!timings) return;
+
+    const prayerDayId = getPrayerDayId();
+    const savedStatus = localStorage.getItem('prayedStatus');
+    const savedDayId = localStorage.getItem('prayerDayId');
+    
+    if (savedStatus && savedDayId === prayerDayId) {
+      setPrayedStatus(JSON.parse(savedStatus));
+    } else {
+      // New prayer day (passed Fajr), reset!
+      setPrayedStatus({
+        "الفجر": false,
+        "الظهر": false,
+        "العصر": false,
+        "المغرب": false,
+        "العشاء": false,
+      });
+      localStorage.setItem('prayerDayId', prayerDayId);
+      localStorage.setItem('prayedStatus', JSON.stringify({
+        "الفجر": false,
+        "الظهر": false,
+        "العصر": false,
+        "المغرب": false,
+        "العشاء": false,
+      }));
+    }
+  }, [timings]); // runs when timings are loaded
+
   // Save to local storage whenever it changes
   useEffect(() => {
-    if (Object.keys(prayedStatus).length > 0) {
+    if (Object.keys(prayedStatus).length > 0 && timings) {
       localStorage.setItem('prayedStatus', JSON.stringify(prayedStatus));
     }
-  }, [prayedStatus]);
+  }, [prayedStatus, timings]);
 
   const getNextPrayer = () => {
-    if (!timings) return { name: "جاري التحميل", time: "", countdown: "", isPrayed: false };
+    if (!timings) return { name: "جاري التحميل", time: "", countdown: "", isPrayed: false, rawTime: "" };
     
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
     
-    const parseTime = (timeStr: string) => {
-      const [h, m] = timeStr.split(":");
-      return parseInt(h) * 60 + parseInt(m);
-    };
-
     const schedule = [
       { name: "الفجر", time: timings.Fajr, mins: parseTime(timings.Fajr) },
       { name: "الظهر", time: timings.Dhuhr, mins: parseTime(timings.Dhuhr) },
@@ -135,17 +194,41 @@ export default function Dashboard() {
       const diffMins = (24 * 60 - currentMinutes) + next.mins;
       const h = Math.floor(diffMins / 60);
       const m = diffMins % 60;
-      return { name: next.name, time: next.time, countdown: `${h}س ${m}د`, isPrayed: prayedStatus[next.name] };
+      return { name: next.name, time: next.time, countdown: `${h}س ${m}د`, isPrayed: prayedStatus[next.name], rawTime: next.time };
     }
 
     const diffMins = next.mins - currentMinutes;
     const h = Math.floor(diffMins / 60);
     const m = diffMins % 60;
     
-    return { name: next.name, time: next.time, countdown: `${h > 0 ? h + 'س ' : ''}${m}د`, isPrayed: prayedStatus[next.name] };
+    return { name: next.name, time: next.time, countdown: `${h > 0 ? h + 'س ' : ''}${m}د`, isPrayed: prayedStatus[next.name], rawTime: next.time };
+  };
+
+  // The "current" prayer is the one that just passed (so they can log it)
+  const getCurrentPrayer = () => {
+    if (!timings) return null;
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    
+    const schedule = [
+      { name: "الفجر", time: timings.Fajr, mins: parseTime(timings.Fajr) },
+      { name: "الظهر", time: timings.Dhuhr, mins: parseTime(timings.Dhuhr) },
+      { name: "العصر", time: timings.Asr, mins: parseTime(timings.Asr) },
+      { name: "المغرب", time: timings.Maghrib, mins: parseTime(timings.Maghrib) },
+      { name: "العشاء", time: timings.Isha, mins: parseTime(timings.Isha) },
+    ];
+
+    // Find the last prayer whose time has passed
+    const passedPrayers = schedule.filter(p => p.mins <= currentMinutes);
+    if (passedPrayers.length === 0) {
+      // Before Fajr today, so current prayer is Isha from yesterday
+      return schedule[4];
+    }
+    return passedPrayers[passedPrayers.length - 1];
   };
 
   const nextPrayer = getNextPrayer();
+  const currentPrayer = getCurrentPrayer();
 
   return (
     <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] pb-32 text-[#1e354d] dark:text-[#f8fafc] font-sans" dir="rtl">
@@ -172,12 +255,14 @@ export default function Dashboard() {
              <p className="text-sm opacity-80 mt-1">{nextPrayer.name} بعد {nextPrayer.countdown}</p>
           </div>
           
-          <button 
-            onClick={() => togglePrayed(nextPrayer.name)}
-            className={`mt-6 px-8 py-3 rounded-full font-bold shadow-lg transition-all ${nextPrayer.isPrayed ? 'bg-[#8ba7c0] text-white opacity-80 shadow-none' : 'bg-[#4a6b8c] text-white hover:bg-[#395675] shadow-[#4a6b8c]/30'}`}
-          >
-            {nextPrayer.isPrayed ? 'تمت الصلاة بفضل الله' : 'سجل صلاتك'}
-          </button>
+          {currentPrayer && (
+            <button 
+              onClick={() => togglePrayed(currentPrayer.name, currentPrayer.time)}
+              className={`mt-6 px-8 py-3 rounded-full font-bold shadow-lg transition-all ${prayedStatus[currentPrayer.name] ? 'bg-[#8ba7c0] text-white opacity-80 shadow-none' : 'bg-[#4a6b8c] text-white hover:bg-[#395675] shadow-[#4a6b8c]/30'}`}
+            >
+              {prayedStatus[currentPrayer.name] ? `تمت صلاة ${currentPrayer.name} بفضل الله` : `سجل صلاة ${currentPrayer.name}`}
+            </button>
+          )}
         </div>
       </div>
 
@@ -192,14 +277,15 @@ export default function Dashboard() {
             { name: "العشاء", time: timings?.Isha || "--:--" },
           ].map((p, i) => {
             const isChecked = prayedStatus[p.name];
+            const isClickable = timings ? canCheckPrayer(p.time) : false;
             return (
             <div key={i} className={`flex flex-col items-center min-w-[60px] ${nextPrayer.name === p.name ? 'bg-[#f4f7f9] dark:bg-[#0f172a] p-2 rounded-2xl border border-[#e2e8f0] dark:border-[#334155]' : ''}`}>
                <span className="text-xs opacity-70 mb-1">{p.name}</span>
                <span className="font-bold text-sm">{p.time}</span>
                
                <div 
-                 onClick={() => togglePrayed(p.name)}
-                 className={`mt-2 w-11 h-6 rounded-full p-1 transition-colors flex items-center cursor-pointer shadow-inner ${isChecked ? 'bg-[#4a6b8c]' : 'bg-[#e2e8f0] dark:bg-[#334155]'}`}
+                 onClick={() => togglePrayed(p.name, p.time)}
+                 className={`mt-2 w-11 h-6 rounded-full p-1 transition-colors flex items-center shadow-inner ${!isClickable ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'} ${isChecked ? 'bg-[#4a6b8c]' : 'bg-[#e2e8f0] dark:bg-[#334155]'}`}
                >
                  <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${isChecked ? 'translate-x-[-20px]' : 'translate-x-0'}`}></div>
                </div>
