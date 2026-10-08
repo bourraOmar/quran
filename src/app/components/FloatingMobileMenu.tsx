@@ -48,8 +48,8 @@ export default function FloatingMobileMenu() {
 
         {/* Qibla / Center Action */}
         <Link href="/qibla" aria-label="القبلة" className="p-3 -mt-6 bg-[#4a6b8c] text-white rounded-full flex flex-col items-center justify-center transition-all shadow-lg shadow-[#4a6b8c]/30 hover:scale-105 border-4 border-[#f4f7f9] dark:border-[#0f172a]">
-          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+          <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
           </svg>
         </Link>
 

@@ -139,7 +139,7 @@ export default function Dashboard() {
         <div className="relative flex flex-col items-center mt-6 z-10">
           <div className="w-64 h-32 border-t-2 border-dashed border-[#4a6b8c] dark:border-[#8ba7c0] rounded-t-full relative flex flex-col items-center justify-end pb-4">
              {/* Indicator dot */}
-             <div className="absolute top-0 right-1/4 w-4 h-4 bg-[#4a6b8c] dark:bg-[#8ba7c0] rounded-full -translate-y-1/2 shadow-lg shadow-[#4a6b8c]/50"></div>
+             <div className="absolute top-0 left-1/2 w-4 h-4 -translate-x-1/2 bg-[#4a6b8c] dark:bg-[#8ba7c0] rounded-full -translate-y-1/2 shadow-lg shadow-[#4a6b8c]/50"></div>
              
              <h2 className="text-4xl font-extrabold text-[#4a6b8c] dark:text-[#8ba7c0]">{nextPrayer.name}</h2>
              <p className="text-lg font-bold mt-2">{nextPrayer.time}</p>
@@ -168,8 +168,8 @@ export default function Dashboard() {
                <span className="text-xs opacity-70 mb-1">{p.name}</span>
                <span className="font-bold text-sm">{p.time}</span>
                {/* Toggle switch visual */}
-               <div className={`mt-2 w-10 h-5 rounded-full p-1 transition-colors ${i === 4 ? 'bg-[#4a6b8c]' : 'bg-[#e2e8f0] dark:bg-[#334155]'}`}>
-                 <div className={`w-3 h-3 bg-white rounded-full transition-transform ${i === 4 ? 'translate-x-5' : 'translate-x-0'}`}></div>
+               <div className={`mt-2 w-11 h-6 rounded-full p-1 transition-colors flex items-center cursor-pointer shadow-inner ${i === 4 ? 'bg-[#4a6b8c]' : 'bg-[#e2e8f0] dark:bg-[#334155]'}`}>
+                 <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${i === 4 ? 'translate-x-5' : 'translate-x-0'}`}></div>
                </div>
             </div>
           ))}
