@@ -277,7 +277,12 @@ export default function DhikrApp() {
                 <p className={`text-center font-amiri text-white leading-relaxed whitespace-pre-wrap transition-all duration-300 ${
                   fontSize === 'small' ? 'text-xl' : fontSize === 'large' ? 'text-4xl' : 'text-2xl'
                 }`}>
-                  {readingData[currentCardIndex].text.replace(/\n/g, '\n')}
+                  {readingData[currentCardIndex].text.split('\\n').map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
                 </p>
               </div>
 

@@ -1,19 +1,21 @@
 const fs = require('fs');
-
 let code = fs.readFileSync('src/app/dhikr/page.tsx', 'utf8');
 
-// The original buggy text rendering
-const oldCode = `{readingData[currentCardIndex].text.replace(/\\\\n/g, '\\\\n')}`;
-
-// The new mapped rendering for actual HTML breaks
-const newCode = `{readingData[currentCardIndex].text.split('\\\\n').map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      <br />
-                    </span>
-                  ))}`;
-
-code = code.replace(oldCode, newCode);
-
-fs.writeFileSync('src/app/dhikr/page.tsx', code);
-console.log('Fixed literal \\n characters');
+const startIdx = code.indexOf('<p className={`text-center font-amiri text-white leading-relaxed whitespace-pre-wrap transition-all duration-300 ${');
+if (startIdx !== -1) {
+  const endIdx = code.indexOf('</p>', startIdx);
+  
+  const before = code.substring(0, startIdx);
+  const after = code.substring(endIdx);
+  
+  const newMiddle = "<p className={`text-center font-amiri text-white leading-relaxed whitespace-pre-wrap transition-all duration-300 ${" +
+    "\n                  fontSize === 'small' ? 'text-xl' : fontSize === 'large' ? 'text-4xl' : 'text-2xl'" +
+    "\n                }`}>\n                  {readingData[currentCardIndex].text.split('\\\\n').map((line, i) => (\n" +
+    "                    <span key={i}>\n                      {line}\n                      <br />\n                    </span>\n" +
+    "                  ))}\n                ";
+  
+  fs.writeFileSync('src/app/dhikr/page.tsx', before + newMiddle + after);
+  console.log("REPLACED!");
+} else {
+  console.log("NOT FOUND");
+}
