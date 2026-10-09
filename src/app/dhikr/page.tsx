@@ -2,21 +2,37 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/link"; // We won't use next/image to keep it simple, just SVGs
+
+const dhikrCategories = [
+  { id: 'tasbeeh', title: 'المسبحة الإلكترونية', icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+  )},
+  { id: 'morning', title: 'أذكار الصباح', icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+  )},
+  { id: 'evening', title: 'أذكار المساء', icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+  )},
+  { id: 'prayer', title: 'أذكار الصلاة', icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+  )},
+];
 
 const dhikrList = [
-  { id: 1, arabic: "سُبْحَانَ اللَّهِ", transliteration: "Subhanallah", meaning: "Glory be to Allah" },
-  { id: 2, arabic: "الْحَمْدُ لِلَّهِ", transliteration: "Alhamdulillah", meaning: "Praise be to Allah" },
-  { id: 3, arabic: "اللَّهُ أَكْبَرُ", transliteration: "Allahu Akbar", meaning: "Allah is the Greatest" },
-  { id: 4, arabic: "أَسْتَغْفِرُ اللَّهَ", transliteration: "Astaghfirullah", meaning: "I seek forgiveness from Allah" },
-  { id: 5, arabic: "لَا إِلَهَ إِلَّا اللَّهُ", transliteration: "La ilaha illallah", meaning: "There is no deity but Allah" },
-  { id: 6, arabic: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", transliteration: "La hawla wa la quwwata illa billah", meaning: "There is no power nor strength except by Allah" },
+  { id: 1, arabic: "سُبْحَانَ اللَّهِ", transliteration: "Subhanallah" },
+  { id: 2, arabic: "الْحَمْدُ لِلَّهِ", transliteration: "Alhamdulillah" },
+  { id: 3, arabic: "اللَّهُ أَكْبَرُ", transliteration: "Allahu Akbar" },
+  { id: 4, arabic: "أَسْتَغْفِرُ اللَّهَ", transliteration: "Astaghfirullah" },
+  { id: 5, arabic: "لَا إِلَهَ إِلَّا اللَّهُ", transliteration: "La ilaha illallah" },
+  { id: 6, arabic: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", transliteration: "La hawla wa la quwwata illa billah" },
 ];
 
 const morningAdhkarList = [
-  { id: 'm1', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ...", count: 1 },
+  { id: 'm1', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ...", count: 1 },
   { id: 'm2', text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.", count: 3 },
-  { id: 'm3', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", count: 1 },
-  { id: 'm4', text: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ.", count: 1 },
+  { id: 'm3', text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\\nقُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ.", count: 3 },
+  { id: 'm4', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", count: 1 },
   { id: 'm5', text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ.", count: 100 }
 ];
 
@@ -28,18 +44,28 @@ const eveningAdhkarList = [
   { id: 'e5', text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ.", count: 100 }
 ];
 
+const prayerAdhkarList = [
+  { id: 'p1', text: "أَسْتَغْفِرُ اللَّهَ (ثَلاثاً) اللَّهُمَّ أَنْتَ السَّلاَمُ، وَمِنْكَ السَّلاَمُ، تَبَارَكْتَ يَا ذَا الْجَلاَلِ وَالإِكْرَامِ.", count: 1 },
+  { id: 'p2', text: "سُبْحَانَ اللهِ (33)، والْحَمْدُ للهِ (33)، واللهُ أَكْبَرُ (33)، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ...", count: 1 }
+];
+
 export default function DhikrApp() {
+  const [view, setView] = useState<"categories" | "tasbeeh_list" | "tasbeeh_counter" | "reading">("categories");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [activeDhikrId, setActiveDhikrId] = useState<number | null>(null); // For tasbeeh
+  
+  // States for Tasbeeh
   const [counts, setCounts] = useState<Record<number, number>>({});
-  const [selectedDhikr, setSelectedDhikr] = useState<number | null>(null);
   const [target, setTarget] = useState<number>(33);
-  const [activeTab, setActiveTab] = useState<"tasbeeh" | "morning" | "evening">("tasbeeh");
-  const [trackerProgress, setTrackerProgress] = useState<Record<string, number>>({});
+  
+  // States for Reading Mode
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [cardProgress, setCardProgress] = useState(0);
+  const [fontSize, setFontSize] = useState<"small"|"medium"|"large">("medium");
 
   useEffect(() => {
     const saved = localStorage.getItem("dhikrCounts");
-    if (saved) {
-      setCounts(JSON.parse(saved));
-    }
+    if (saved) setCounts(JSON.parse(saved));
   }, []);
 
   const saveCounts = (newCounts: Record<number, number>) => {
@@ -47,216 +73,241 @@ export default function DhikrApp() {
     localStorage.setItem("dhikrCounts", JSON.stringify(newCounts));
   };
 
-  const handleTap = (id: number) => {
+  const handleTasbeehTap = (id: number) => {
     const current = counts[id] || 0;
     const newCount = current + 1;
-    
-    // Vibrate longer if target is reached
     if (navigator.vibrate) {
-      if (target > 0 && newCount > 0 && newCount % target === 0) {
-        navigator.vibrate([100, 50, 100]); // distinct vibration pattern on goal
-      } else {
-        navigator.vibrate(50);
-      }
+      if (target > 0 && newCount > 0 && newCount % target === 0) navigator.vibrate([100, 50, 100]);
+      else navigator.vibrate(50);
     }
-    
-    const newCounts = { ...counts, [id]: newCount };
-    saveCounts(newCounts);
+    saveCounts({ ...counts, [id]: newCount });
   };
 
-  const handleReset = (id: number) => {
+  const handleTasbeehReset = (id: number) => {
     if (confirm("هل تريد تصفير عداد هذا الذكر؟")) {
-      const newCounts = { ...counts, [id]: 0 };
-      saveCounts(newCounts);
+      saveCounts({ ...counts, [id]: 0 });
     }
   };
 
-  const handleTrackerTap = (id: string, target: number) => {
-    if (navigator.vibrate) navigator.vibrate(50);
-    setTrackerProgress(prev => {
-      const current = prev[id] || 0;
-      if (current >= target) return prev;
-      return { ...prev, [id]: current + 1 };
-    });
+  const handleCategoryClick = (id: string) => {
+    if (id === 'tasbeeh') {
+      setView("tasbeeh_list");
+    } else {
+      setSelectedCategory(id);
+      setCurrentCardIndex(0);
+      setCardProgress(0);
+      setView("reading");
+    }
   };
 
-  const activeDhikr = selectedDhikr ? dhikrList.find(d => d.id === selectedDhikr) : null;
+  // Reading Mode Data
+  let readingData = morningAdhkarList;
+  let readingTitle = "أذكار الصباح";
+  if (selectedCategory === 'evening') { readingData = eveningAdhkarList; readingTitle = "أذكار المساء"; }
+  if (selectedCategory === 'prayer') { readingData = prayerAdhkarList; readingTitle = "أذكار الصلاة"; }
+
+  const handleReadingTap = (targetCount: number) => {
+    if (navigator.vibrate) navigator.vibrate(50);
+    const nextProgress = cardProgress + 1;
+    setCardProgress(nextProgress);
+    
+    if (nextProgress >= targetCount) {
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+      
+      // Auto transition to next card after a small delay
+      setTimeout(() => {
+        if (currentCardIndex < readingData.length - 1) {
+          setCurrentCardIndex(currentCardIndex + 1);
+          setCardProgress(0);
+        } else {
+          // Finished all adhkar
+          setView("categories");
+        }
+      }, 400);
+    }
+  };
+
 
   return (
-    <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] font-sans pb-32" dir="rtl">
+    <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] font-sans pb-24" dir="rtl">
       
-      {!selectedDhikr ? (
-        // --- LIST VIEW ---
-        <div className="animate-fade-in">
-          {/* Header */}
-          <div className="bg-[#1e354d] dark:bg-[#0b1221] text-white pt-16 pb-8 px-6 rounded-b-[50px] shadow-lg relative overflow-hidden">
-            {/* Moon/Stars decoration */}
-            <div className="absolute top-8 left-8">
-              <svg className="w-12 h-12 text-[#8ba7c0] opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            </div>
-            <div className="relative z-10 mb-6">
-              <h1 className="text-3xl font-extrabold mb-1">أذكاري</h1>
-              <p className="text-sm opacity-80">ألا بذكر الله تطمئن القلوب</p>
-            </div>
-            
-            {/* Tabs */}
-            <div className="flex bg-black/20 p-1 rounded-full relative z-10">
-              <button onClick={() => setActiveTab("tasbeeh")} className={`flex-1 py-3 rounded-full text-sm font-bold transition-all ${activeTab === "tasbeeh" ? 'bg-amber-400 text-amber-900 shadow-md' : 'text-white/70 hover:text-white'}`}>التسبيح</button>
-              <button onClick={() => setActiveTab("morning")} className={`flex-1 py-3 rounded-full text-sm font-bold transition-all ${activeTab === "morning" ? 'bg-amber-400 text-amber-900 shadow-md' : 'text-white/70 hover:text-white'}`}>الصباح</button>
-              <button onClick={() => setActiveTab("evening")} className={`flex-1 py-3 rounded-full text-sm font-bold transition-all ${activeTab === "evening" ? 'bg-amber-400 text-amber-900 shadow-md' : 'text-white/70 hover:text-white'}`}>المساء</button>
-            </div>
-          </div>
-
-          {activeTab === "tasbeeh" && (
-            <div className="px-5 mt-8 relative z-20 space-y-4">
-              {dhikrList.map((dhikr) => (
-                <div 
-                  key={dhikr.id} 
-                  onClick={() => setSelectedDhikr(dhikr.id)}
-                  className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex items-center justify-between cursor-pointer hover:scale-[1.02] transition-transform border border-transparent hover:border-[#4a6b8c]/30"
-                >
-                  {/* Text (Right Side in RTL) */}
-                  <div className="flex-1 pr-4">
-                    <p className="text-2xl font-amiri font-bold text-[#1e354d] dark:text-white mb-1">{dhikr.arabic}</p>
-                    <p className="text-xs opacity-60">{dhikr.transliteration}</p>
-                  </div>
-
-                  {/* Badge (Left Side in RTL) */}
-                  <div className="bg-amber-400 text-amber-900 px-4 py-2 rounded-full font-extrabold text-sm shadow-md min-w-[70px] text-center">
-                    {(counts[dhikr.id] || 0)}x
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Tracker List */}
-          {(activeTab === "morning" || activeTab === "evening") && (
-            <div className="px-5 mt-8 relative z-20 space-y-4">
-              {(activeTab === "morning" ? morningAdhkarList : eveningAdhkarList).map((dhikr) => {
-                const current = trackerProgress[dhikr.id] || 0;
-                const isDone = current >= dhikr.count;
-                return (
-                  <div key={dhikr.id} className={`bg-white dark:bg-[#1e293b] rounded-3xl p-6 shadow-sm border ${isDone ? 'border-amber-400/50' : 'border-transparent'} transition-colors relative overflow-hidden`}>
-                    {isDone && <div className="absolute top-0 right-0 w-16 h-16 bg-amber-400/10 rounded-bl-full border-b border-l border-amber-400/20"></div>}
-                    
-                    <p className="text-xl md:text-2xl font-amiri leading-loose whitespace-pre-wrap mb-6">{dhikr.text}</p>
-                    
-                    <button
-                      onClick={() => handleTrackerTap(dhikr.id, dhikr.count)}
-                      disabled={isDone}
-                      className={`w-full py-4 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${
-                        isDone 
-                        ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400' 
-                        : 'bg-[#f4f7f9] dark:bg-[#0f172a] text-[#4a6b8c] dark:text-[#8ba7c0] hover:bg-[#e2e8f0] dark:hover:bg-[#1e293b]'
-                      }`}
-                    >
-                      {isDone ? (
-                        <>
-                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                          اكتمل
-                        </>
-                      ) : (
-                        <>
-                          العدد: {current} / {dhikr.count}
-                        </>
-                      )}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-        </div>
-      ) : (
-        // --- COUNTER VIEW ---
-        <div className="animate-fade-in flex flex-col min-h-screen bg-[#1e354d] dark:bg-[#0b1221] text-white relative pb-32">
+      {/* 1. CATEGORIES VIEW */}
+      {view === "categories" && (
+        <div className="animate-fade-in px-6 pt-16">
+          <h1 className="text-3xl font-extrabold mb-8 text-[#1e354d] dark:text-white">قسم الأذكار</h1>
           
-          {/* Top Bar */}
+          <div className="space-y-4">
+            {dhikrCategories.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => handleCategoryClick(cat.id)}
+                className="w-full bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex items-center justify-between transition-transform active:scale-95 border border-transparent hover:border-[#4a6b8c]/30"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#f4f7f9] dark:bg-[#0f172a] flex items-center justify-center text-[#4a6b8c] dark:text-[#8ba7c0]">
+                    {cat.icon}
+                  </div>
+                  <span className="text-xl font-bold">{cat.title}</span>
+                </div>
+                <svg className="w-5 h-5 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 2. TASBEEH LIST VIEW */}
+      {view === "tasbeeh_list" && (
+        <div className="animate-fade-in px-6 pt-16">
+          <div className="flex items-center mb-8 gap-4">
+            <button onClick={() => setView("categories")} className="p-2 bg-white/10 dark:bg-black/20 rounded-full">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
+            </button>
+            <h1 className="text-3xl font-extrabold text-[#1e354d] dark:text-white">المسبحة</h1>
+          </div>
+          
+          <div className="space-y-4">
+            {dhikrList.map(dhikr => (
+              <div 
+                key={dhikr.id} 
+                onClick={() => { setActiveDhikrId(dhikr.id); setView("tasbeeh_counter"); }}
+                className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex items-center justify-between cursor-pointer active:scale-95 transition-transform"
+              >
+                <div className="flex-1 pr-4">
+                  <p className="text-2xl font-amiri font-bold text-[#1e354d] dark:text-white mb-1">{dhikr.arabic}</p>
+                  <p className="text-xs opacity-60">{dhikr.transliteration}</p>
+                </div>
+                <div className="bg-amber-400 text-amber-900 px-4 py-2 rounded-full font-extrabold text-sm shadow-md min-w-[70px] text-center">
+                  {(counts[dhikr.id] || 0)}x
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 3. TASBEEH COUNTER VIEW */}
+      {view === "tasbeeh_counter" && (
+        <div className="animate-fade-in flex flex-col min-h-screen bg-[#1e354d] dark:bg-[#0b1221] text-white relative pb-32">
           <div className="pt-10 px-6 flex items-center justify-between z-10 w-full">
-            <div className="w-10"></div> {/* Spacer for centering */}
+            <div className="w-10"></div>
             <span className="font-bold opacity-80 text-lg">التسبيح</span>
-            {/* The single back button on the right */}
-            <button onClick={() => setSelectedDhikr(null)} className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition focus:outline-none">
+            <button onClick={() => setView("tasbeeh_list")} className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
 
-          {/* Dhikr Text */}
           <div className="flex flex-col items-center justify-center mt-8 mb-10 px-6 text-center z-10">
-            <h2 className="text-5xl font-amiri font-bold mb-4 leading-normal text-white">{activeDhikr?.arabic}</h2>
-            <p className="opacity-70 text-lg">{activeDhikr?.transliteration}</p>
+            <h2 className="text-5xl font-amiri font-bold mb-4 leading-normal text-white">{dhikrList.find(d => d.id === activeDhikrId)?.arabic}</h2>
           </div>
 
-          {/* Flat Minimal Circle Counter */}
           <div className="flex-1 flex flex-col items-center z-10 w-full">
-            
             <button 
-              onClick={() => handleTap(activeDhikr!.id)}
+              onClick={() => handleTasbeehTap(activeDhikrId!)}
               className="relative w-64 h-64 flex items-center justify-center group focus:outline-none"
             >
-              {/* SVG Circular Progress */}
               <svg className="absolute inset-0 w-full h-full transform -rotate-90 pointer-events-none" viewBox="0 0 288 288">
-                {/* Background Track */}
+                <circle cx="144" cy="144" r="130" stroke="currentColor" strokeWidth="8" fill="none" className="text-white/10" />
                 <circle 
-                  cx="144" cy="144" r="130" 
-                  stroke="currentColor" 
-                  strokeWidth="8" 
-                  fill="none" 
-                  className="text-white/10"
-                />
-                
-                {/* Active Progress Arc */}
-                <circle 
-                  cx="144" cy="144" r="130" 
-                  stroke="currentColor" 
-                  strokeWidth="8" 
-                  fill="none" 
-                  strokeLinecap="round"
+                  cx="144" cy="144" r="130" stroke="currentColor" strokeWidth="8" fill="none" strokeLinecap="round"
                   className="text-amber-400 transition-all duration-300 ease-out"
                   strokeDasharray="816.8" 
-                  strokeDashoffset={target === 0 ? 0 : 816.8 - ((counts[activeDhikr!.id] || 0) % target || (counts[activeDhikr!.id] > 0 && (counts[activeDhikr!.id] || 0) % target === 0 ? target : 0)) / target * 816.8}
+                  strokeDashoffset={target === 0 ? 0 : 816.8 - ((counts[activeDhikrId!] || 0) % target || (counts[activeDhikrId!] > 0 && (counts[activeDhikrId!] || 0) % target === 0 ? target : 0)) / target * 816.8}
                 />
               </svg>
-
-              {/* The Numbers */}
-              <span 
-                className="font-mono text-7xl font-light text-amber-400 tracking-wider group-active:scale-95 transition-transform"
-                style={{ fontFamily: "'Courier New', Courier, monospace" }}
-              >
-                {(counts[activeDhikr!.id] || 0)}
+              <span className="font-mono text-7xl font-light text-amber-400 tracking-wider group-active:scale-95 transition-transform">
+                {(counts[activeDhikrId!] || 0)}
               </span>
             </button>
 
-            {/* Target Selector */}
-            <div className="mt-10 flex gap-4 bg-white/5 p-1 rounded-full border border-white/10 backdrop-blur-sm">
+            <div className="mt-10 flex gap-4 bg-white/5 p-1 rounded-full border border-white/10">
               {[33, 100, 0].map(t => (
-                <button
-                  key={t}
-                  onClick={() => setTarget(t)}
-                  className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${target === t ? 'bg-amber-400 text-amber-900 shadow-md' : 'text-white/60 hover:text-white hover:bg-white/10'}`}
-                >
+                <button key={t} onClick={() => setTarget(t)} className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${target === t ? 'bg-amber-400 text-amber-900 shadow-md' : 'text-white/60 hover:text-white'}`}>
                   {t === 0 ? 'مفتوح' : t}
                 </button>
               ))}
             </div>
 
-            {/* Centered Reset Button */}
-            <button 
-              onClick={() => handleReset(activeDhikr!.id)} 
-              className="mt-8 p-4 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-all focus:outline-none flex items-center justify-center shadow-lg"
-              aria-label="تصفير العداد"
-            >
+            <button onClick={() => handleTasbeehReset(activeDhikrId!)} className="mt-8 p-4 bg-white/5 border border-white/10 rounded-full text-white/60">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* 4. READING VIEW (Stacked Cards UI) */}
+      {view === "reading" && (
+        <div className="animate-fade-in flex flex-col min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] relative">
+          
+          {/* Top Navigation */}
+          <div className="pt-12 px-6 flex items-center justify-between w-full mb-6 relative z-20">
+            <button className="w-10 h-10 bg-white dark:bg-[#1e293b] shadow-sm rounded-full flex items-center justify-center">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+            </button>
+            <h1 className="text-2xl font-extrabold text-[#1e354d] dark:text-white">{readingTitle}</h1>
+            <button onClick={() => setView("categories")} className="w-10 h-10 bg-white dark:bg-[#1e293b] shadow-sm rounded-full flex items-center justify-center">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          {/* Stacked Cards Container */}
+          <div className="flex-1 flex flex-col items-center justify-center px-6 relative z-10 w-full mb-24">
+            
+            {/* Background decorative stack cards */}
+            <div className="absolute top-4 w-[80%] h-12 bg-white/30 dark:bg-white/5 rounded-[40px] -z-20"></div>
+            <div className="absolute top-8 w-[90%] h-12 bg-white/60 dark:bg-white/10 rounded-[40px] -z-10"></div>
+            
+            {/* Main Active Card */}
+            <div className="w-full bg-[#1e354d] dark:bg-[#1e293b] rounded-[40px] shadow-2xl p-6 md:p-8 flex flex-col min-h-[55vh] border border-[#2a4563] dark:border-[#2d3b4e] relative z-0">
+              
+              {/* Badge */}
+              <div className="flex justify-center mb-8">
+                <div className="bg-[#5c8a5c] dark:bg-emerald-700 text-white px-5 py-1.5 rounded-full text-sm font-bold shadow-md">
+                  {currentCardIndex + 1}/{readingData.length}
+                </div>
+              </div>
+
+              {/* Text Content */}
+              <div className="flex-1 flex items-center justify-center">
+                <p className={`text-center font-amiri text-white leading-relaxed whitespace-pre-wrap transition-all duration-300 ${
+                  fontSize === 'small' ? 'text-xl' : fontSize === 'large' ? 'text-4xl' : 'text-2xl'
+                }`}>
+                  {readingData[currentCardIndex].text.replace(/\\n/g, '\\n')}
+                </p>
+              </div>
+
+              {/* Counter Button */}
+              <div className="flex justify-center mt-12 mb-4">
+                <button 
+                  onClick={() => handleReadingTap(readingData[currentCardIndex].count)}
+                  className="relative overflow-hidden bg-transparent border-2 border-[#5c8a5c] dark:border-emerald-700 text-white px-8 py-3 rounded-full text-lg font-bold group"
+                >
+                  <span className="relative z-10">{cardProgress} من {readingData[currentCardIndex].count} مرات</span>
+                  {/* Progress Fill */}
+                  <div 
+                    className="absolute top-0 right-0 bottom-0 bg-[#5c8a5c] dark:bg-emerald-700 transition-all duration-300 ease-out z-0"
+                    style={{ width: `${(cardProgress / readingData[currentCardIndex].count) * 100}%` }}
+                  ></div>
+                </button>
+              </div>
+            </div>
             
           </div>
           
-          {/* Background Arc Decoration */}
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-[#4a6b8c]/20 rounded-t-[100%] z-0 pointer-events-none blur-3xl"></div>
+          {/* Bottom Settings Bar */}
+          <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between z-20">
+            <button onClick={() => setFontSize(fontSize === 'medium' ? 'large' : fontSize === 'large' ? 'small' : 'medium')} className="w-12 h-12 bg-white dark:bg-[#1e293b] rounded-full shadow-md flex items-center justify-center font-bold text-[#1e354d] dark:text-white">AA</button>
+            <div className="bg-white dark:bg-[#1e293b] px-6 py-3 rounded-full shadow-md text-[#1e354d] dark:text-white font-bold text-sm">
+              الانتقال التلقائي
+            </div>
+            <button className="w-12 h-12 bg-white dark:bg-[#1e293b] rounded-full shadow-md flex items-center justify-center text-[#1e354d] dark:text-white">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            </button>
+          </div>
+
         </div>
       )}
+
     </div>
   );
 }
