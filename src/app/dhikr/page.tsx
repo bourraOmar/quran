@@ -15,6 +15,7 @@ const dhikrList = [
 export default function DhikrApp() {
   const [counts, setCounts] = useState<Record<number, number>>({});
   const [selectedDhikr, setSelectedDhikr] = useState<number | null>(null);
+  const [target, setTarget] = useState<number>(33);
 
   useEffect(() => {
     const saved = localStorage.getItem("dhikrCounts");
@@ -29,8 +30,19 @@ export default function DhikrApp() {
   };
 
   const handleTap = (id: number) => {
-    if (navigator.vibrate) navigator.vibrate(50);
-    const newCounts = { ...counts, [id]: (counts[id] || 0) + 1 };
+    const current = counts[id] || 0;
+    const newCount = current + 1;
+    
+    // Vibrate longer if target is reached
+    if (navigator.vibrate) {
+      if (target > 0 && newCount > 0 && newCount % target === 0) {
+        navigator.vibrate([100, 50, 100]); // distinct vibration pattern on goal
+      } else {
+        navigator.vibrate(50);
+      }
+    }
+    
+    const newCounts = { ...counts, [id]: newCount };
     saveCounts(newCounts);
   };
 
@@ -102,18 +114,36 @@ export default function DhikrApp() {
             <p className="opacity-70 text-lg">{activeDhikr?.transliteration}</p>
           </div>
 
-                    {/* Flat Minimal Circle Counter */}
-          <div className="flex-1 flex flex-col items-center justify-center z-10 w-full mb-12">
+                              {/* Flat Minimal Circle Counter */}
+          <div className="flex-1 flex flex-col items-center justify-center z-10 w-full mb-8">
             
             <button 
               onClick={() => handleTap(activeDhikr!.id)}
-              className="relative w-72 h-72 rounded-full flex items-center justify-center group focus:outline-none"
+              className="relative w-72 h-72 flex items-center justify-center group focus:outline-none"
             >
-              {/* Outer track */}
-              <div className="absolute inset-0 rounded-full border-4 border-white/10"></div>
-              
-              {/* Inner active arc (simulated with a colored border for now, or you can use SVG for actual arc) */}
-              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-400 border-r-amber-400 group-active:border-amber-400 transition-all duration-300 transform -rotate-45"></div>
+              {/* SVG Circular Progress */}
+              <svg className="absolute inset-0 w-full h-full transform -rotate-90 pointer-events-none" viewBox="0 0 288 288">
+                {/* Background Track */}
+                <circle 
+                  cx="144" cy="144" r="130" 
+                  stroke="currentColor" 
+                  strokeWidth="8" 
+                  fill="none" 
+                  className="text-white/10"
+                />
+                
+                {/* Active Progress Arc */}
+                <circle 
+                  cx="144" cy="144" r="130" 
+                  stroke="currentColor" 
+                  strokeWidth="8" 
+                  fill="none" 
+                  strokeLinecap="round"
+                  className="text-amber-400 transition-all duration-300 ease-out"
+                  strokeDasharray="816.8" 
+                  strokeDashoffset={target === 0 ? 0 : 816.8 - ((counts[activeDhikr!.id] || 0) % target || (counts[activeDhikr!.id] > 0 && (counts[activeDhikr!.id] || 0) % target === 0 ? target : 0)) / target * 816.8}
+                />
+              </svg>
 
               {/* The Numbers */}
               <span 
@@ -124,8 +154,21 @@ export default function DhikrApp() {
               </span>
             </button>
 
+            {/* Target Selector */}
+            <div className="mt-12 flex gap-4 bg-white/5 p-1 rounded-full border border-white/10 backdrop-blur-sm">
+              {[33, 100, 0].map(t => (
+                <button
+                  key={t}
+                  onClick={() => setTarget(t)}
+                  className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${target === t ? 'bg-amber-400 text-amber-900 shadow-md' : 'text-white/60 hover:text-white hover:bg-white/10'}`}
+                >
+                  {t === 0 ? 'مفتوح' : t}
+                </button>
+              ))}
+            </div>
+
             {/* Bottom Flat Icons */}
-            <div className="flex items-center justify-between w-full max-w-xs mt-16 px-8">
+            <div className="flex items-center justify-between w-full max-w-xs mt-8 px-8">
               <button onClick={() => handleReset(activeDhikr!.id)} className="p-3 opacity-60 hover:opacity-100 transition-opacity focus:outline-none">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
               </button>
