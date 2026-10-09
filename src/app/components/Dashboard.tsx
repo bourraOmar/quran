@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [locationName, setLocationName] = useState("جاري تحديد الموقع...");
   
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [toastMessage, setToastMessage] = useState("");
   
   const [prayedStatus, setPrayedStatus] = useState<Record<string, boolean>>({
     "الفجر": false,
@@ -78,7 +79,8 @@ export default function Dashboard() {
   const togglePrayed = (prayerName: string, prayerTimeStr: string) => {
     if (!canCheckPrayer(prayerTimeStr)) {
       // Could show a small toast here: "لم يحن وقت الصلاة بعد"
-      alert("لا يمكن تسجيل الصلاة قبل دخول وقتها");
+      setToastMessage("لا يمكن تسجيل الصلاة قبل دخول وقتها");
+      setTimeout(() => setToastMessage(""), 3000);
       return;
     }
     setPrayedStatus(prev => ({
@@ -332,6 +334,12 @@ export default function Dashboard() {
            </p>
         </div>
 
+      </div>
+
+
+      {/* Toast Notification */}
+      <div className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 bg-[#1e354d] text-white px-6 py-3 rounded-full shadow-2xl font-bold text-sm transition-all duration-300 pointer-events-none ${toastMessage ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+        {toastMessage}
       </div>
     </div>
   );

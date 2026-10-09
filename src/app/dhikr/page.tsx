@@ -21,6 +21,7 @@ export default function DhikrPage() {
   
   // Morning Adhkar State (track progress of each dhikr)
   const [adhkarProgress, setAdhkarProgress] = useState<Record<number, number>>({});
+  const [showResetModal, setShowResetModal] = useState(false);
 
   // Load saved free count from localStorage on mount
   useEffect(() => {
@@ -35,11 +36,10 @@ export default function DhikrPage() {
     localStorage.setItem("freeTasbeehCount", newCount.toString());
   };
 
-  const resetFreeTap = () => {
-    if (confirm("هل تريد تصفير العداد؟")) {
-      setFreeCount(0);
-      localStorage.setItem("freeTasbeehCount", "0");
-    }
+  const confirmReset = () => {
+    setFreeCount(0);
+    localStorage.setItem("freeTasbeehCount", "0");
+    setShowResetModal(false);
   };
 
   const handleAdhkarTap = (id: number, target: number) => {
@@ -83,6 +83,22 @@ export default function DhikrPage() {
 
       <div className="px-6 mt-8">
         
+        
+      {/* Reset Modal */}
+      {showResetModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-[#1e293b] rounded-3xl p-6 w-full max-w-xs shadow-2xl scale-100">
+            <h3 className="text-xl font-bold mb-2">تصفير العداد</h3>
+            <p className="opacity-70 text-sm mb-6">هل أنت متأكد أنك تريد تصفير عداد التسبيح؟</p>
+            <div className="flex gap-3">
+              <button onClick={() => setShowResetModal(false)} className="flex-1 py-3 rounded-full font-bold bg-[#f4f7f9] dark:bg-[#0f172a] hover:opacity-80 transition-opacity">إلغاء</button>
+              <button onClick={confirmReset} className="flex-1 py-3 rounded-full font-bold bg-red-500 text-white hover:bg-red-600 transition-colors shadow-lg shadow-red-500/30">تصفير</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
         {/* ---------------- FREE TASBEEH ---------------- */}
         {activeTab === "free" && (
           <div className="flex flex-col items-center justify-center mt-12 animate-fade-in">
@@ -96,7 +112,7 @@ export default function DhikrPage() {
             </div>
 
             <button 
-              onClick={resetFreeTap}
+              onClick={() => setShowResetModal(true)}
               className="mt-12 bg-white dark:bg-[#1e293b] text-red-500/80 px-6 py-3 rounded-full font-bold shadow-sm border border-red-500/20 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all flex items-center gap-2"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
