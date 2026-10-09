@@ -56,13 +56,13 @@ export default function DhikrApp() {
   const activeDhikr = selectedDhikr ? dhikrList.find(d => d.id === selectedDhikr) : null;
 
   return (
-    <div className="min-h-screen bg-transparent text-white font-sans pb-32" dir="rtl">
+    <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] font-sans pb-32" dir="rtl">
       
       {!selectedDhikr ? (
         // --- LIST VIEW ---
         <div className="animate-fade-in">
           {/* Header */}
-          <div className="bg-black/40 backdrop-blur-md text-white pt-16 pb-12 px-6 rounded-b-[50px] shadow-lg relative overflow-hidden border-b border-amber-400/20">
+          <div className="bg-[#1e354d] dark:bg-[#0b1221] text-white pt-16 pb-12 px-6 rounded-b-[50px] shadow-lg relative overflow-hidden">
             {/* Moon/Stars decoration */}
             <div className="absolute top-8 left-8">
               <svg className="w-12 h-12 text-[#8ba7c0] opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -79,7 +79,7 @@ export default function DhikrApp() {
               <div 
                 key={dhikr.id} 
                 onClick={() => setSelectedDhikr(dhikr.id)}
-                className="bg-[#1e293b]/60 backdrop-blur-md p-5 rounded-3xl shadow-sm flex items-center justify-between cursor-pointer hover:scale-[1.02] transition-transform border border-transparent hover:border-[#4a6b8c]/30"
+                className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex items-center justify-between cursor-pointer hover:scale-[1.02] transition-transform border border-transparent hover:border-[#4a6b8c]/30"
               >
                 {/* Text (Right Side in RTL) */}
                 <div className="flex-1 pr-4">
@@ -97,7 +97,7 @@ export default function DhikrApp() {
         </div>
       ) : (
         // --- COUNTER VIEW ---
-        <div className="animate-fade-in flex flex-col min-h-screen bg-transparent text-white relative pb-32">
+        <div className="animate-fade-in flex flex-col min-h-screen bg-[#1e354d] dark:bg-[#0b1221] text-white relative pb-32">
           
           {/* Top Bar */}
           <div className="pt-10 px-6 flex items-center justify-between z-10 w-full">

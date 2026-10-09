@@ -271,7 +271,7 @@ export default function Dashboard() {
 
       <div className="px-4 mt-[-20px] relative z-20 space-y-4">
         
-        <div className="bg-[#1e293b]/80 backdrop-blur-md border border-white/10 p-5 rounded-[30px] shadow-sm flex justify-between items-center overflow-x-auto gap-4 hide-scrollbar">
+        <div className="bg-white dark:bg-[#1e293b] p-5 rounded-[30px] shadow-sm flex justify-between items-center overflow-x-auto gap-4 hide-scrollbar">
           {[
             { name: "الفجر", time: timings?.Fajr || "--:--" },
             { name: "الظهر", time: timings?.Dhuhr || "--:--" },
@@ -304,7 +304,7 @@ export default function Dashboard() {
              { name: "الذكر", icon: <Image src="/icons/dhikr.png" width={32} height={32} alt="الذكر" className="opacity-70 dark:invert dark:opacity-80 object-contain w-8 h-8" />, href: "/dhikr" },
              { name: "القبلة", icon: <Image src="/icons/qibla.png" width={32} height={32} alt="القبلة" className="opacity-70 dark:invert dark:opacity-80 object-contain w-8 h-8" />, href: "/qibla" },
            ].map((item, i) => (
-             <Link href={item.href} key={i} className="bg-[#1e293b]/80 backdrop-blur-md border border-white/10 py-5 px-2 rounded-3xl shadow-sm flex flex-col items-center justify-center gap-3 hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] transition-all border border-transparent hover:border-[#e2e8f0] dark:hover:border-[#334155]">
+             <Link href={item.href} key={i} className="bg-white dark:bg-[#1e293b] py-5 px-2 rounded-3xl shadow-sm flex flex-col items-center justify-center gap-3 hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] transition-all border border-transparent hover:border-[#e2e8f0] dark:hover:border-[#334155]">
                {item.icon}
                <span className="text-[11px] font-bold text-[#4a6b8c] dark:text-[#94a3b8]">{item.name}</span>
              </Link>
@@ -312,11 +312,11 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-[#1e293b]/80 backdrop-blur-md border border-white/10 p-5 rounded-3xl shadow-sm flex flex-col justify-center">
+          <div className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex flex-col justify-center">
              <span className="text-xs opacity-70 mb-1">التاريخ الهجري</span>
              <span className="font-bold text-lg">{hijri ? `${hijri.day} ${hijri.month.ar} ${hijri.year}` : "جاري التحميل..."}</span>
           </div>
-          <div className="bg-[#1e293b]/80 backdrop-blur-md border border-white/10 p-5 rounded-3xl shadow-sm flex flex-col justify-center items-start">
+          <div className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex flex-col justify-center items-start">
              <span className="text-xs opacity-70 mb-1">آخر قراءة</span>
              <span className="font-bold text-lg font-amiri mb-2">سورة الفاتحة</span>
              <Link href="/surah/1" className="text-xs text-[#4a6b8c] dark:text-[#8ba7c0] font-bold flex items-center gap-1">
@@ -326,7 +326,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-[#1e293b]/80 backdrop-blur-md border border-white/10 p-6 rounded-3xl shadow-sm border border-[#e2e8f0] dark:border-[#334155] relative overflow-hidden">
+        <div className="bg-white dark:bg-[#1e293b] p-6 rounded-3xl shadow-sm border border-[#e2e8f0] dark:border-[#334155] relative overflow-hidden">
            <div className="absolute top-0 right-0 w-32 h-32 opacity-5" style={{ backgroundImage: 'url(/img/pattern.png)' }}></div>
            <span className="text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0] mb-3 block text-center">حديث اليوم</span>
            <p className="text-xl md:text-2xl font-amiri text-center leading-loose">
