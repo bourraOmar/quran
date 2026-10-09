@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function FloatingMobileMenu() {
@@ -34,16 +35,12 @@ export default function FloatingMobileMenu() {
         
         {/* Home */}
         <Link href="/" aria-label="الرئيسية" className={`p-3 rounded-2xl flex flex-col items-center justify-center transition-all ${pathname === "/" ? "text-[#4a6b8c] dark:text-[#8ba7c0]" : "text-[#94a3b8] hover:text-[#4a6b8c] dark:hover:text-[#8ba7c0]"}`}>
-          <svg className="w-6 h-6" fill={pathname === "/" ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24" strokeWidth={pathname === "/" ? 1.5 : 2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
+          <Image src="/icons/home.png" width={24} height={24} alt="الرئيسية" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname === "/" ? "opacity-100 scale-110" : "opacity-50"}`} />
         </Link>
 
         {/* Quran (Surahs) */}
         <Link href="/surahs" aria-label="القرآن" className={`p-3 rounded-2xl flex flex-col items-center justify-center transition-all ${pathname.startsWith("/surah") ? "text-[#4a6b8c] dark:text-[#8ba7c0]" : "text-[#94a3b8] hover:text-[#4a6b8c] dark:hover:text-[#8ba7c0]"}`}>
-          <svg className="w-6 h-6" fill={pathname.startsWith("/surah") ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24" strokeWidth={pathname.startsWith("/surah") ? 1.5 : 2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
+          <Image src="/icons/quran.png" width={24} height={24} alt="القرآن" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname.startsWith("/surah") ? "opacity-100 scale-110" : "opacity-50"}`} />
         </Link>
 
         {/* Qibla / Center Action */}
@@ -55,16 +52,12 @@ export default function FloatingMobileMenu() {
 
         {/* Reciters */}
         <Link href="/reciters" aria-label="القراء" className={`p-3 rounded-2xl flex flex-col items-center justify-center transition-all ${pathname.startsWith("/reciter") ? "text-[#4a6b8c] dark:text-[#8ba7c0]" : "text-[#94a3b8] hover:text-[#4a6b8c] dark:hover:text-[#8ba7c0]"}`}>
-          <svg className="w-6 h-6" fill={pathname.startsWith("/reciter") ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24" strokeWidth={pathname.startsWith("/reciter") ? 1.5 : 2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-          </svg>
+          <Image src="/icons/reciters.png" width={24} height={24} alt="القراء" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname.startsWith("/reciter") ? "opacity-100 scale-110" : "opacity-50"}`} />
         </Link>
 
         {/* Profile / Settings */}
         <Link href="/profile" aria-label="حسابي" className={`p-3 rounded-2xl flex flex-col items-center justify-center transition-all ${pathname === "/profile" ? "text-[#4a6b8c] dark:text-[#8ba7c0]" : "text-[#94a3b8] hover:text-[#4a6b8c] dark:hover:text-[#8ba7c0]"}`}>
-          <svg className="w-6 h-6" fill={pathname === "/profile" ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24" strokeWidth={pathname === "/profile" ? 1.5 : 2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
+          <Image src="/icons/profile.png" width={24} height={24} alt="الملف الشخصي" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname === "/profile" ? "opacity-100 scale-110" : "opacity-50"}`} />
         </Link>
 
       </div>
