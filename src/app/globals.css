@@ -10,8 +10,12 @@
 
 @layer base {
   body {
-    background-color: #f4f7f9;
-    color: #1e354d;
+    background-color: #0f172a;
+    background-image: url('/bg.jpg');
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    color: #ffffff;
   }
 }
 
