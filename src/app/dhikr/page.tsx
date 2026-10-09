@@ -81,15 +81,15 @@ export default function DhikrApp() {
                 onClick={() => setSelectedDhikr(dhikr.id)}
                 className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex items-center justify-between cursor-pointer hover:scale-[1.02] transition-transform border border-transparent hover:border-[#4a6b8c]/30"
               >
-                {/* Badge */}
+                {/* Text (Right Side in RTL) */}
+                <div className="flex-1 pr-4">
+                  <p className="text-2xl font-amiri font-bold text-[#1e354d] dark:text-white mb-1">{dhikr.arabic}</p>
+                  <p className="text-xs opacity-60">{dhikr.transliteration}</p>
+                </div>
+
+                {/* Badge (Left Side in RTL) */}
                 <div className="bg-amber-400 text-amber-900 px-4 py-2 rounded-full font-extrabold text-sm shadow-md min-w-[70px] text-center">
                   {(counts[dhikr.id] || 0)}x
-                </div>
-                
-                {/* Text */}
-                <div className="text-left flex-1 pl-4" dir="ltr">
-                  <p className="text-2xl font-amiri font-bold text-[#1e354d] dark:text-white mb-1 text-right">{dhikr.arabic}</p>
-                  <p className="text-xs opacity-60 text-right">{dhikr.transliteration}</p>
                 </div>
               </div>
             ))}
