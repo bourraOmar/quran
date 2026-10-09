@@ -31,33 +31,31 @@ export default function FloatingMobileMenu() {
 
   return (
     <div className={wrapperClasses}>
-      <div className={`pointer-events-auto bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-xl h-[64px] rounded-[32px] flex items-center justify-between shadow-2xl border border-[#e2e8f0] dark:border-white/10 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${innerClasses}`}>
-        
-        {/* Home */}
-        <Link href="/" aria-label="الرئيسية" className={`p-3 rounded-2xl flex flex-col items-center justify-center transition-all ${pathname === "/" ? "text-[#4a6b8c] dark:text-[#8ba7c0]" : "text-[#94a3b8] hover:text-[#4a6b8c] dark:hover:text-[#8ba7c0]"}`}>
+      <div className={`pointer-events-auto bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-xl h-[64px] rounded-[32px] flex items-center justify-around shadow-2xl border border-[#e2e8f0] dark:border-white/10 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${innerClasses}`}>
+
+        {/* 1. Home */}
+        <Link href="/" aria-label="الرئيسية" className={`p-3 flex-1 flex flex-col items-center justify-center transition-all`}>
           <Image src="/icons/home.png" width={24} height={24} alt="الرئيسية" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname === "/" ? "opacity-100 scale-110" : "opacity-50"}`} />
         </Link>
 
-        {/* Quran (Surahs) */}
-        <Link href="/surahs" aria-label="القرآن" className={`p-3 rounded-2xl flex flex-col items-center justify-center transition-all ${pathname.startsWith("/surah") ? "text-[#4a6b8c] dark:text-[#8ba7c0]" : "text-[#94a3b8] hover:text-[#4a6b8c] dark:hover:text-[#8ba7c0]"}`}>
-          <Image src="/icons/quran.png" width={24} height={24} alt="القرآن" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname.startsWith("/surah") ? "opacity-100 scale-110" : "opacity-50"}`} />
-        </Link>
-
-        {/* Qibla / Center Action */}
-        <Link href="/qibla" aria-label="القبلة" className="p-3 -mt-6 bg-[#4a6b8c] text-white rounded-full flex flex-col items-center justify-center transition-all shadow-lg shadow-[#4a6b8c]/30 hover:scale-105 border-4 border-[#f4f7f9] dark:border-[#0f172a]">
-          <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </Link>
-
-        {/* Reciters */}
-        <Link href="/reciters" aria-label="القراء" className={`p-3 rounded-2xl flex flex-col items-center justify-center transition-all ${pathname.startsWith("/reciter") ? "text-[#4a6b8c] dark:text-[#8ba7c0]" : "text-[#94a3b8] hover:text-[#4a6b8c] dark:hover:text-[#8ba7c0]"}`}>
+        {/* 2. Reciters */}
+        <Link href="/reciters" aria-label="القراء" className={`p-3 flex-1 flex flex-col items-center justify-center transition-all`}>
           <Image src="/icons/reciters.png" width={24} height={24} alt="القراء" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname.startsWith("/reciter") ? "opacity-100 scale-110" : "opacity-50"}`} />
         </Link>
 
-        {/* Profile / Settings */}
-        <Link href="/profile" aria-label="حسابي" className={`p-3 rounded-2xl flex flex-col items-center justify-center transition-all ${pathname === "/profile" ? "text-[#4a6b8c] dark:text-[#8ba7c0]" : "text-[#94a3b8] hover:text-[#4a6b8c] dark:hover:text-[#8ba7c0]"}`}>
-          <Image src="/icons/profile.png" width={24} height={24} alt="الملف الشخصي" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname === "/profile" ? "opacity-100 scale-110" : "opacity-50"}`} />
+        {/* 3. Quran / Surahs */}
+        <Link href="/surahs" aria-label="القرآن" className={`p-3 flex-1 flex flex-col items-center justify-center transition-all`}>
+          <Image src="/icons/quran.png" width={24} height={24} alt="القرآن" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname.startsWith("/surah") ? "opacity-100 scale-110" : "opacity-50"}`} />
+        </Link>
+
+        {/* 4. Dhikr */}
+        <Link href="/dhikr" aria-label="الذكر" className={`p-3 flex-1 flex flex-col items-center justify-center transition-all`}>
+          <Image src="/icons/dhikr.png" width={24} height={24} alt="الذكر" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname === "/dhikr" ? "opacity-100 scale-110" : "opacity-50"}`} />
+        </Link>
+
+        {/* 5. Setting / Profile */}
+        <Link href="/profile" aria-label="الإعدادات" className={`p-3 flex-1 flex flex-col items-center justify-center transition-all`}>
+          <Image src="/icons/profile.png" width={24} height={24} alt="الإعدادات" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname === "/profile" ? "opacity-100 scale-110" : "opacity-50"}`} />
         </Link>
 
       </div>
