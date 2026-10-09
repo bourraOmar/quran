@@ -12,10 +12,29 @@ const dhikrList = [
   { id: 6, arabic: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", transliteration: "La hawla wa la quwwata illa billah", meaning: "There is no power nor strength except by Allah" },
 ];
 
+const morningAdhkarList = [
+  { id: 'm1', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ...", count: 1 },
+  { id: 'm2', text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.", count: 3 },
+  { id: 'm3', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", count: 1 },
+  { id: 'm4', text: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ.", count: 1 },
+  { id: 'm5', text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ.", count: 100 }
+];
+
+const eveningAdhkarList = [
+  { id: 'e1', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ...", count: 1 },
+  { id: 'e2', text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.", count: 3 },
+  { id: 'e3', text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", count: 1 },
+  { id: 'e4', text: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.", count: 1 },
+  { id: 'e5', text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ.", count: 100 }
+];
+
+
 export default function DhikrApp() {
   const [counts, setCounts] = useState<Record<number, number>>({});
   const [selectedDhikr, setSelectedDhikr] = useState<number | null>(null);
   const [target, setTarget] = useState<number>(33);
+  const [activeTab, setActiveTab] = useState<"tasbeeh" | "morning" | "evening">("tasbeeh");
+  const [trackerProgress, setTrackerProgress] = useState<Record<string, number>>({});
 
   useEffect(() => {
     const saved = localStorage.getItem("dhikrCounts");
@@ -51,6 +70,16 @@ export default function DhikrApp() {
       const newCounts = { ...counts, [id]: 0 };
       saveCounts(newCounts);
     }
+  };
+
+  
+  const handleTrackerTap = (id: string, target: number) => {
+    if (navigator.vibrate) navigator.vibrate(50);
+    setTrackerProgress(prev => {
+      const current = prev[id] || 0;
+      if (current >= target) return prev;
+      return { ...prev, [id]: current + 1 };
+    });
   };
 
   const activeDhikr = selectedDhikr ? dhikrList.find(d => d.id === selectedDhikr) : null;
