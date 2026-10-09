@@ -13,21 +13,20 @@ const dhikrList = [
 ];
 
 const morningAdhkarList = [
-  { id: 'm1', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ...", count: 1 },
-  { id: 'm2', text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.", count: 3 },
+  { id: 'm1', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ...", count: 1 },
+  { id: 'm2', text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.", count: 3 },
   { id: 'm3', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", count: 1 },
   { id: 'm4', text: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ.", count: 1 },
   { id: 'm5', text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ.", count: 100 }
 ];
 
 const eveningAdhkarList = [
-  { id: 'e1', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ...", count: 1 },
-  { id: 'e2', text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.", count: 3 },
+  { id: 'e1', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ...", count: 1 },
+  { id: 'e2', text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيم\\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.", count: 3 },
   { id: 'e3', text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", count: 1 },
   { id: 'e4', text: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.", count: 1 },
   { id: 'e5', text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ.", count: 100 }
 ];
-
 
 export default function DhikrApp() {
   const [counts, setCounts] = useState<Record<number, number>>({});
@@ -72,7 +71,6 @@ export default function DhikrApp() {
     }
   };
 
-  
   const handleTrackerTap = (id: string, target: number) => {
     if (navigator.vibrate) navigator.vibrate(50);
     setTrackerProgress(prev => {
@@ -91,38 +89,85 @@ export default function DhikrApp() {
         // --- LIST VIEW ---
         <div className="animate-fade-in">
           {/* Header */}
-          <div className="bg-[#1e354d] dark:bg-[#0b1221] text-white pt-16 pb-12 px-6 rounded-b-[50px] shadow-lg relative overflow-hidden">
+          <div className="bg-[#1e354d] dark:bg-[#0b1221] text-white pt-16 pb-8 px-6 rounded-b-[50px] shadow-lg relative overflow-hidden">
             {/* Moon/Stars decoration */}
             <div className="absolute top-8 left-8">
               <svg className="w-12 h-12 text-[#8ba7c0] opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             </div>
-            <div className="relative z-10">
+            <div className="relative z-10 mb-6">
               <h1 className="text-3xl font-extrabold mb-1">أذكاري</h1>
-              <p className="text-sm opacity-80">هل ذكرت الله اليوم؟</p>
+              <p className="text-sm opacity-80">ألا بذكر الله تطمئن القلوب</p>
+            </div>
+            
+            {/* Tabs */}
+            <div className="flex bg-black/20 p-1 rounded-full relative z-10">
+              <button onClick={() => setActiveTab("tasbeeh")} className={`flex-1 py-3 rounded-full text-sm font-bold transition-all ${activeTab === "tasbeeh" ? 'bg-amber-400 text-amber-900 shadow-md' : 'text-white/70 hover:text-white'}`}>التسبيح</button>
+              <button onClick={() => setActiveTab("morning")} className={`flex-1 py-3 rounded-full text-sm font-bold transition-all ${activeTab === "morning" ? 'bg-amber-400 text-amber-900 shadow-md' : 'text-white/70 hover:text-white'}`}>الصباح</button>
+              <button onClick={() => setActiveTab("evening")} className={`flex-1 py-3 rounded-full text-sm font-bold transition-all ${activeTab === "evening" ? 'bg-amber-400 text-amber-900 shadow-md' : 'text-white/70 hover:text-white'}`}>المساء</button>
             </div>
           </div>
 
-          {/* List */}
-          <div className="px-5 mt-[-20px] relative z-20 space-y-4">
-            {dhikrList.map((dhikr) => (
-              <div 
-                key={dhikr.id} 
-                onClick={() => setSelectedDhikr(dhikr.id)}
-                className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex items-center justify-between cursor-pointer hover:scale-[1.02] transition-transform border border-transparent hover:border-[#4a6b8c]/30"
-              >
-                {/* Text (Right Side in RTL) */}
-                <div className="flex-1 pr-4">
-                  <p className="text-2xl font-amiri font-bold text-[#1e354d] dark:text-white mb-1">{dhikr.arabic}</p>
-                  <p className="text-xs opacity-60">{dhikr.transliteration}</p>
-                </div>
+          {activeTab === "tasbeeh" && (
+            <div className="px-5 mt-8 relative z-20 space-y-4">
+              {dhikrList.map((dhikr) => (
+                <div 
+                  key={dhikr.id} 
+                  onClick={() => setSelectedDhikr(dhikr.id)}
+                  className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex items-center justify-between cursor-pointer hover:scale-[1.02] transition-transform border border-transparent hover:border-[#4a6b8c]/30"
+                >
+                  {/* Text (Right Side in RTL) */}
+                  <div className="flex-1 pr-4">
+                    <p className="text-2xl font-amiri font-bold text-[#1e354d] dark:text-white mb-1">{dhikr.arabic}</p>
+                    <p className="text-xs opacity-60">{dhikr.transliteration}</p>
+                  </div>
 
-                {/* Badge (Left Side in RTL) */}
-                <div className="bg-amber-400 text-amber-900 px-4 py-2 rounded-full font-extrabold text-sm shadow-md min-w-[70px] text-center">
-                  {(counts[dhikr.id] || 0)}x
+                  {/* Badge (Left Side in RTL) */}
+                  <div className="bg-amber-400 text-amber-900 px-4 py-2 rounded-full font-extrabold text-sm shadow-md min-w-[70px] text-center">
+                    {(counts[dhikr.id] || 0)}x
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
+
+          {/* Tracker List */}
+          {(activeTab === "morning" || activeTab === "evening") && (
+            <div className="px-5 mt-8 relative z-20 space-y-4">
+              {(activeTab === "morning" ? morningAdhkarList : eveningAdhkarList).map((dhikr) => {
+                const current = trackerProgress[dhikr.id] || 0;
+                const isDone = current >= dhikr.count;
+                return (
+                  <div key={dhikr.id} className={`bg-white dark:bg-[#1e293b] rounded-3xl p-6 shadow-sm border ${isDone ? 'border-amber-400/50' : 'border-transparent'} transition-colors relative overflow-hidden`}>
+                    {isDone && <div className="absolute top-0 right-0 w-16 h-16 bg-amber-400/10 rounded-bl-full border-b border-l border-amber-400/20"></div>}
+                    
+                    <p className="text-xl md:text-2xl font-amiri leading-loose whitespace-pre-wrap mb-6">{dhikr.text}</p>
+                    
+                    <button
+                      onClick={() => handleTrackerTap(dhikr.id, dhikr.count)}
+                      disabled={isDone}
+                      className={`w-full py-4 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${
+                        isDone 
+                        ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400' 
+                        : 'bg-[#f4f7f9] dark:bg-[#0f172a] text-[#4a6b8c] dark:text-[#8ba7c0] hover:bg-[#e2e8f0] dark:hover:bg-[#1e293b]'
+                      }`}
+                    >
+                      {isDone ? (
+                        <>
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                          اكتمل
+                        </>
+                      ) : (
+                        <>
+                          العدد: {current} / {dhikr.count}
+                        </>
+                      )}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
         </div>
       ) : (
         // --- COUNTER VIEW ---

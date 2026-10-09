@@ -1,11 +1,10 @@
 const fs = require('fs');
-let code = fs.readFileSync('src/app/surah/[id]/SurahReader.tsx', 'utf8');
+let code = fs.readFileSync('src/app/dhikr/page.tsx', 'utf8');
 
-// The file currently ends with the injected modal block. I just need to append `\n  );\n}\n` to the end.
-if (!code.endsWith('  );\n}\n')) {
-  code += '\n  );\n}\n';
-  fs.writeFileSync('src/app/surah/[id]/SurahReader.tsx', code);
-  console.log('Fixed syntax error.');
-} else {
-  console.log('Already fixed.');
-}
+// The write_to_file tool inserted literal backslashes: {\`flex-1 ... \${...}\`}
+// We need to replace {\` with {` and \${ with ${ and \`} with `}
+code = code.replace(/\\`/g, '`');
+code = code.replace(/\\\$/g, '$');
+
+fs.writeFileSync('src/app/dhikr/page.tsx', code);
+console.log('Fixed syntax errors');
