@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface PrayerTimings {
   Fajr: string;
@@ -296,10 +297,10 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-4 gap-3">
            {[
-             { name: "الحديث", icon: <i className="fi fi-rr-book-alt text-3xl text-[#4a6b8c] dark:text-[#8ba7c0]"></i>, href: "/hadith" },
-             { name: "الدعاء", icon: <i className="fi fi-rr-person-praying text-3xl text-[#4a6b8c] dark:text-[#8ba7c0]"></i>, href: "/dua" },
-             { name: "الذكر", icon: <i className="fi fi-rr-moon-stars text-3xl text-[#4a6b8c] dark:text-[#8ba7c0]"></i>, href: "/dhikr" },
-             { name: "القبلة", icon: <i className="fi fi-rr-compass text-3xl text-[#4a6b8c] dark:text-[#8ba7c0]"></i>, href: "/qibla" },
+             { name: "الحديث", icon: <Image src="/icons/hadith.png" width={32} height={32} alt="الحديث" className="opacity-70 dark:invert dark:opacity-80 object-contain w-8 h-8" />, href: "/hadith" },
+             { name: "الدعاء", icon: <Image src="/icons/dua.png" width={32} height={32} alt="الدعاء" className="opacity-70 dark:invert dark:opacity-80 object-contain w-8 h-8" />, href: "/dua" },
+             { name: "الذكر", icon: <Image src="/icons/dhikr.png" width={32} height={32} alt="الذكر" className="opacity-70 dark:invert dark:opacity-80 object-contain w-8 h-8" />, href: "/dhikr" },
+             { name: "القبلة", icon: <Image src="/icons/qibla.png" width={32} height={32} alt="القبلة" className="opacity-70 dark:invert dark:opacity-80 object-contain w-8 h-8" />, href: "/qibla" },
            ].map((item, i) => (
              <Link href={item.href} key={i} className="bg-white dark:bg-[#1e293b] py-5 px-2 rounded-3xl shadow-sm flex flex-col items-center justify-center gap-3 hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] transition-all border border-transparent hover:border-[#e2e8f0] dark:hover:border-[#334155]">
                {item.icon}
