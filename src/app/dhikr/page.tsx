@@ -285,7 +285,7 @@ export default function DhikrApp() {
                 const isDone = currentProg >= dhikr.count;
                 
                 return (
-                  <SwiperSlide key={dhikr.id} className="w-full h-full flex">
+                  <SwiperSlide key={dhikr.id} className="w-full h-full flex rounded-[40px] overflow-hidden bg-[#1e354d] dark:bg-[#1e293b]">
                     <div className={`w-full bg-[#1e354d] dark:bg-[#1e293b] rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.3)] p-6 md:p-8 flex flex-col h-full border transition-colors duration-300 ${isDone ? 'border-[#0f8e5d]' : 'border-[#2a4563] dark:border-[#2d3b4e]'} relative`}>
                       
                       {/* Badge */}
