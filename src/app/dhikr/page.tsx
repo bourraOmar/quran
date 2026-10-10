@@ -304,26 +304,7 @@ export default function DhikrApp() {
             
           </div>
           
-          {/* Bottom Settings Bar */}
-          <div className="flex items-center justify-between z-20 w-full px-8 pb-10">
-            {/* Right side in RTL (Chevron >) */}
-            <button onClick={() => setView("categories")} className="w-12 h-12 bg-white/10 dark:bg-[#1e293b] rounded-full shadow-md flex items-center justify-center font-bold text-[#1e354d] dark:text-white opacity-0 pointer-events-none">
-               {/* Hidden placeholder for spacing */}
-            </button>
 
-            {/* Center (Auto transition) */}
-            <div className="bg-white/10 dark:bg-[#1e293b] px-6 py-3 rounded-full shadow-md text-[#1e354d] dark:text-white font-bold text-sm">
-              الانتقال التلقائي
-            </div>
-
-            {/* Left side in RTL (Settings) */}
-            <div className="flex gap-4">
-               <button className="w-12 h-12 bg-white/10 dark:bg-[#1e293b] rounded-full shadow-md flex items-center justify-center text-[#1e354d] dark:text-white">
-                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-               </button>
-               <button onClick={() => setFontSize(fontSize === 'medium' ? 'large' : fontSize === 'large' ? 'small' : 'medium')} className="w-12 h-12 bg-white/10 dark:bg-[#1e293b] rounded-full shadow-md flex items-center justify-center font-bold text-[#1e354d] dark:text-white">AA</button>
-            </div>
-          </div>
 
         </div>
       )}
