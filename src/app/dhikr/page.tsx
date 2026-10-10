@@ -277,7 +277,7 @@ export default function DhikrApp() {
               onSwiper={setSwiperInstance}
               onSlideChange={(swiper: any) => setCurrentCardIndex(swiper.activeIndex)}
               className="w-full h-[60vh] pb-10"
-              direction="vertical"
+              direction="horizontal"
               dir="rtl"
             >
               {readingData.map((dhikr, index) => {
