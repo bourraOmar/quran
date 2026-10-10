@@ -117,16 +117,16 @@ export default function DhikrApp() {
   if (selectedCategory) {
      if (selectedCategory === 'morning') {
          readingTitle = "أذكار الصباح";
-         readingData = (azkarData as any)['أذكار الصباح'] || [];
+         readingData = (azkarData as any)['أذكار الصباح']?.flat() || [];
      } else if (selectedCategory === 'evening') {
          readingTitle = "أذكار المساء";
-         readingData = (azkarData as any)['أذكار المساء'] || [];
+         readingData = (azkarData as any)['أذكار المساء']?.flat() || [];
      } else if (selectedCategory === 'prayer') {
          readingTitle = "أذكار الصلاة";
-         readingData = (azkarData as any)['أذكار بعد السلام من الصلاة المفروضة'] || [];
+         readingData = (azkarData as any)['أذكار بعد السلام من الصلاة المفروضة']?.flat() || [];
      } else if (selectedCategory === 'sleep') {
          readingTitle = "أذكار النوم";
-         readingData = (azkarData as any)['أذكار النوم'] || [];
+         readingData = (azkarData as any)['أذكار النوم']?.flat() || [];
      }
   }
 
