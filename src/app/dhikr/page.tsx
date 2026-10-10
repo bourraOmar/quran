@@ -133,7 +133,7 @@ export default function DhikrApp() {
   }
 
   // Format mapping since azkarData uses { content, count, description } instead of { text, count }
-  readingData = readingData.map((d, index) => ({
+  readingData = readingData.filter(d => d.content && d.content !== "stop").map((d, index) => ({
       id: selectedCategory + '_' + index,
       text: d.content + (d.description ? '\n\n(' + d.description + ')' : ''),
       count: parseInt(d.count || "1", 10)
