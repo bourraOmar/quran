@@ -216,7 +216,7 @@ export default function DhikrApp() {
                 className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex items-center justify-between cursor-pointer active:scale-95 transition-transform"
               >
                 <div className="flex-1 pr-4">
-                  <p className="text-2xl font-amiri font-bold text-[#1e354d] dark:text-white mb-1">{dhikr.arabic}</p>
+                  <p className="text-2xl  font-bold text-[#1e354d] dark:text-white mb-1">{dhikr.arabic}</p>
                   <p className="text-xs opacity-60">{dhikr.transliteration}</p>
                 </div>
                 <div className="bg-amber-400 text-amber-900 px-4 py-2 rounded-full font-extrabold text-sm shadow-md min-w-[70px] text-center">
@@ -240,7 +240,7 @@ export default function DhikrApp() {
           </div>
 
           <div className="flex flex-col items-center justify-center mt-8 mb-10 px-6 text-center z-10">
-            <h2 className="text-5xl font-amiri font-bold mb-4 leading-normal text-white">{dhikrList.find(d => d.id === activeDhikrId)?.arabic}</h2>
+            <h2 className="text-5xl  font-bold mb-4 leading-normal text-white">{dhikrList.find(d => d.id === activeDhikrId)?.arabic}</h2>
           </div>
 
           <div className="flex-1 flex flex-col items-center z-10 w-full">
@@ -325,7 +325,7 @@ export default function DhikrApp() {
 
                       {/* Text Content */}
                       <div className="flex-1 flex items-center justify-center overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                        <p className={`text-center font-amiri text-white leading-relaxed whitespace-pre-wrap transition-all duration-300 ${fontSize === 'small' ? 'text-lg' : fontSize === 'large' ? 'text-3xl' : 'text-xl md:text-2xl'}`}>
+                        <p className={`text-center  text-white leading-relaxed whitespace-pre-wrap transition-all duration-300 ${fontSize === 'small' ? 'text-lg' : fontSize === 'large' ? 'text-3xl' : 'text-xl md:text-2xl'}`}>
                           {dhikr.text.split('\\n').map((line: string, i: number) => (
                             <span key={i}>
                               {line}
