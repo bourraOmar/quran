@@ -324,8 +324,8 @@ export default function DhikrApp() {
                       </div>
 
                       {/* Text Content */}
-                      <div className="flex-1 flex items-center justify-center overflow-y-auto">
-                        <p className={`text-center font-amiri text-white leading-relaxed whitespace-pre-wrap transition-all duration-300 ${fontSize === 'small' ? 'text-xl' : fontSize === 'large' ? 'text-4xl' : 'text-2xl'}`}>
+                      <div className="flex-1 flex items-center justify-center overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                        <p className={`text-center font-amiri text-white leading-relaxed whitespace-pre-wrap transition-all duration-300 ${fontSize === 'small' ? 'text-lg' : fontSize === 'large' ? 'text-3xl' : 'text-xl md:text-2xl'}`}>
                           {dhikr.text.split('\\n').map((line: string, i: number) => (
                             <span key={i}>
                               {line}
