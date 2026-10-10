@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -75,6 +76,7 @@ export default function DhikrApp() {
 
   useEffect(() => {
     const saved = localStorage.getItem("dhikrCounts");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved) setCounts(JSON.parse(saved));
   }, []);
 

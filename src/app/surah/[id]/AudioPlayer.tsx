@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/display-name */
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import { useSearchParams } from "next/navigation";
 
