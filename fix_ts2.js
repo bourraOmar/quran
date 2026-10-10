@@ -1,10 +1,4 @@
 const fs = require('fs');
-
-let player = fs.readFileSync('src/app/components/GlobalPlayer.tsx', 'utf8');
-
-player = player.replace(
-  'verseTimings\n  } = useGlobalAudio();',
-  'verseTimings,\n    isTimingLoading\n  } = useGlobalAudio();'
-);
-
-fs.writeFileSync('src/app/components/GlobalPlayer.tsx', player);
+let c = fs.readFileSync('src/app/dhikr/page.tsx', 'utf8');
+c = c.replace('.map((line, i) => (', '.map((line: string, i: number) => (');
+fs.writeFileSync('src/app/dhikr/page.tsx', c);

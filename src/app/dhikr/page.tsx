@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import azkarData from "../../data/azkar.json";
 import { EffectCards } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
@@ -16,6 +17,9 @@ const dhikrCategories = [
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
   )},
   { id: 'evening', title: 'أذكار المساء', icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+  )},
+  { id: 'sleep', title: 'أذكار النوم', icon: (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
   )},
   { id: 'prayer', title: 'أذكار الصلاة', icon: (
@@ -107,10 +111,32 @@ export default function DhikrApp() {
   };
 
   // Reading Mode Data
-  let readingData = morningAdhkarList;
-  let readingTitle = "أذكار الصباح";
-  if (selectedCategory === 'evening') { readingData = eveningAdhkarList; readingTitle = "أذكار المساء"; }
-  if (selectedCategory === 'prayer') { readingData = prayerAdhkarList; readingTitle = "أذكار الصلاة"; }
+  let readingData: any[] = [];
+  let readingTitle = "";
+  
+  if (selectedCategory) {
+     if (selectedCategory === 'morning') {
+         readingTitle = "أذكار الصباح";
+         readingData = (azkarData as any)['أذكار الصباح'] || [];
+     } else if (selectedCategory === 'evening') {
+         readingTitle = "أذكار المساء";
+         readingData = (azkarData as any)['أذكار المساء'] || [];
+     } else if (selectedCategory === 'prayer') {
+         readingTitle = "أذكار الصلاة";
+         readingData = (azkarData as any)['أذكار بعد السلام من الصلاة المفروضة'] || [];
+     } else if (selectedCategory === 'sleep') {
+         readingTitle = "أذكار النوم";
+         readingData = (azkarData as any)['أذكار النوم'] || [];
+     }
+  }
+
+  // Format mapping since azkarData uses { content, count, description } instead of { text, count }
+  readingData = readingData.map((d, index) => ({
+      id: selectedCategory + '_' + index,
+      text: d.content + (d.description ? '\n\n(' + d.description + ')' : ''),
+      count: parseInt(d.count || "1", 10)
+  }));
+
 
   const handleReadingTap = (id: string, targetCount: number) => {
     if (navigator.vibrate) navigator.vibrate(50);
@@ -298,7 +324,7 @@ export default function DhikrApp() {
                       {/* Text Content */}
                       <div className="flex-1 flex items-center justify-center overflow-y-auto">
                         <p className={`text-center font-amiri text-white leading-relaxed whitespace-pre-wrap transition-all duration-300 ${fontSize === 'small' ? 'text-xl' : fontSize === 'large' ? 'text-4xl' : 'text-2xl'}`}>
-                          {dhikr.text.split('\\n').map((line, i) => (
+                          {dhikr.text.split('\\n').map((line: string, i: number) => (
                             <span key={i}>
                               {line}
                               <br />
