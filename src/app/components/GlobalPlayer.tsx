@@ -27,7 +27,6 @@ export default function GlobalPlayer() {
     toggleRepeat,
     toggleShuffle,
     verseTimings,
-    isTimingLoading
   } = useGlobalAudio();
 
   const [isMaximized, setIsMaximized] = useState(false);
@@ -37,9 +36,6 @@ export default function GlobalPlayer() {
   const [verses, setVerses] = useState<{ id: number; verse_key: string; text_uthmani: string }[]>([]);
   const lastActiveVerseId = React.useRef<number | null>(null);
   const activeVerseRef = React.useRef<any>(null);
-
-  
-  
 
   useEffect(() => {
     if (activeVerseRef.current && showLyrics) {
@@ -58,14 +54,11 @@ export default function GlobalPlayer() {
       const nextTiming = verseTimings[index + 1];
       
       if (!timing) return false;
-      
-      // Active if current time is past this verse's start, AND (there is no next verse, or current time is before next verse's start)
       return currentTimeMs >= timing.timestamp_from && (!nextTiming || currentTimeMs < nextTiming.timestamp_from);
     });
 
     if (activeVerse && activeVerse.id !== lastActiveVerseId.current) {
       lastActiveVerseId.current = activeVerse.id;
-      // Slight delay to allow CSS class to apply before calculating scroll position
       const el = document.getElementById(`verse-${activeVerse.id}`);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -106,7 +99,6 @@ export default function GlobalPlayer() {
     };
     window.addEventListener("keydown", handleKeyDown);
     
-    // Prevent scrolling on the body when the player is maximized
     if (isMaximized) {
       document.body.style.overflow = "hidden";
     } else {
@@ -157,7 +149,6 @@ export default function GlobalPlayer() {
 
   const progressPercent = duration ? `${(currentTime / duration) * 100}%` : "0%";
 
-  
   let currentActiveKey = null;
   if (showLyrics && verses.length > 0 && verseTimings.length > 0) {
     const currentTimeMs = currentTime * 1000;
@@ -174,10 +165,10 @@ export default function GlobalPlayer() {
   return (
     <>
       {/* ---------------------------------------------------------------------- */}
-      {/* 1. MOBILE MAXIMIZED FULLSCREEN (Takes whole screen, huge controls) */}
+      {/* 1. MOBILE MAXIMIZED FULLSCREEN */}
       {/* ---------------------------------------------------------------------- */}
       {isMaximized && (
-        <div className="md:hidden fixed inset-0 w-full h-full bg-gradient-to-b from-[#4a6b8c] to-[#0f172a] z-[100] flex flex-col p-6 animate-in fade-in duration-300" dir="ltr">
+        <div className="md:hidden fixed inset-0 w-full h-full bg-gradient-to-b from-[#1e354d] via-[#111e2e] to-[#0f172a] z-[100] flex flex-col p-6 animate-in fade-in duration-300" dir="ltr">
           {/* Top Bar */}
           <div className="flex justify-between items-center w-full mb-auto text-white/80">
             {showLyrics ? (
@@ -188,7 +179,7 @@ export default function GlobalPlayer() {
             ) : (
               <div></div>
             )}
-            <button onClick={toggleFullscreen} className="hover:text-white transition flex items-center gap-2 bg-black/20 hover:bg-black/40 px-4 py-2 rounded-full backdrop-blur-md">
+            <button onClick={toggleFullscreen} className="hover:text-white transition flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-md">
               <span className="text-sm">تصغير</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
@@ -200,7 +191,7 @@ export default function GlobalPlayer() {
               {verses.length > 0 ? (
                 <div className="w-full h-full overflow-y-auto px-4 hide-scrollbar flex flex-col gap-10 pb-32 pt-8">
                   {verseTimings.length === 0 && (
-                    <div className="text-white/50 text-sm text-center mb-4 px-4 py-2 bg-white/5 rounded-full backdrop-blur-sm border border-white/10 mx-auto w-max">
+                    <div className="text-white/60 text-sm text-center mb-4 px-4 py-2 bg-white/5 rounded-full backdrop-blur-sm border border-white/10 mx-auto w-max">
                       المزامنة التلقائية غير متوفرة
                     </div>
                   )}
@@ -210,7 +201,11 @@ export default function GlobalPlayer() {
                       <p 
                         key={verse.id}
                         id={`verse-${verse.id}`} ref={isActive ? (activeVerseRef as any) : null} 
-                        className={`transition-all duration-500 font-quran text-center leading-[1.8] cursor-pointer w-full text-4xl md:text-5xl ${isActive ? 'text-white font-bold drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-white/30 blur-[1px] hover:blur-none'}`}
+                        className={`transition-all duration-500 font-quran text-center leading-[1.8] cursor-pointer w-full text-4xl md:text-5xl ${
+                          isActive 
+                            ? 'text-[#4ade80] font-bold drop-shadow-[0_0_15px_rgba(74,222,128,0.5)]' 
+                            : 'text-white/30 blur-[1px] hover:blur-none'
+                        }`}
                       >
                         {verse.text_uthmani}
                       </p>
@@ -223,22 +218,22 @@ export default function GlobalPlayer() {
             </div>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center min-h-0 py-8">
-              <div className="w-[280px] h-[280px] bg-[#1e354d] rounded-2xl flex items-center justify-center text-white shadow-2xl mb-8 border border-white/10 relative overflow-hidden">
-                 <div className="absolute inset-0 bg-gradient-to-br from-[#4a6b8c]/20 to-transparent"></div>
+              <div className="w-[280px] h-[280px] bg-[#1e293b] rounded-3xl flex items-center justify-center text-white shadow-2xl mb-8 border border-white/10 relative overflow-hidden">
+                 <div className="absolute inset-0 bg-gradient-to-br from-[#0f8e5d]/20 to-transparent"></div>
                  <span className="font-quran text-7xl leading-none drop-shadow-xl z-10">{activeSurah.name_arabic.replace('سورة ', '')}</span>
               </div>
-              <h1 className="text-3xl font-bold text-white mb-3 text-center">{activeSurah.name_simple}</h1>
-              <p className="text-lg text-white/70 text-center font-medium">{reciter.reciter_name}</p>
+              <h1 className="text-3xl font-bold text-white mb-2 text-center">{activeSurah.name_simple}</h1>
+              <p className="text-base text-white/70 text-center font-medium">{reciter.reciter_name}</p>
             </div>
           )}
 
           {/* Bottom Controls */}
           <div className="w-full mx-auto flex flex-col gap-8 pb-4">
             {/* Progress */}
-            <div className="flex items-center w-full gap-4 text-sm font-medium text-white/60">
+            <div className="flex items-center w-full gap-4 text-sm font-medium text-white/70">
               <span className="w-10 text-right">{formatTime(currentTime)}</span>
-              <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden cursor-pointer relative group" onClick={handleSeek}>
-                <div className="absolute top-0 left-0 h-full bg-white rounded-full group-hover:bg-[#8ba7c0] transition-colors" style={{ width: progressPercent }}></div>
+              <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden cursor-pointer relative group" onClick={handleSeek}>
+                <div className="absolute top-0 left-0 h-full bg-[#0f8e5d] rounded-full group-hover:bg-[#4ade80] transition-colors" style={{ width: progressPercent }}></div>
               </div>
               <span className="w-10 text-left">{formatTime(duration)}</span>
             </div>
@@ -252,7 +247,7 @@ export default function GlobalPlayer() {
                 title="الآيات"
               >
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m12 8-9.04 9.06a2.82 2.82 0 1 0 3.98 3.98L16 12"/><circle cx="17" cy="7" r="5"/></svg>
-                {showLyrics && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto absolute -bottom-2 left-1/2 -translate-x-1/2"></div>}
+                {showLyrics && <div className="w-1.5 h-1.5 bg-[#4ade80] rounded-full mx-auto absolute -bottom-2 left-1/2 -translate-x-1/2"></div>}
               </button>
 
               <div className="flex items-center gap-6">
@@ -260,7 +255,7 @@ export default function GlobalPlayer() {
                   <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
                 </button>
                 
-                <button onClick={togglePlay} className="w-20 h-20 rounded-full bg-white text-[#0f172a] flex items-center justify-center hover:scale-105 transition-all shadow-[0_4px_30px_rgba(255,255,255,0.2)]">
+                <button onClick={togglePlay} className="w-20 h-20 rounded-full bg-[#0f8e5d] hover:bg-[#0c734b] text-white flex items-center justify-center hover:scale-105 transition-all shadow-[0_4px_30px_rgba(15,142,93,0.4)]">
                   {isPlaying ? (
                     <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
                   ) : (
@@ -280,25 +275,22 @@ export default function GlobalPlayer() {
                 title="تكرار"
               >
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
-                {isRepeating && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto absolute -bottom-2 left-1/2 -translate-x-1/2"></div>}
+                {isRepeating && <div className="w-1.5 h-1.5 bg-[#4ade80] rounded-full mx-auto absolute -bottom-2 left-1/2 -translate-x-1/2"></div>}
               </button>
             </div>
           </div>
         </div>
       )}
 
-
       {/* ---------------------------------------------------------------------- */}
-      {/* 2. DESKTOP MAXIMIZED OVERLAY (Spotify "Now Playing" view)             */}
-      {/* Sits right above the bottom player (bottom-[90px])                     */}
+      {/* 2. DESKTOP MAXIMIZED OVERLAY */}
       {/* ---------------------------------------------------------------------- */}
       {isMaximized && (
-        <div className="hidden md:flex fixed inset-0 bottom-[90px] w-full bg-gradient-to-b from-[#6b8ba7] to-[#1e354d] dark:from-[#33506b] dark:to-[#0f172a] z-[60] flex-col p-6 px-8 animate-in fade-in duration-300" dir="ltr">
-          {/* Top Bar (Title on left, Minimize on right) */}
+        <div className="hidden md:flex fixed inset-0 bottom-[90px] w-full bg-gradient-to-b from-[#1e354d] to-[#0f172a] z-[60] flex-col p-6 px-8 animate-in fade-in duration-300" dir="ltr">
+          {/* Top Bar */}
           <div className="flex justify-between items-center w-full">
-            <h2 className="text-white font-bold text-[16px] drop-shadow-sm">{activeSurah.name_simple}</h2>
-            <button onClick={toggleFullscreen} className="text-white/70 hover:text-white transition-colors bg-black/10 hover:bg-black/30 p-2 rounded-full" title="Réduire la vue">
-              {/* Down-right arrow / Minimize icon */}
+            <h2 className="text-white font-bold text-base drop-shadow-sm">{activeSurah.name_simple}</h2>
+            <button onClick={toggleFullscreen} className="text-white/70 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full" title="تصغير">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M3 21l7-7"/></svg>
             </button>
           </div>
@@ -313,23 +305,26 @@ export default function GlobalPlayer() {
                 {verses.length > 0 ? (
                   <>
                     {verseTimings.length === 0 && (
-                      <div className="text-white/50 text-sm text-center mb-8 px-4 py-2 bg-white/5 rounded-full backdrop-blur-sm border border-white/10 mx-auto w-max">
+                      <div className="text-white/60 text-sm text-center mb-8 px-4 py-2 bg-white/10 rounded-full backdrop-blur-sm border border-white/10 mx-auto w-max">
                         المزامنة التلقائية غير متوفرة لهذا القارئ
                       </div>
                     )}
                     {verses.map((verse) => {
-                    const isActive = currentActiveKey === verse.verse_key;
-                    
-                    return (
-                      <p 
-                        key={verse.id}
-                        id={`verse-${verse.id}`} ref={isActive ? (activeVerseRef as any) : null} 
-                        className={`transition-all duration-500 font-quran text-center leading-[1.8] cursor-pointer w-full text-5xl md:text-6xl lg:text-7xl ${isActive ? 'text-white font-bold drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-white/30 hover:text-white/60 blur-[1px] hover:blur-none'}`}
-                      >
-                        {verse.text_uthmani}
-                      </p>
-                    );
-                  })}
+                      const isActive = currentActiveKey === verse.verse_key;
+                      return (
+                        <p 
+                          key={verse.id}
+                          id={`verse-${verse.id}`} ref={isActive ? (activeVerseRef as any) : null} 
+                          className={`transition-all duration-500 font-quran text-center leading-[1.8] cursor-pointer w-full text-5xl md:text-6xl lg:text-7xl ${
+                            isActive 
+                              ? 'text-[#4ade80] font-bold drop-shadow-[0_0_20px_rgba(74,222,128,0.5)]' 
+                              : 'text-white/30 hover:text-white/60 blur-[1px] hover:blur-none'
+                          }`}
+                        >
+                          {verse.text_uthmani}
+                        </p>
+                      );
+                    })}
                   </>
                 ) : (
                   <div className="flex items-center justify-center h-full text-white/50 text-xl font-medium animate-pulse">
@@ -338,14 +333,13 @@ export default function GlobalPlayer() {
                 )}
               </div>
             ) : (
-              <div className="w-[350px] h-[350px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] bg-gradient-to-br from-[#1e354d] to-[#0f172a] rounded-xl flex flex-col items-center justify-center text-white shadow-2xl relative overflow-hidden border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                 {/* Glowing ring mimicking the art in screenshot */}
-                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#6b8ba7]/30 via-transparent to-transparent opacity-50 blur-xl"></div>
+              <div className="w-[340px] h-[340px] lg:w-[440px] lg:h-[440px] bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-3xl flex flex-col items-center justify-center text-white shadow-2xl relative overflow-hidden border border-white/10">
+                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0f8e5d]/30 via-transparent to-transparent opacity-60 blur-xl"></div>
                  
-                 <span className="font-quran text-[100px] lg:text-[140px] xl:text-[160px] leading-none drop-shadow-2xl z-10 text-white">
+                 <span className="font-quran text-[100px] lg:text-[130px] leading-none drop-shadow-2xl z-10 text-white">
                    {activeSurah.name_arabic.replace('سورة ', '')}
                  </span>
-                 <span className="font-bold text-3xl mt-4 tracking-wider text-[#f8fafc] z-10 drop-shadow-lg uppercase">
+                 <span className="font-bold text-2xl mt-4 tracking-wider text-[#f8fafc] z-10 drop-shadow-lg uppercase">
                    {activeSurah.name_simple}
                  </span>
               </div>
@@ -354,35 +348,31 @@ export default function GlobalPlayer() {
         </div>
       )}
 
-
       {/* ---------------------------------------------------------------------- */}
-      {/* ---------------------------------------------------------------------- */}
-      {/* 3. ALWAYS-VISIBLE BOTTOM PLAYER BAR (Spotify standard player)         */}
+      {/* 3. ALWAYS-VISIBLE BOTTOM PLAYER BAR */}
       {/* ---------------------------------------------------------------------- */}
       <div 
-        className={`fixed bottom-24 md:bottom-0 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-11/12 md:w-full max-w-[350px] md:max-w-none 
-          bg-[#f8fafc] dark:bg-[#1e293b] md:dark:bg-[#0f172a] 
-          rounded-xl md:rounded-none border border-[#e2e8f0] dark:border-white/10 md:border-t md:border-x-0 md:border-b-0
-          shadow-lg md:shadow-none z-40 
-          h-[65px] md:h-[90px]
-          flex items-center px-3 md:px-6 py-2 md:py-3
+        className={`fixed bottom-24 md:bottom-0 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-11/12 md:w-full max-w-[360px] md:max-w-none 
+          bg-white dark:bg-[#1e293b] 
+          rounded-2xl md:rounded-none border border-black/5 dark:border-white/5 md:border-t md:border-x-0 md:border-b-0
+          shadow-xl md:shadow-none z-40 
+          h-[68px] md:h-[90px]
+          flex items-center px-3 md:px-8 py-2 md:py-3
           md:grid md:grid-cols-[1fr_2fr_1fr] md:gap-4
           ${isMaximized ? 'hidden md:grid' : 'flex'}
         `} 
         dir="ltr"
         onClick={(e) => {
-          // Only trigger maximize on mobile if they click the container, not the buttons
           if (window.innerWidth < 768 && (e.target as HTMLElement).tagName !== 'BUTTON' && (e.target as HTMLElement).tagName !== 'path' && (e.target as HTMLElement).tagName !== 'svg') {
             toggleFullscreen();
           }
         }}
       >
          
-         {/* 3.1. Track Info (Left Side on Desktop, Left on Mobile) */}
+         {/* 3.1. Track Info */}
          <div className="flex items-center gap-3 w-full md:w-auto text-left cursor-pointer overflow-hidden">
-           {/* Mini Album Art */}
            <div 
-             className="w-10 h-10 md:w-14 md:h-14 bg-gradient-to-br from-[#4a6b8c] to-[#0f172a] rounded flex items-center justify-center text-white font-quran font-bold text-lg md:text-2xl shrink-0 shadow-sm relative overflow-hidden group" 
+             className="w-10 h-10 md:w-13 md:h-13 bg-gradient-to-br from-[#0f8e5d] to-[#1e354d] rounded-xl flex items-center justify-center text-white font-quran font-bold text-lg md:text-xl shrink-0 shadow-sm relative overflow-hidden group" 
            >
              <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 bg-black/60 rounded-full p-0.5 transition-opacity hidden md:block">
                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" /></svg>
@@ -390,50 +380,48 @@ export default function GlobalPlayer() {
              {activeSurah.name_arabic.replace('سورة ', '')}
            </div>
            
-           {/* Title & Artist */}
            <div className="flex flex-col justify-center truncate">
-             <h4 className="font-bold text-[#1e354d] dark:text-white text-[14px] leading-tight truncate md:group-hover:underline">{activeSurah.name_simple}</h4>
-             <p className="text-[11px] text-[#4a6b8c] dark:text-[#a1a1aa] truncate mt-0.5 md:group-hover:underline md:group-hover:text-white transition-colors">{reciter.reciter_name}</p>
+             <h4 className="font-bold text-[#1e354d] dark:text-white text-sm leading-tight truncate md:group-hover:text-[#0f8e5d] dark:md:group-hover:text-[#4ade80] transition-colors">{activeSurah.name_simple}</h4>
+             <p className="text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] truncate mt-0.5">{reciter.reciter_name}</p>
            </div>
          </div>
 
-         {/* MOBILE ONLY: Play & Close Buttons (Right side of mini player) */}
-         <div className="md:hidden flex items-center gap-5 ml-auto shrink-0 text-[#1e354d] dark:text-white">
-           <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity">
+         {/* MOBILE ONLY: Play & Close Buttons */}
+         <div className="md:hidden flex items-center gap-4 ml-auto shrink-0 text-[#1e354d] dark:text-white">
+           <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-9 h-9 rounded-full bg-[#0f8e5d] text-white flex items-center justify-center shadow-md shadow-[#0f8e5d]/30 active:scale-95 transition-all">
              {isPlaying ? (
-               <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
              ) : (
-               <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
+               <svg className="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg>
              )}
            </button>
-           <button onClick={(e) => { e.stopPropagation(); closePlayer(); }} className="w-8 h-8 flex items-center justify-center text-[#4a6b8c] dark:text-[#a1a1aa] hover:opacity-70 transition-opacity">
-             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+           <button onClick={(e) => { e.stopPropagation(); closePlayer(); }} className="w-8 h-8 flex items-center justify-center text-[#4a6b8c] dark:text-[#8ba7c0] hover:text-red-500 transition-colors">
+             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
            </button>
          </div>
 
-         {/* MOBILE ONLY: Progress Bar (Bottom edge of mini player) */}
-         <div className="md:hidden absolute bottom-0 left-2 right-2 h-0.5 bg-[#e2e8f0] dark:bg-[#334155] rounded-full overflow-hidden">
-           <div className="h-full bg-[#1e354d] dark:bg-white" style={{ width: progressPercent }}></div>
+         {/* MOBILE ONLY: Progress Bar */}
+         <div className="md:hidden absolute bottom-0 left-3 right-3 h-1 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
+           <div className="h-full bg-[#0f8e5d] dark:bg-[#4ade80]" style={{ width: progressPercent }}></div>
          </div>
 
-         {/* 3.2. Progress Bar & Controls (Center on Desktop) - HIDDEN ON MOBILE */}
+         {/* 3.2. Controls (Center on Desktop) */}
          <div className="hidden md:flex w-full max-w-2xl mx-auto flex-col items-center gap-1.5 justify-self-center">
            
-           {/* Controls Row */}
            <div className="flex items-center gap-6 text-[#1e354d] dark:text-white">
              {/* Shuffle Button */}
-             <button onClick={toggleShuffle} className={`transition-colors ${isShuffling ? "text-[#4ade80]" : "text-[#4a6b8c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تبديل عشوائي">
+             <button onClick={toggleShuffle} className={`transition-colors ${isShuffling ? "text-[#0f8e5d] dark:text-[#4ade80]" : "text-[#4a6b8c] dark:text-[#8ba7c0] hover:text-[#0f8e5d] dark:hover:text-[#4ade80]"}`} title="تبديل عشوائي">
                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
-               {isShuffling && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
+               {isShuffling && <div className="w-1 h-1 bg-[#0f8e5d] dark:bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
              </button>
 
              {/* Previous */}
-             <button onClick={playPrev} disabled={activeSurahId === 1} className="text-[#4a6b8c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
+             <button onClick={playPrev} disabled={activeSurahId === 1} className="text-[#4a6b8c] dark:text-[#8ba7c0] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
              </button>
 
              {/* Play/Pause */}
-             <button onClick={togglePlay} className="w-8 h-8 rounded-full bg-[#1e354d] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-105 transition-transform shadow-md">
+             <button onClick={togglePlay} className="w-9 h-9 rounded-full bg-[#0f8e5d] hover:bg-[#0c734b] text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-md shadow-[#0f8e5d]/30">
                {isPlaying ? (
                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
                ) : (
@@ -442,29 +430,29 @@ export default function GlobalPlayer() {
              </button>
 
              {/* Next */}
-             <button onClick={playNext} disabled={activeSurahId === 114} className="text-[#4a6b8c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
+             <button onClick={playNext} disabled={activeSurahId === 114} className="text-[#4a6b8c] dark:text-[#8ba7c0] hover:text-[#1e354d] dark:hover:text-white disabled:opacity-30 transition-colors">
                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0010 14v-2.798L4.555 14.832A1 1 0 003 14V6a1 1 0 001.555-.832L10 8.798V6a1 1 0 001.555-.832l6 4a1 1 0 000 1.664l-6 4z" /></svg>
              </button>
              
              {/* Repeat Button */}
-             <button onClick={toggleRepeat} className={`transition-colors relative ${isRepeating ? "text-[#4ade80]" : "text-[#4a6b8c] dark:text-[#a1a1aa] hover:text-[#1e354d] dark:hover:text-white"}`} title="تكرار">
+             <button onClick={toggleRepeat} className={`transition-colors relative ${isRepeating ? "text-[#0f8e5d] dark:text-[#4ade80]" : "text-[#4a6b8c] dark:text-[#8ba7c0] hover:text-[#0f8e5d] dark:hover:text-[#4ade80]"}`} title="تكرار">
                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
-               {isRepeating && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
+               {isRepeating && <div className="w-1 h-1 bg-[#0f8e5d] dark:bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2"></div>}
              </button>
            </div>
            
            {/* Progress Line */}
-           <div className="flex items-center w-full gap-2 text-[11px] font-medium text-[#4a6b8c] dark:text-[#a1a1aa]">
+           <div className="flex items-center w-full gap-2 text-[11px] font-medium text-[#4a6b8c] dark:text-[#8ba7c0]">
              <span className="w-8 text-right">{formatTime(currentTime)}</span>
-             <div className="flex-1 h-1 bg-[#e2e8f0] dark:bg-[#3f3f46] rounded-full overflow-hidden cursor-pointer relative group" onClick={handleSeek}>
-               <div className="absolute top-0 left-0 h-full bg-[#1e354d] dark:bg-white group-hover:bg-[#4ade80] transition-colors" style={{ width: progressPercent }}></div>
+             <div className="flex-1 h-1 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden cursor-pointer relative group" onClick={handleSeek}>
+               <div className="absolute top-0 left-0 h-full bg-[#0f8e5d] dark:bg-[#4ade80] rounded-full transition-colors" style={{ width: progressPercent }}></div>
              </div>
              <span className="w-8 text-left">{formatTime(duration)}</span>
            </div>
          </div>
 
-         {/* 3.3. Right Side Actions (Maximize & Close) - DESKTOP ONLY */}
-         <div className="hidden md:flex justify-self-end items-center justify-end gap-3 text-[#4a6b8c] dark:text-[#a1a1aa]">
+         {/* 3.3. Right Side Actions (Desktop) */}
+         <div className="hidden md:flex justify-self-end items-center justify-end gap-3 text-[#4a6b8c] dark:text-[#8ba7c0]">
            
            {/* Volume Control */}
            <div className="flex items-center gap-2 mr-2">
@@ -486,9 +474,9 @@ export default function GlobalPlayer() {
              </button>
              
              {/* Volume Slider */}
-             <div className="w-20 h-1 bg-[#e2e8f0] dark:bg-[#3f3f46] rounded-full overflow-hidden cursor-pointer relative group" onClick={handleVolumeChange}>
+             <div className="w-20 h-1 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden cursor-pointer relative group" onClick={handleVolumeChange}>
                <div 
-                 className="absolute top-0 left-0 h-full bg-[#1e354d] dark:bg-white group-hover:bg-[#4ade80] transition-colors" 
+                 className="absolute top-0 left-0 h-full bg-[#0f8e5d] dark:bg-[#4ade80] transition-colors" 
                  style={{ width: `${(isMuted ? 0 : volume) * 100}%` }}
                ></div>
              </div>
@@ -500,11 +488,11 @@ export default function GlobalPlayer() {
                setShowLyrics(!showLyrics);
                if (!isMaximized) setIsMaximized(true);
              }} 
-             className={`flex transition-colors relative ${showLyrics ? "text-[#4ade80]" : "hover:text-[#1e354d] dark:hover:text-white"}`} 
+             className={`flex transition-colors relative ${showLyrics ? "text-[#0f8e5d] dark:text-[#4ade80]" : "hover:text-[#1e354d] dark:hover:text-white"}`} 
              title="الآيات"
            >
              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m12 8-9.04 9.06a2.82 2.82 0 1 0 3.98 3.98L16 12"/><circle cx="17" cy="7" r="5"/></svg>
-             {showLyrics && <div className="w-1 h-1 bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2 top-4"></div>}
+             {showLyrics && <div className="w-1 h-1 bg-[#0f8e5d] dark:bg-[#4ade80] rounded-full mx-auto mt-1 absolute left-1/2 -translate-x-1/2 top-4"></div>}
            </button>
            
            {/* Maximize Toggle */}
@@ -517,7 +505,7 @@ export default function GlobalPlayer() {
            </button>
            
            {/* Close Button */}
-           <button onClick={closePlayer} className="hover:text-[#1e354d] dark:hover:text-white transition-colors ml-2 rounded-full" title="إغلاق">
+           <button onClick={closePlayer} className="hover:text-red-500 transition-colors ml-1 rounded-full p-1" title="إغلاق">
              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
            </button>
          </div>

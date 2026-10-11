@@ -25,17 +25,38 @@ export default async function AllSurahsPage() {
   const surahs = await getSurahs();
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 py-16">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-6">
-          فهرس سور القرآن الكريم
-        </h1>
-        <p className="text-[#4a6b8c] dark:text-[#94a3b8] text-lg max-w-2xl mx-auto">
-          تصفح جميع سور القرآن الكريم المائة وأربع عشرة سورة، مكتوبة بالتشكيل مع إمكانية الاستماع والترجمة.
-        </p>
-      </div>
+    <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] pb-32 pt-8 px-4 md:px-8 transition-colors" dir="rtl">
+      <div className="max-w-[1300px] mx-auto">
+        {/* Header Bar matching Dua/Dhikr */}
+        <div className="flex items-center justify-between mb-10 pt-4">
+          <div className="flex items-center gap-4">
+            <Link
+              href="/"
+              className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] flex items-center justify-center text-[#1e354d] dark:text-white shadow-sm border border-transparent hover:border-[#4a6b8c]/30 active:scale-95 transition-all"
+              title="الرجوع للرئيسية"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+            <div>
+              <h1 className="text-3xl md:text-4xl font-extrabold text-[#1e354d] dark:text-white">
+                سور القرآن الكريم
+              </h1>
+              <p className="text-sm text-[#4a6b8c] dark:text-[#8ba7c0] mt-1">
+                تصفح واقرأ جميع سور القرآن الكريم المكتوبة بالتشكيل
+              </p>
+            </div>
+          </div>
 
-      <SurahsGrid initialSurahs={surahs} />
+          <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0f8e5d]/10 text-[#0f8e5d] dark:text-[#4ade80] text-xs font-bold">
+            <span>114 سورة كاملة</span>
+          </div>
+        </div>
+
+        {/* Surahs Grid Component */}
+        <SurahsGrid initialSurahs={surahs} />
+      </div>
     </div>
   );
 }

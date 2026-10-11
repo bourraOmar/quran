@@ -12,6 +12,16 @@
   body {
     background-color: #f4f7f9;
     color: #1e354d;
+    transition-property: color, background-color;
+    transition-duration: 200ms;
+  }
+  .dark body {
+    background-color: #0f172a;
+    color: #f8fafc;
+  }
+  ::selection {
+    background-color: rgba(15, 142, 93, 0.25);
+    color: #0f8e5d;
   }
 }
 

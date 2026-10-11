@@ -1,7 +1,5 @@
 export const dynamic = 'force-dynamic';
-import Link from "next/link";
 import SurahReader from "./SurahReader";
-import Sidebar from "../../components/Sidebar";
 
 interface Verse {
   id: number;
@@ -46,9 +44,8 @@ async function getSurahData(id: string) {
   return { chapter, verses };
 }
 
-
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const { id } = params;
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   try {
     const chapterRes = await fetch(`https://api.quran.com/api/v4/chapters/${id}`);
     const chapterJson = await chapterRes.json();
@@ -62,7 +59,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         description: `اقرأ واستمع إلى سورة ${chapterName} من القرآن الكريم.`,
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: `سورة ${id}`,
     };
@@ -81,11 +78,12 @@ export default async function SurahPage({
   const isTranslationEnabled = showTranslation === "true";
   
   const { chapter, verses } = await getSurahData(id);
-  const surahName = `سورة ${chapter.name_arabic}`;
 
   return (
-    <div className="max-w-[1400px] mx-auto py-12 px-4">
-      <SurahReader chapter={chapter} verses={verses} isTranslationEnabled={isTranslationEnabled} />
+    <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] transition-colors">
+      <div className="max-w-[1400px] mx-auto py-8 md:py-12 px-4 md:px-8">
+        <SurahReader chapter={chapter} verses={verses} isTranslationEnabled={isTranslationEnabled} />
+      </div>
     </div>
   );
 }
