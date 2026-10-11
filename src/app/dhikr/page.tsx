@@ -626,16 +626,37 @@ export default function DhikrApp() {
 
           {/* Top Header Bar */}
           <div className="pt-10 px-6 flex items-center justify-between w-full max-w-lg mx-auto relative z-30">
-            {/* Left Controls (Reset, Theme/Night, Settings) */}
-            <div className="flex items-center gap-2.5">
-              {/* Reset Count Button */}
+            {/* Right: Title & Back Button */}
+            <div className="flex items-center gap-3">
               <button
-                onClick={handleResetTasbeeh}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setView("categories");
+                }}
                 className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white border border-black/5 dark:border-white/10 active:scale-90 transition-transform"
-                title="تصفير العداد"
+                title="رجوع للأقسام"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+              <span className="text-2xl font-extrabold text-[#1e354d] dark:text-white">السبحة</span>
+            </div>
+
+            {/* Left Controls (Settings, Theme/Night, Reset) */}
+            <div className="flex items-center gap-2.5">
+              {/* Settings Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSettingsModal(true);
+                }}
+                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white border border-black/5 dark:border-white/10 active:scale-90 transition-transform"
+                title="إعدادات السبحة"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </button>
 
@@ -656,35 +677,14 @@ export default function DhikrApp() {
                 )}
               </button>
 
-              {/* Settings Button */}
+              {/* Reset Count Button */}
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowSettingsModal(true);
-                }}
+                onClick={handleResetTasbeeh}
                 className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white border border-black/5 dark:border-white/10 active:scale-90 transition-transform"
-                title="إعدادات السبحة"
+                title="تصفير العداد"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Right: Back & Title */}
-            <div className="flex items-center gap-3">
-              <span className="text-2xl font-extrabold text-[#1e354d] dark:text-white">السبحة</span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setView("categories");
-                }}
-                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white border border-black/5 dark:border-white/10 active:scale-90 transition-transform"
-                title="رجوع للأقسام"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </button>
             </div>
@@ -780,42 +780,8 @@ export default function DhikrApp() {
             </div>
           </div>
 
-          {/* Bottom Wooden Beads Decoration (matching user screenshot) */}
-          <div className="relative w-full overflow-hidden pointer-events-none pb-6 flex justify-center">
-            <svg
-              className={`w-full max-w-md h-24 transition-transform duration-150 ${
-                tapAnimation ? "translate-x-2" : "translate-x-0"
-              }`}
-              viewBox="0 0 400 100"
-              fill="none"
-            >
-              <defs>
-                <radialGradient id="woodBead" cx="35%" cy="35%" r="65%">
-                  <stop offset="0%" stopColor="#d99b66" />
-                  <stop offset="40%" stopColor="#a36336" />
-                  <stop offset="85%" stopColor="#5c3417" />
-                  <stop offset="100%" stopColor="#2e1708" />
-                </radialGradient>
-                <linearGradient id="beadString" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#3d210f" />
-                  <stop offset="100%" stopColor="#542e15" />
-                </linearGradient>
-              </defs>
-
-              {/* Thread String */}
-              <path d="M 0 65 Q 200 110 400 65" stroke="url(#beadString)" strokeWidth="4" />
-
-              {/* Wooden Beads Row */}
-              <circle cx="30" cy="72" r="22" fill="url(#woodBead)" />
-              <circle cx="75" cy="79" r="23" fill="url(#woodBead)" />
-              <circle cx="122" cy="84" r="24" fill="url(#woodBead)" />
-              <circle cx="172" cy="87" r="25" fill="url(#woodBead)" />
-              <circle cx="225" cy="87" r="25" fill="url(#woodBead)" />
-              <circle cx="277" cy="84" r="24" fill="url(#woodBead)" />
-              <circle cx="325" cy="79" r="23" fill="url(#woodBead)" />
-              <circle cx="370" cy="72" r="22" fill="url(#woodBead)" />
-            </svg>
-          </div>
+          {/* Bottom spacing */}
+          <div className="pb-8 pointer-events-none" />
 
           {/* Settings Modal (Image 2 design) */}
           {showSettingsModal && (
