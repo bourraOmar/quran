@@ -216,13 +216,14 @@ export default function DhikrApp() {
 
   const handleResetTasbeeh = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm("هل تريد تصفير عداد التسبيح؟")) {
-      setTasbeehCount(0);
-      try {
-        localStorage.setItem("tasbeeh_current_count", "0");
-      } catch {
-        // ignore
-      }
+    setTasbeehCount(0);
+    try {
+      localStorage.setItem("tasbeeh_current_count", "0");
+    } catch {
+      // ignore
+    }
+    if (vibrateEnabled && navigator.vibrate) {
+      navigator.vibrate(50);
     }
   };
 
