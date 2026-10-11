@@ -121,6 +121,8 @@ export default function DhikrApp() {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [vibrateEnabled, setVibrateEnabled] = useState<boolean>(true);
   const [saveCountEnabled, setSaveCountEnabled] = useState<boolean>(true);
+  const [motifStyle, setMotifStyle] = useState<"star8" | "star12" | "both">("star8");
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
   const [tapAnimation, setTapAnimation] = useState<boolean>(false);
 
@@ -141,6 +143,16 @@ export default function DhikrApp() {
 
       const savedSaveCount = localStorage.getItem("tasbeeh_save_count");
       if (savedSaveCount !== null) setSaveCountEnabled(savedSaveCount === "true");
+
+      const savedMotif = localStorage.getItem("tasbeeh_motif") as "star8" | "star12" | "both" | null;
+      if (savedMotif) setMotifStyle(savedMotif);
+
+      const savedTheme = localStorage.getItem("theme");
+      const isDark = savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      setIsDarkMode(isDark);
+      if (isDark) {
+        document.documentElement.classList.add("dark");
+      }
 
       const favs = localStorage.getItem("dhikr_favorites");
       if (favs) setFavorites(JSON.parse(favs));
@@ -211,6 +223,28 @@ export default function DhikrApp() {
       } catch {
         // ignore
       }
+    }
+  };
+
+  const toggleTheme = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isDarkMode) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+      setIsDarkMode(false);
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      setIsDarkMode(true);
+    }
+  };
+
+  const handleSelectMotif = (m: "star8" | "star12" | "both") => {
+    setMotifStyle(m);
+    try {
+      localStorage.setItem("tasbeeh_motif", m);
+    } catch {
+      // ignore
     }
   };
 
@@ -581,14 +615,23 @@ export default function DhikrApp() {
           onClick={handleFullTouchTap}
           className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden select-none cursor-pointer bg-[#f4f7f9] dark:bg-[#111c24] text-[#1e354d] dark:text-white animate-fade-in"
         >
+          {/* Top-Left Geometric Watermark Corner (from user screenshot reference) */}
+          <div className="absolute -top-12 -left-12 pointer-events-none select-none opacity-15 dark:invert dark:opacity-20 z-0">
+            <img
+              src="/images/islamic-star-12.png"
+              alt="زخرفة ركنية إسلامية"
+              className="w-56 h-56 md:w-72 md:h-72 object-contain rotate-12"
+            />
+          </div>
+
           {/* Top Header Bar */}
           <div className="pt-10 px-6 flex items-center justify-between w-full max-w-lg mx-auto relative z-30">
-            {/* Left Controls (Settings, Mute, Reset) */}
+            {/* Left Controls (Reset, Theme/Night, Settings) */}
             <div className="flex items-center gap-2.5">
               {/* Reset Count Button */}
               <button
                 onClick={handleResetTasbeeh}
-                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white active:scale-90 transition-transform"
+                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white border border-black/5 dark:border-white/10 active:scale-90 transition-transform"
                 title="تصفير العداد"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -596,33 +639,19 @@ export default function DhikrApp() {
                 </svg>
               </button>
 
-              {/* Sound Toggle Button */}
+              {/* Night Mode / Theme Toggle Button */}
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const nextSound = !soundEnabled;
-                  setSoundEnabled(nextSound);
-                  try {
-                    localStorage.setItem("tasbeeh_sound", nextSound.toString());
-                  } catch {
-                    // ignore
-                  }
-                }}
-                className={`w-11 h-11 rounded-full shadow-md flex items-center justify-center transition-transform active:scale-90 ${
-                  soundEnabled
-                    ? "bg-[#0f8e5d] text-white"
-                    : "bg-white dark:bg-[#1e293b] text-[#1e354d]/60 dark:text-white/60"
-                }`}
-                title={soundEnabled ? "كتم الصوت" : "تشغيل الصوت"}
+                onClick={toggleTheme}
+                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white border border-black/5 dark:border-white/10 active:scale-90 transition-transform"
+                title={isDarkMode ? "الوضع النهاري" : "الوضع الليلي"}
               >
-                {soundEnabled ? (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                {isDarkMode ? (
+                  <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 ) : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                  <svg className="w-5 h-5 text-[#4a6b8c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                   </svg>
                 )}
               </button>
@@ -633,8 +662,8 @@ export default function DhikrApp() {
                   e.stopPropagation();
                   setShowSettingsModal(true);
                 }}
-                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white active:scale-90 transition-transform"
-                title="إعدادات العداد"
+                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white border border-black/5 dark:border-white/10 active:scale-90 transition-transform"
+                title="إعدادات السبحة"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -651,7 +680,7 @@ export default function DhikrApp() {
                   e.stopPropagation();
                   setView("categories");
                 }}
-                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white active:scale-90 transition-transform"
+                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white border border-black/5 dark:border-white/10 active:scale-90 transition-transform"
                 title="رجوع للأقسام"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -686,20 +715,10 @@ export default function DhikrApp() {
             </div>
           </div>
 
-          {/* Center Touch Counter with Islamic Star Watermark */}
-          <div className="flex-1 flex flex-col items-center justify-center relative w-full my-auto py-10">
-            {/* Background Geometric 8-Point Star Pattern (from user screenshot) */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 dark:opacity-25">
-              <svg className="w-[320px] h-[320px] md:w-[420px] md:h-[420px] text-gray-500 dark:text-gray-300" viewBox="0 0 200 200" fill="none" stroke="currentColor" strokeWidth="4">
-                {/* 8-point geometric star pattern */}
-                <rect x="40" y="40" width="120" height="120" rx="4" />
-                <rect x="40" y="40" width="120" height="120" rx="4" transform="rotate(45 100 100)" />
-                <circle cx="100" cy="100" r="25" strokeWidth="2" strokeDasharray="4 4" />
-              </svg>
-            </div>
-
+          {/* Center Touch Counter with Islamic Geometric Star Motif */}
+          <div className="flex-1 flex flex-col items-center justify-center relative w-full my-auto py-8">
             {/* Selected Dhikr Title */}
-            <div className="relative z-10 mb-4 px-6 text-center">
+            <div className="relative z-10 mb-2 px-6 text-center">
               <h2 className="text-2xl md:text-3xl font-extrabold text-[#1e354d] dark:text-white leading-relaxed">
                 {TASBEEH_PRESETS.find((p) => p.id === selectedPresetId)?.arabic}
               </h2>
@@ -710,21 +729,55 @@ export default function DhikrApp() {
               )}
             </div>
 
-            {/* Giant Number Display */}
-            <div
-              className={`relative z-10 transition-transform duration-100 ${
-                tapAnimation ? "scale-110" : "scale-100"
-              }`}
-            >
-              <span className="text-8xl md:text-9xl font-black tracking-tight text-[#0f8e5d] dark:text-[#4ade80] drop-shadow-sm select-none">
-                {tasbeehCount}
-              </span>
-            </div>
+            {/* Central Geometric Star Motif Framing the Counter Number */}
+            <div className="relative flex items-center justify-center">
+              {/* Islamic Star Background (from user uploaded icons) */}
+              <div
+                className={`transition-transform duration-150 pointer-events-none select-none ${
+                  tapAnimation ? "scale-105" : "scale-100"
+                }`}
+              >
+                {motifStyle === "star8" && (
+                  <img
+                    src="/images/islamic-star-8.png"
+                    alt="نجمة إسلامية مثمنة"
+                    className="w-72 h-72 md:w-96 md:h-96 object-contain opacity-25 dark:invert dark:opacity-30 drop-shadow-sm transition-opacity"
+                  />
+                )}
+                {motifStyle === "star12" && (
+                  <img
+                    src="/images/islamic-star-12.png"
+                    alt="وردة إسلامية هندسية"
+                    className="w-72 h-72 md:w-96 md:h-96 object-contain opacity-25 dark:invert dark:opacity-30 drop-shadow-sm transition-opacity"
+                  />
+                )}
+                {motifStyle === "both" && (
+                  <div className="relative w-72 h-72 md:w-96 md:h-96 flex items-center justify-center">
+                    <img
+                      src="/images/islamic-star-12.png"
+                      alt="زخرفة 12"
+                      className="absolute inset-0 w-full h-full object-contain opacity-20 dark:invert dark:opacity-20"
+                    />
+                    <img
+                      src="/images/islamic-star-8.png"
+                      alt="زخرفة 8"
+                      className="absolute inset-6 w-[calc(100%-3rem)] h-[calc(100%-3rem)] object-contain opacity-25 dark:invert dark:opacity-30 rotate-45"
+                    />
+                  </div>
+                )}
+              </div>
 
-            {/* Subtle Touch Hint */}
-            <p className="relative z-10 mt-6 text-xs md:text-sm text-[#4a6b8c]/80 dark:text-[#8ba7c0]/80 font-medium animate-pulse">
-              اضغط في أي مكان على الشاشة للتسبيح
-            </p>
+              {/* Giant Number Display Centered Inside Motif */}
+              <div
+                className={`absolute inset-0 flex items-center justify-center transition-transform duration-100 ${
+                  tapAnimation ? "scale-110" : "scale-100"
+                }`}
+              >
+                <span className="text-8xl md:text-9xl font-black tracking-tight text-[#0f8e5d] dark:text-[#a7f3d0] drop-shadow-sm select-none font-sans">
+                  {tasbeehCount}
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Bottom Wooden Beads Decoration (matching user screenshot) */}
@@ -866,6 +919,49 @@ export default function DhikrApp() {
                         }`}
                       />
                     </button>
+                  </div>
+
+                  {/* Islamic Geometric Motif Selector */}
+                  <div className="pt-2">
+                    <span className="text-xs text-white/60 block mb-2 font-semibold">شكل الزخرفة الهندسية:</span>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleSelectMotif("star8")}
+                        className={`py-2 px-1 rounded-xl text-xs font-bold transition-all text-center flex flex-col items-center gap-1 ${
+                          motifStyle === "star8"
+                            ? "bg-[#0f8e5d] text-white shadow-md shadow-[#0f8e5d]/30"
+                            : "bg-white/10 text-white/70 hover:bg-white/15"
+                        }`}
+                      >
+                        <img src="/images/islamic-star-8.png" alt="8" className="w-5 h-5 invert opacity-80" />
+                        <span>نجمة مثمنة</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSelectMotif("star12")}
+                        className={`py-2 px-1 rounded-xl text-xs font-bold transition-all text-center flex flex-col items-center gap-1 ${
+                          motifStyle === "star12"
+                            ? "bg-[#0f8e5d] text-white shadow-md shadow-[#0f8e5d]/30"
+                            : "bg-white/10 text-white/70 hover:bg-white/15"
+                        }`}
+                      >
+                        <img src="/images/islamic-star-12.png" alt="12" className="w-5 h-5 invert opacity-80" />
+                        <span>وردة إسلامية</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSelectMotif("both")}
+                        className={`py-2 px-1 rounded-xl text-xs font-bold transition-all text-center flex flex-col items-center gap-1 ${
+                          motifStyle === "both"
+                            ? "bg-[#0f8e5d] text-white shadow-md shadow-[#0f8e5d]/30"
+                            : "bg-white/10 text-white/70 hover:bg-white/15"
+                        }`}
+                      >
+                        <span className="text-sm">✦ ✦</span>
+                        <span>النمطان معاً</span>
+                      </button>
+                    </div>
                   </div>
 
                   {/* Target Goal Selector */}
