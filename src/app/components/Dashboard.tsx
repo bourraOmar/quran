@@ -330,6 +330,26 @@ export default function Dashboard() {
     }
   };
 
+  // Helper for rendering Daily App and Quran icons matching user's Flaticon links
+  const renderDailyIcon = (name: "tasbih" | "qibla" | "shalat" | "play" | "islam", className: string = "w-7 h-7") => {
+    return (
+      <span
+        className={`inline-block bg-current shrink-0 ${className}`}
+        style={{
+          maskImage: `url('/icons/daily/${name}.png')`,
+          WebkitMaskImage: `url('/icons/daily/${name}.png')`,
+          maskSize: "contain",
+          WebkitMaskSize: "contain",
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+          maskPosition: "center",
+          WebkitMaskPosition: "center",
+        }}
+        aria-hidden="true"
+      />
+    );
+  };
+
   // Determine morning vs evening dhikr based on current hour
   const currentHour = currentTime.getHours();
   const isMorningDhikrTime = currentHour >= 3 && currentHour < 15;
@@ -689,52 +709,46 @@ export default function Dashboard() {
 
           {/* Circular Apps Row */}
           <div className="flex items-center justify-between gap-2 overflow-x-auto pb-2 scrollbar-none">
-            {/* 1. Tasbih */}
+            {/* 1. Tasbih (tasbih_4939058) */}
             <button
               onClick={() => setShowTasbihModal(true)}
               className="flex flex-col items-center gap-2 group shrink-0 min-w-[72px]"
             >
               <div className="w-16 h-16 rounded-full bg-[#e8efe9] dark:bg-[#203126] text-[#0f8e5d] dark:text-[#4ade80] flex items-center justify-center shadow-sm group-hover:scale-105 active:scale-95 transition-all">
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                </svg>
+                {renderDailyIcon("tasbih", "w-7 h-7")}
               </div>
               <span className="text-xs font-bold text-[#1e354d] dark:text-white group-hover:text-[#0f8e5d] transition-colors">
                 المسبحة
               </span>
             </button>
 
-            {/* 2. Qibla */}
+            {/* 2. Qibla (qibla_4434397) */}
             <button
               onClick={() => setShowQiblaModal(true)}
               className="flex flex-col items-center gap-2 group shrink-0 min-w-[72px]"
             >
               <div className="w-16 h-16 rounded-full bg-[#f1ebf7] dark:bg-[#2d2238] text-[#9333ea] dark:text-[#c084fc] flex items-center justify-center shadow-sm group-hover:scale-105 active:scale-95 transition-all">
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-11l5-2-2 5-5 2 2-5z" />
-                </svg>
+                {renderDailyIcon("qibla", "w-7 h-7")}
               </div>
               <span className="text-xs font-bold text-[#1e354d] dark:text-white group-hover:text-[#9333ea] transition-colors">
                 اتجاه القبلة
               </span>
             </button>
 
-            {/* 3. Dhikr after Prayer */}
+            {/* 3. Dhikr after Prayer (shalat_4358949) */}
             <Link
               href="/dhikr"
               className="flex flex-col items-center gap-2 group shrink-0 min-w-[72px]"
             >
               <div className="w-16 h-16 rounded-full bg-[#e8f2ea] dark:bg-[#1a3324] text-[#16a34a] dark:text-[#4ade80] flex items-center justify-center shadow-sm group-hover:scale-105 active:scale-95 transition-all">
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
+                {renderDailyIcon("shalat", "w-7 h-7")}
               </div>
               <span className="text-xs font-bold text-[#1e354d] dark:text-white group-hover:text-[#16a34a] transition-colors text-center leading-tight">
                 أذكار بعد الصلاة
               </span>
             </Link>
 
-            {/* 4. Live Radio */}
+            {/* 4. Live Radio (play_15464933) */}
             <button
               onClick={toggleRadio}
               className="flex flex-col items-center gap-2 group shrink-0 min-w-[72px]"
@@ -745,10 +759,7 @@ export default function Dashboard() {
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                 ) : (
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  renderDailyIcon("play", "w-7 h-7")
                 )}
               </div>
               <span className="text-xs font-bold text-[#1e354d] dark:text-white group-hover:text-[#e11d48] transition-colors text-center leading-tight">
@@ -766,11 +777,9 @@ export default function Dashboard() {
           className="block bg-white dark:bg-[#1e293b] p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm hover:border-[#0f8e5d]/30 active:scale-[0.99] transition-all group"
         >
           <div className="flex items-center justify-between gap-4">
-            {/* Right: Circular Quran Emblem */}
+            {/* Right: Circular Quran Emblem (islam_7342926) */}
             <div className="w-14 h-14 rounded-2xl bg-[#0f8e5d]/10 dark:bg-[#0f8e5d]/20 text-[#0f8e5d] dark:text-[#4ade80] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
+              {renderDailyIcon("islam", "w-8 h-8")}
             </div>
 
             {/* Center: Info */}
@@ -814,9 +823,7 @@ export default function Dashboard() {
               onClick={() => setShowTasbihModal(true)}
               className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-[#e0e7ff] dark:bg-[#1e2540] text-[#4338ca] dark:text-[#a5b4fc] text-xs font-bold shrink-0 hover:scale-105 active:scale-95 transition-all shadow-sm"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4" />
-              </svg>
+              {renderDailyIcon("tasbih", "w-4 h-4")}
               <span>السبحة الإلكترونية</span>
             </button>
 
@@ -825,9 +832,7 @@ export default function Dashboard() {
               href="/dua"
               className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-[#fce7f3] dark:bg-[#381e2b] text-[#be185d] dark:text-[#f472b6] text-xs font-bold shrink-0 hover:scale-105 active:scale-95 transition-all shadow-sm"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13" />
-              </svg>
+              {renderDailyIcon("islam", "w-4 h-4")}
               <span>أدعية من القرآن</span>
             </Link>
 
@@ -894,9 +899,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between mb-4">
               {/* Badge */}
               <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0f8e5d]/10 text-[#0f8e5d] dark:text-[#4ade80] text-xs font-bold">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13" />
-                </svg>
+                {renderDailyIcon("islam", "w-3.5 h-3.5")}
                 <span>آية اليوم</span>
               </div>
 
@@ -955,9 +958,7 @@ export default function Dashboard() {
           <div className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0f8e5d]/10 text-[#0f8e5d] dark:text-[#4ade80] text-xs font-bold">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
+                {renderDailyIcon("shalat", "w-3.5 h-3.5")}
                 <span>دعاء اليوم</span>
               </div>
 
@@ -1000,7 +1001,10 @@ export default function Dashboard() {
               >
                 ✕
               </button>
-              <h3 className="font-bold text-lg text-[#1e354d] dark:text-white">المسبحة الإلكترونية</h3>
+              <h3 className="font-bold text-lg text-[#1e354d] dark:text-white flex items-center gap-2">
+                <span className="text-[#0f8e5d] dark:text-[#4ade80]">{renderDailyIcon("tasbih", "w-5 h-5")}</span>
+                <span>المسبحة الإلكترونية</span>
+              </h3>
             </div>
 
             {/* Dhikr Selector */}
@@ -1062,7 +1066,10 @@ export default function Dashboard() {
               >
                 ✕
               </button>
-              <h3 className="font-bold text-lg text-[#1e354d] dark:text-white">بوصلة اتجاه القبلة</h3>
+              <h3 className="font-bold text-lg text-[#1e354d] dark:text-white flex items-center gap-2">
+                <span className="text-[#9333ea] dark:text-[#c084fc]">{renderDailyIcon("qibla", "w-5 h-5")}</span>
+                <span>بوصلة اتجاه القبلة</span>
+              </h3>
             </div>
 
             <p className="text-xs text-[#4a6b8c] dark:text-[#8ba7c0] mb-6">
