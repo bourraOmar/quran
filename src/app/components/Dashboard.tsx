@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface PrayerTimings {
   Fajr: string;
@@ -256,6 +257,79 @@ export default function Dashboard() {
 
   const nextPrayer = getNextPrayerData();
 
+  // Helper to render accurate Flaticon prayer icons
+  const renderPrayerIcon = (prayerName: string, isHighlighted: boolean = false) => {
+    const iconClass = isHighlighted
+      ? "w-5 h-5 object-contain opacity-90 dark:invert transition-all"
+      : "w-5 h-5 object-contain opacity-80 dark:invert transition-all";
+
+    switch (prayerName) {
+      case "الفجر":
+        return (
+          <Image
+            src="/icons/prayer/shines.svg"
+            alt="الفجر"
+            width={20}
+            height={20}
+            className={iconClass}
+          />
+        );
+      case "الشروق":
+        return (
+          <Image
+            src="/icons/prayer/sunrise.png"
+            alt="الشروق"
+            width={20}
+            height={20}
+            className={iconClass}
+          />
+        );
+      case "الظهر":
+        return (
+          <Image
+            src="/icons/prayer/dhuhr.png"
+            alt="الظهر"
+            width={20}
+            height={20}
+            className={iconClass}
+          />
+        );
+      case "العصر":
+        return (
+          <Image
+            src="/icons/prayer/asr.png"
+            alt="العصر"
+            width={20}
+            height={20}
+            className={iconClass}
+          />
+        );
+      case "المغرب":
+        return (
+          <Image
+            src="/icons/prayer/maghrib.png"
+            alt="المغرب"
+            width={20}
+            height={20}
+            className={iconClass}
+          />
+        );
+      case "العشاء":
+      case "منتصف الليل":
+        return (
+          <Image
+            src="/icons/prayer/isha.png"
+            alt={prayerName}
+            width={20}
+            height={20}
+            className={iconClass}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   // Determine morning vs evening dhikr based on current hour
   const currentHour = currentTime.getHours();
   const isMorningDhikrTime = currentHour >= 3 && currentHour < 15;
@@ -385,7 +459,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Left Column: Date Card (Exact Style from Screenshot) */}
+          {/* Left Column: Date Card */}
           <div className="bg-white dark:bg-[#1e293b] p-4 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm flex flex-col justify-between text-center relative overflow-hidden">
             <div className="pt-1">
               <h2 className="text-3xl font-extrabold text-[#0f8e5d] dark:text-[#4ade80] leading-none mb-3" style={{ fontFamily: 'var(--font-amiri)' }}>
@@ -425,7 +499,7 @@ export default function Dashboard() {
         </div>
 
         {/* ============================================================== */}
-        {/* 3. PRAYER TIMES SECTION ("أوقات الصلاة")                        */}
+        {/* 3. PRAYER TIMES SECTION WITH REQUESTED FLATICON ICONS           */}
         {/* ============================================================== */}
         <div>
           {/* Section Header */}
@@ -444,7 +518,7 @@ export default function Dashboard() {
 
           {/* Prayer Cards Grid */}
           <div className="grid grid-cols-4 gap-2.5">
-            {/* 1. Fajr */}
+            {/* 1. Fajr (shines_764690) */}
             <div 
               onClick={() => togglePrayed("الفجر")}
               className={`bg-white dark:bg-[#1e293b] p-3 rounded-2xl border text-center transition-all cursor-pointer shadow-sm ${
@@ -452,9 +526,7 @@ export default function Dashboard() {
               }`}
             >
               <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                </svg>
+                {renderPrayerIcon("الفجر")}
               </div>
               <span className="block text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">الفجر</span>
               <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
@@ -462,12 +534,10 @@ export default function Dashboard() {
               </span>
             </div>
 
-            {/* 2. Sunrise */}
+            {/* 2. Sunrise (sunrise_907686) */}
             <div className="bg-white dark:bg-[#1e293b] p-3 rounded-2xl border border-black/5 dark:border-white/5 text-center shadow-sm">
               <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" />
-                </svg>
+                {renderPrayerIcon("الشروق")}
               </div>
               <span className="block text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">الشروق</span>
               <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
@@ -475,7 +545,7 @@ export default function Dashboard() {
               </span>
             </div>
 
-            {/* 3. Dhuhr */}
+            {/* 3. Dhuhr (sunny_3570489) */}
             <div 
               onClick={() => togglePrayed("الظهر")}
               className={`bg-white dark:bg-[#1e293b] p-3 rounded-2xl border text-center transition-all cursor-pointer shadow-sm ${
@@ -483,9 +553,7 @@ export default function Dashboard() {
               }`}
             >
               <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
+                {renderPrayerIcon("الظهر")}
               </div>
               <span className="block text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">الظهر</span>
               <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
@@ -493,7 +561,7 @@ export default function Dashboard() {
               </span>
             </div>
 
-            {/* 4. Asr */}
+            {/* 4. Asr (brightness_3951337) */}
             <div 
               onClick={() => togglePrayed("العصر")}
               className={`bg-white dark:bg-[#1e293b] p-3 rounded-2xl border text-center transition-all cursor-pointer shadow-sm ${
@@ -501,9 +569,7 @@ export default function Dashboard() {
               }`}
             >
               <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                {renderPrayerIcon("العصر")}
               </div>
               <span className="block text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">العصر</span>
               <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
@@ -517,7 +583,9 @@ export default function Dashboard() {
                 <span className="text-[11px] font-bold text-[#0f8e5d] dark:text-[#4ade80]">
                   تبقى على الأذان
                 </span>
-                <span className="text-xs">✨</span>
+                <div className="text-[#0f8e5d] dark:text-[#4ade80]">
+                  {renderPrayerIcon(nextPrayer.name, true)}
+                </div>
               </div>
 
               <div className="my-1.5 text-center">
@@ -532,36 +600,71 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Isha */}
-            <div 
-              onClick={() => togglePrayed("العشاء")}
-              className={`bg-white dark:bg-[#1e293b] p-3 rounded-2xl border text-center transition-all cursor-pointer shadow-sm flex flex-col justify-between ${
-                prayedStatus["العشاء"] ? "border-[#0f8e5d] bg-[#0f8e5d]/5" : "border-black/5 dark:border-white/5 hover:border-[#0f8e5d]/30"
-              }`}
-            >
-              <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              </div>
-              <span className="block text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">العشاء</span>
-              <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
-                {timings ? format12Hour(timings.Isha) : "7:26 م"}
-              </span>
-            </div>
+            {/* If nextPrayer is Maghrib: Show Isha and Midnight */}
+            {nextPrayer.name === "المغرب" ? (
+              <>
+                {/* Isha (night-mode_1679851) */}
+                <div 
+                  onClick={() => togglePrayed("العشاء")}
+                  className={`bg-white dark:bg-[#1e293b] p-3 rounded-2xl border text-center transition-all cursor-pointer shadow-sm flex flex-col justify-between ${
+                    prayedStatus["العشاء"] ? "border-[#0f8e5d] bg-[#0f8e5d]/5" : "border-black/5 dark:border-white/5 hover:border-[#0f8e5d]/30"
+                  }`}
+                >
+                  <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
+                    {renderPrayerIcon("العشاء")}
+                  </div>
+                  <span className="block text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">العشاء</span>
+                  <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
+                    {timings ? format12Hour(timings.Isha) : "7:26 م"}
+                  </span>
+                </div>
 
-            {/* Midnight */}
-            <div className="bg-white dark:bg-[#1e293b] p-3 rounded-2xl border border-black/5 dark:border-white/5 text-center shadow-sm flex flex-col justify-between">
-              <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                </svg>
-              </div>
-              <span className="block text-[11px] font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">منتصف الليل</span>
-              <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
-                {timings ? format12Hour(timings.Midnight) : "11:43 م"}
-              </span>
-            </div>
+                {/* Midnight (night-mode_1679851) */}
+                <div className="bg-white dark:bg-[#1e293b] p-3 rounded-2xl border border-black/5 dark:border-white/5 text-center shadow-sm flex flex-col justify-between">
+                  <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
+                    {renderPrayerIcon("منتصف الليل")}
+                  </div>
+                  <span className="block text-[11px] font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">منتصف الليل</span>
+                  <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
+                    {timings ? format12Hour(timings.Midnight) : "11:43 م"}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Maghrib (sunset/maghrib icon) */}
+                <div 
+                  onClick={() => togglePrayed("المغرب")}
+                  className={`bg-white dark:bg-[#1e293b] p-3 rounded-2xl border text-center transition-all cursor-pointer shadow-sm flex flex-col justify-between ${
+                    prayedStatus["المغرب"] ? "border-[#0f8e5d] bg-[#0f8e5d]/5" : "border-black/5 dark:border-white/5 hover:border-[#0f8e5d]/30"
+                  }`}
+                >
+                  <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
+                    {renderPrayerIcon("المغرب")}
+                  </div>
+                  <span className="block text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">المغرب</span>
+                  <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
+                    {timings ? format12Hour(timings.Maghrib) : "6:09 م"}
+                  </span>
+                </div>
+
+                {/* Isha (night-mode_1679851) */}
+                <div 
+                  onClick={() => togglePrayed("العشاء")}
+                  className={`bg-white dark:bg-[#1e293b] p-3 rounded-2xl border text-center transition-all cursor-pointer shadow-sm flex flex-col justify-between ${
+                    prayedStatus["العشاء"] ? "border-[#0f8e5d] bg-[#0f8e5d]/5" : "border-black/5 dark:border-white/5 hover:border-[#0f8e5d]/30"
+                  }`}
+                >
+                  <div className="flex justify-center mb-1 text-[#4a6b8c] dark:text-[#8ba7c0]">
+                    {renderPrayerIcon("العشاء")}
+                  </div>
+                  <span className="block text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0]">العشاء</span>
+                  <span className="block text-xs font-extrabold text-[#1e354d] dark:text-white mt-1" dir="ltr">
+                    {timings ? format12Hour(timings.Isha) : "7:26 م"}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
