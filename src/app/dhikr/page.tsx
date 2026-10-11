@@ -32,7 +32,7 @@ const CATEGORIES: DhikrCategory[] = [
   {
     id: "tasbeeh",
     title: "المسبحة الإلكترونية",
-    description: "عداد رقمي تفاعلي للتسبيح والاستغفار",
+    description: "المس أي مكان في الشاشة للتسبيح بسهولة",
     countLabel: "عداد ذكي",
     icon: "tasbeeh",
     type: "tasbeeh",
@@ -95,29 +95,34 @@ const CATEGORIES: DhikrCategory[] = [
 ];
 
 const TASBEEH_PRESETS = [
-  { id: 1, arabic: "سُبْحَانَ اللَّهِ", transliteration: "Subhanallah", target: 33 },
-  { id: 2, arabic: "الْحَمْدُ لِلَّهِ", transliteration: "Alhamdulillah", target: 33 },
-  { id: 3, arabic: "اللَّهُ أَكْبَرُ", transliteration: "Allahu Akbar", target: 33 },
-  { id: 4, arabic: "أَسْتَغْفِرُ اللَّهَ", transliteration: "Astaghfirullah", target: 100 },
-  { id: 5, arabic: "لَا إِلَهَ إِلَّا اللَّهُ", transliteration: "La ilaha illallah", target: 100 },
-  { id: 6, arabic: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", transliteration: "La hawla wa la quwwata illa billah", target: 33 },
-  { id: 7, arabic: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ", transliteration: "Subhanallahi wa bihamdih", target: 100 },
-  { id: 8, arabic: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", transliteration: "Salawat", target: 100 },
+  { id: 1, arabic: "سُبْحَانَ اللَّهِ", target: 33 },
+  { id: 2, arabic: "الْحَمْدُ لِلَّهِ", target: 33 },
+  { id: 3, arabic: "اللَّهُ أَكْبَرُ", target: 33 },
+  { id: 4, arabic: "لَا إِلَهَ إِلَّا اللَّهُ", target: 100 },
+  { id: 5, arabic: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", target: 100 },
+  { id: 6, arabic: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", target: 33 },
+  { id: 7, arabic: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ", target: 100 },
+  { id: 8, arabic: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", target: 100 },
 ];
 
 export default function DhikrApp() {
-  const [view, setView] = useState<"categories" | "tasbeeh_list" | "tasbeeh_counter" | "reading">("categories");
+  const [view, setView] = useState<"categories" | "tasbeeh_counter" | "reading">("categories");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [activeDhikrId, setActiveDhikrId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "daily" | "prayer_sleep" | "tasbeeh" | "favorites">("all");
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  // States for Tasbeeh
-  const [counts, setCounts] = useState<Record<number, number>>({});
-  const [target, setTarget] = useState<number>(33);
+  // States for Tasbeeh (Full-Screen Touch)
+  const [tasbeehCount, setTasbeehCount] = useState<number>(0);
+  const [selectedPresetId, setSelectedPresetId] = useState<number>(1);
+  const [tasbeehTarget, setTasbeehTarget] = useState<number>(33);
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [vibrateEnabled, setVibrateEnabled] = useState<boolean>(true);
+  const [saveCountEnabled, setSaveCountEnabled] = useState<boolean>(true);
+  const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
+  const [tapAnimation, setTapAnimation] = useState<boolean>(false);
 
   // States for Reading Mode
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
@@ -125,8 +130,18 @@ export default function DhikrApp() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("dhikrCounts");
-      if (saved) setCounts(JSON.parse(saved));
+      const savedCount = localStorage.getItem("tasbeeh_current_count");
+      if (savedCount) setTasbeehCount(parseInt(savedCount, 10) || 0);
+
+      const savedSound = localStorage.getItem("tasbeeh_sound");
+      if (savedSound !== null) setSoundEnabled(savedSound === "true");
+
+      const savedVibrate = localStorage.getItem("tasbeeh_vibrate");
+      if (savedVibrate !== null) setVibrateEnabled(savedVibrate === "true");
+
+      const savedSaveCount = localStorage.getItem("tasbeeh_save_count");
+      if (savedSaveCount !== null) setSaveCountEnabled(savedSaveCount === "true");
+
       const favs = localStorage.getItem("dhikr_favorites");
       if (favs) setFavorites(JSON.parse(favs));
     } catch {
@@ -134,12 +149,68 @@ export default function DhikrApp() {
     }
   }, []);
 
-  const saveCounts = (newCounts: Record<number, number>) => {
-    setCounts(newCounts);
+  const playBeadClick = () => {
     try {
-      localStorage.setItem("dhikrCounts", JSON.stringify(newCounts));
+      const AudioCtx = (window as any).AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(550, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.035);
+
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.035);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.035);
     } catch {
-      // ignore
+      // audio error ignored
+    }
+  };
+
+  const handleFullTouchTap = () => {
+    const next = tasbeehCount + 1;
+    setTasbeehCount(next);
+
+    if (saveCountEnabled) {
+      try {
+        localStorage.setItem("tasbeeh_current_count", next.toString());
+      } catch {
+        // ignore
+      }
+    }
+
+    if (soundEnabled) {
+      playBeadClick();
+    }
+
+    if (vibrateEnabled && navigator.vibrate) {
+      if (tasbeehTarget > 0 && next % tasbeehTarget === 0) {
+        navigator.vibrate([100, 60, 120]);
+      } else {
+        navigator.vibrate(30);
+      }
+    }
+
+    setTapAnimation(true);
+    setTimeout(() => setTapAnimation(false), 120);
+  };
+
+  const handleResetTasbeeh = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm("هل تريد تصفير عداد التسبيح؟")) {
+      setTasbeehCount(0);
+      try {
+        localStorage.setItem("tasbeeh_current_count", "0");
+      } catch {
+        // ignore
+      }
     }
   };
 
@@ -179,25 +250,9 @@ export default function DhikrApp() {
     }
   };
 
-  const handleTasbeehTap = (id: number) => {
-    const current = counts[id] || 0;
-    const newCount = current + 1;
-    if (navigator.vibrate) {
-      if (target > 0 && newCount > 0 && newCount % target === 0) navigator.vibrate([100, 50, 100]);
-      else navigator.vibrate(50);
-    }
-    saveCounts({ ...counts, [id]: newCount });
-  };
-
-  const handleTasbeehReset = (id: number) => {
-    if (confirm("هل تريد تصفير عداد هذا الذكر؟")) {
-      saveCounts({ ...counts, [id]: 0 });
-    }
-  };
-
   const handleCategoryClick = (id: string) => {
     if (id === "tasbeeh") {
-      setView("tasbeeh_list");
+      setView("tasbeeh_counter");
     } else {
       setSelectedCategory(id);
       setView("reading");
@@ -347,12 +402,12 @@ export default function DhikrApp() {
 
   return (
     <div
-      className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] font-sans pb-28 transition-colors duration-300"
+      className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] font-sans transition-colors duration-300"
       dir="rtl"
     >
       {/* 1. CATEGORIES VIEW */}
       {view === "categories" && (
-        <div className="animate-fade-in px-6 pt-16 max-w-lg mx-auto">
+        <div className="animate-fade-in px-6 pt-16 pb-28 max-w-lg mx-auto">
           {/* Header Bar */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
@@ -463,7 +518,7 @@ export default function DhikrApp() {
             </button>
           </div>
 
-          {/* Categories List (matching Dua page 100%) */}
+          {/* Categories List */}
           <div className="space-y-4">
             {filteredCategories.map((cat) => (
               <button
@@ -520,126 +575,334 @@ export default function DhikrApp() {
         </div>
       )}
 
-      {/* 2. TASBEEH LIST VIEW */}
-      {view === "tasbeeh_list" && (
-        <div className="animate-fade-in px-6 pt-16 max-w-lg mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
+      {/* 2. FULL-SCREEN TOUCHABLE TASBEEH VIEW */}
+      {view === "tasbeeh_counter" && (
+        <div
+          onClick={handleFullTouchTap}
+          className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden select-none cursor-pointer bg-[#f4f7f9] dark:bg-[#111c24] text-[#1e354d] dark:text-white animate-fade-in"
+        >
+          {/* Top Header Bar */}
+          <div className="pt-10 px-6 flex items-center justify-between w-full max-w-lg mx-auto relative z-30">
+            {/* Left Controls (Settings, Mute, Reset) */}
+            <div className="flex items-center gap-2.5">
+              {/* Reset Count Button */}
               <button
-                onClick={() => setView("categories")}
-                className="w-10 h-10 rounded-full bg-white dark:bg-[#1e293b] flex items-center justify-center text-[#1e354d] dark:text-white shadow-sm border border-transparent hover:border-[#4a6b8c]/30 active:scale-95 transition-all"
+                onClick={handleResetTasbeeh}
+                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white active:scale-90 transition-transform"
+                title="تصفير العداد"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </button>
+
+              {/* Sound Toggle Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const nextSound = !soundEnabled;
+                  setSoundEnabled(nextSound);
+                  try {
+                    localStorage.setItem("tasbeeh_sound", nextSound.toString());
+                  } catch {
+                    // ignore
+                  }
+                }}
+                className={`w-11 h-11 rounded-full shadow-md flex items-center justify-center transition-transform active:scale-90 ${
+                  soundEnabled
+                    ? "bg-[#0f8e5d] text-white"
+                    : "bg-white dark:bg-[#1e293b] text-[#1e354d]/60 dark:text-white/60"
+                }`}
+                title={soundEnabled ? "كتم الصوت" : "تشغيل الصوت"}
+              >
+                {soundEnabled ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                  </svg>
+                )}
+              </button>
+
+              {/* Settings Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSettingsModal(true);
+                }}
+                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white active:scale-90 transition-transform"
+                title="إعدادات العداد"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Right: Back & Title */}
+            <div className="flex items-center gap-3">
+              <span className="text-2xl font-extrabold text-[#1e354d] dark:text-white">السبحة</span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setView("categories");
+                }}
+                className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] shadow-md flex items-center justify-center text-[#1e354d] dark:text-white active:scale-90 transition-transform"
+                title="رجوع للأقسام"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
-              <div>
-                <h1 className="text-3xl font-extrabold text-[#1e354d] dark:text-white">
-                  المسبحة الإلكترونية
-                </h1>
-                <p className="text-sm text-[#4a6b8c] dark:text-[#8ba7c0] mt-0.5">
-                  اختر ذكراً للبدء بالتسبيح مع عداد ذكي
-                </p>
-              </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            {TASBEEH_PRESETS.map((dhikr) => (
-              <div
-                key={dhikr.id}
-                onClick={() => {
-                  setActiveDhikrId(dhikr.id);
-                  setTarget(dhikr.target);
-                  setView("tasbeeh_counter");
-                }}
-                className="w-full bg-white dark:bg-[#1e293b] p-5 rounded-3xl shadow-sm flex items-center justify-between transition-transform active:scale-95 cursor-pointer border border-transparent hover:border-[#4a6b8c]/30 group"
-              >
-                <div className="text-right">
-                  <p className="text-xl font-bold text-[#1e354d] dark:text-white mb-1 group-hover:text-[#0f8e5d] transition-colors">
-                    {dhikr.arabic}
-                  </p>
-                  <p className="text-xs text-[#4a6b8c] dark:text-[#8ba7c0]">
-                    الهدف: {dhikr.target} مرة • {dhikr.transliteration}
-                  </p>
-                </div>
-                <div className="bg-[#0f8e5d] text-white px-4 py-2 rounded-full font-extrabold text-sm shadow-md min-w-[70px] text-center">
-                  {counts[dhikr.id] || 0}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 3. TASBEEH COUNTER VIEW */}
-      {view === "tasbeeh_counter" && activeDhikrId && (
-        <div className="animate-fade-in flex flex-col items-center justify-between min-h-screen px-6 pt-16 pb-28 max-w-lg mx-auto">
-          {/* Header */}
-          <div className="w-full flex items-center justify-between mb-6">
-            <button
-              onClick={() => setView("tasbeeh_list")}
-              className="w-10 h-10 rounded-full bg-white dark:bg-[#1e293b] flex items-center justify-center text-[#1e354d] dark:text-white shadow-sm border border-transparent hover:border-[#4a6b8c]/30 active:scale-95 transition-all"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-            <span className="font-bold text-lg text-[#1e354d] dark:text-white">عداد التسبيح</span>
-            <button
-              onClick={() => handleTasbeehReset(activeDhikrId!)}
-              className="w-10 h-10 rounded-full bg-white dark:bg-[#1e293b] flex items-center justify-center text-red-500 shadow-sm border border-transparent hover:border-red-500/30 active:scale-95 transition-all"
-              title="تصفير العداد"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Main Counter Card */}
+          {/* Quick Dhikr Preset Selector */}
           <div
-            onClick={() => handleTasbeehTap(activeDhikrId)}
-            className="w-full bg-[#1e354d] dark:bg-[#1e293b] rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.3)] p-8 flex flex-col items-center justify-center select-none cursor-pointer active:scale-[0.98] transition-all border border-[#2a4563] dark:border-[#2d3b4e] my-auto min-h-[380px]"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md mx-auto px-6 mt-6 relative z-30"
           >
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-8 leading-normal text-white text-center">
-              {TASBEEH_PRESETS.find((d) => d.id === activeDhikrId)?.arabic}
-            </h2>
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+              {TASBEEH_PRESETS.map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => {
+                    setSelectedPresetId(p.id);
+                    setTasbeehTarget(p.target);
+                  }}
+                  className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all shadow-sm ${
+                    selectedPresetId === p.id
+                      ? "bg-[#0f8e5d] text-white shadow-[#0f8e5d]/30"
+                      : "bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-[#8ba7c0] border border-black/5 dark:border-white/5"
+                  }`}
+                >
+                  {p.arabic}
+                </button>
+              ))}
+            </div>
+          </div>
 
-            <div className="w-48 h-48 rounded-full border-4 border-[#0f8e5d] flex flex-col items-center justify-center bg-black/20 shadow-inner group-active:scale-95 transition-transform">
-              <span className="text-6xl font-extrabold text-white tracking-wider">
-                {counts[activeDhikrId] || 0}
-              </span>
-              <span className="text-xs text-white/60 mt-1">
-                الهدف: {target === 0 ? "حر" : target}
+          {/* Center Touch Counter with Islamic Star Watermark */}
+          <div className="flex-1 flex flex-col items-center justify-center relative w-full my-auto py-10">
+            {/* Background Geometric 8-Point Star Pattern (from user screenshot) */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 dark:opacity-25">
+              <svg className="w-[320px] h-[320px] md:w-[420px] md:h-[420px] text-gray-500 dark:text-gray-300" viewBox="0 0 200 200" fill="none" stroke="currentColor" strokeWidth="4">
+                {/* 8-point geometric star pattern */}
+                <rect x="40" y="40" width="120" height="120" rx="4" />
+                <rect x="40" y="40" width="120" height="120" rx="4" transform="rotate(45 100 100)" />
+                <circle cx="100" cy="100" r="25" strokeWidth="2" strokeDasharray="4 4" />
+              </svg>
+            </div>
+
+            {/* Selected Dhikr Title */}
+            <div className="relative z-10 mb-4 px-6 text-center">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-[#1e354d] dark:text-white leading-relaxed">
+                {TASBEEH_PRESETS.find((p) => p.id === selectedPresetId)?.arabic}
+              </h2>
+              {tasbeehTarget > 0 && (
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#0f8e5d]/10 text-[#0f8e5d] dark:text-[#4ade80] inline-block mt-1">
+                  الهدف: {tasbeehTarget} مرة
+                </span>
+              )}
+            </div>
+
+            {/* Giant Number Display */}
+            <div
+              className={`relative z-10 transition-transform duration-100 ${
+                tapAnimation ? "scale-110" : "scale-100"
+              }`}
+            >
+              <span className="text-8xl md:text-9xl font-black tracking-tight text-[#0f8e5d] dark:text-[#4ade80] drop-shadow-sm select-none">
+                {tasbeehCount}
               </span>
             </div>
 
-            <p className="mt-8 text-sm text-white/70 font-semibold animate-pulse">
-              اضغط في أي مكان للتسبيح
+            {/* Subtle Touch Hint */}
+            <p className="relative z-10 mt-6 text-xs md:text-sm text-[#4a6b8c]/80 dark:text-[#8ba7c0]/80 font-medium animate-pulse">
+              اضغط في أي مكان على الشاشة للتسبيح
             </p>
           </div>
 
-          {/* Targets */}
-          <div className="flex items-center gap-2 mt-6">
-            {[33, 100, 0].map((t) => (
-              <button
-                key={t}
-                onClick={() => setTarget(t)}
-                className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${
-                  target === t
-                    ? "bg-[#0f8e5d] text-white shadow-md shadow-[#0f8e5d]/20"
-                    : "bg-white dark:bg-[#1e293b] text-[#4a6b8c] dark:text-[#8ba7c0] border border-transparent"
-                }`}
-              >
-                {t === 0 ? "حر (مفتوح)" : `${t} مرة`}
-              </button>
-            ))}
+          {/* Bottom Wooden Beads Decoration (matching user screenshot) */}
+          <div className="relative w-full overflow-hidden pointer-events-none pb-6 flex justify-center">
+            <svg
+              className={`w-full max-w-md h-24 transition-transform duration-150 ${
+                tapAnimation ? "translate-x-2" : "translate-x-0"
+              }`}
+              viewBox="0 0 400 100"
+              fill="none"
+            >
+              <defs>
+                <radialGradient id="woodBead" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stopColor="#d99b66" />
+                  <stop offset="40%" stopColor="#a36336" />
+                  <stop offset="85%" stopColor="#5c3417" />
+                  <stop offset="100%" stopColor="#2e1708" />
+                </radialGradient>
+                <linearGradient id="beadString" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#3d210f" />
+                  <stop offset="100%" stopColor="#542e15" />
+                </linearGradient>
+              </defs>
+
+              {/* Thread String */}
+              <path d="M 0 65 Q 200 110 400 65" stroke="url(#beadString)" strokeWidth="4" />
+
+              {/* Wooden Beads Row */}
+              <circle cx="30" cy="72" r="22" fill="url(#woodBead)" />
+              <circle cx="75" cy="79" r="23" fill="url(#woodBead)" />
+              <circle cx="122" cy="84" r="24" fill="url(#woodBead)" />
+              <circle cx="172" cy="87" r="25" fill="url(#woodBead)" />
+              <circle cx="225" cy="87" r="25" fill="url(#woodBead)" />
+              <circle cx="277" cy="84" r="24" fill="url(#woodBead)" />
+              <circle cx="325" cy="79" r="23" fill="url(#woodBead)" />
+              <circle cx="370" cy="72" r="22" fill="url(#woodBead)" />
+            </svg>
           </div>
+
+          {/* Settings Modal (Image 2 design) */}
+          {showSettingsModal && (
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowSettingsModal(false);
+              }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in"
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-sm bg-[#1e293b] text-white rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl border border-white/10"
+              >
+                {/* Modal Header */}
+                <div className="flex items-center justify-between mb-6 pb-3 border-b border-white/10">
+                  <h3 className="text-xl font-bold">العداد</h3>
+                  <button
+                    onClick={() => setShowSettingsModal(false)}
+                    className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Settings Options */}
+                <div className="space-y-5">
+                  {/* Sound Toggle */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-base font-semibold">صوت العداد</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = !soundEnabled;
+                        setSoundEnabled(next);
+                        try {
+                          localStorage.setItem("tasbeeh_sound", next.toString());
+                        } catch {
+                          // ignore
+                        }
+                      }}
+                      className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors ${
+                        soundEnabled ? "bg-[#0f8e5d]" : "bg-gray-600"
+                      }`}
+                    >
+                      <div
+                        className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${
+                          soundEnabled ? "-translate-x-7" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Vibration Toggle */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-base font-semibold">العداد بالاهتزاز</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = !vibrateEnabled;
+                        setVibrateEnabled(next);
+                        try {
+                          localStorage.setItem("tasbeeh_vibrate", next.toString());
+                        } catch {
+                          // ignore
+                        }
+                      }}
+                      className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors ${
+                        vibrateEnabled ? "bg-[#0f8e5d]" : "bg-gray-600"
+                      }`}
+                    >
+                      <div
+                        className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${
+                          vibrateEnabled ? "-translate-x-7" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Save Last Count Toggle */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-base font-semibold">حفظ آخر رقم وصل إليه العداد</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = !saveCountEnabled;
+                        setSaveCountEnabled(next);
+                        try {
+                          localStorage.setItem("tasbeeh_save_count", next.toString());
+                        } catch {
+                          // ignore
+                        }
+                      }}
+                      className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors ${
+                        saveCountEnabled ? "bg-[#0f8e5d]" : "bg-gray-600"
+                      }`}
+                    >
+                      <div
+                        className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${
+                          saveCountEnabled ? "-translate-x-7" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Target Goal Selector */}
+                  <div className="pt-2">
+                    <span className="text-xs text-white/60 block mb-2 font-semibold">الهدف المحدد:</span>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[33, 100, 0].map((t) => (
+                        <button
+                          key={t}
+                          onClick={() => setTasbeehTarget(t)}
+                          className={`py-2 rounded-xl text-xs font-bold transition-all ${
+                            tasbeehTarget === t
+                              ? "bg-[#0f8e5d] text-white shadow-md shadow-[#0f8e5d]/30"
+                              : "bg-white/10 text-white/70 hover:bg-white/15"
+                          }`}
+                        >
+                          {t === 0 ? "حر (مفتوح)" : `${t} مرة`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Save Button */}
+                <button
+                  onClick={() => setShowSettingsModal(false)}
+                  className="w-full mt-7 py-3.5 bg-[#0f8e5d] hover:bg-[#0f8e5d]/90 text-white font-bold rounded-2xl shadow-lg shadow-[#0f8e5d]/30 active:scale-95 transition-all text-sm"
+                >
+                  حفظ
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* 4. READING VIEW (Matching Dua Page UI 100%) */}
+      {/* 3. READING VIEW (Stacked Cards UI) */}
       {view === "reading" && (
         <div className="animate-fade-in flex flex-col min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] relative pb-28">
           {/* Top Navigation */}
