@@ -940,7 +940,7 @@ export default function Dashboard() {
             </div>
 
             <p className="text-base md:text-lg text-center leading-relaxed font-bold text-[#1e354d] dark:text-white my-2 px-2" style={{ fontFamily: 'var(--font-amiri)' }}>
-              "رَبِّ أَسْأَلُكَ تَوْبَةً تَجُبُّ مَا قَبْلَهَا مِنَ الذُّنُوبِ، وَتُصْلِحُ مَا بَعْدَهَا مِنَ الأَعْمَالِ."
+              «رَبِّ أَسْأَلُكَ تَوْبَةً تَجُبُّ مَا قَبْلَهَا مِنَ الذُّنُوبِ، وَتُصْلِحُ مَا بَعْدَهَا مِنَ الأَعْمَالِ.»
             </p>
 
             <span className="block text-center text-xs text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold mt-3">
