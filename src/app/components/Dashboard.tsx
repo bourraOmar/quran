@@ -577,7 +577,18 @@ export default function Dashboard() {
     }
   };
 
-  const dayName = currentTime.toLocaleDateString("ar-EG", { weekday: "long" });
+  const DAY_NAMES_TASHKEEL: Record<string, string> = {
+    "الأحد": "الأَحَدُ",
+    "الاثنين": "الإِثْنَيْنِ",
+    "الإثنين": "الإِثْنَيْنِ",
+    "الثلاثاء": "الثُّلاَثَاءُ",
+    "الأربعاء": "الأَرْبِعَاءُ",
+    "الخميس": "الخَمِيسُ",
+    "الجمعة": "الجُمُعَةُ",
+    "السبت": "السَّبْتُ",
+  };
+  const rawDayName = currentTime.toLocaleDateString("ar-EG", { weekday: "long" });
+  const dayName = DAY_NAMES_TASHKEEL[rawDayName] || rawDayName;
   const gregorianDay = currentTime.getDate();
   const gregorianMonthName = currentTime.toLocaleDateString("ar-EG", { month: "long" });
   const gregorianYear = currentTime.getFullYear();
@@ -632,54 +643,81 @@ export default function Dashboard() {
         {/* ============================================================== */}
         {/* 2. HERO REMINDER & DATE CARDS (Side by Side)                   */}
         {/* ============================================================== */}
-        <div className="grid grid-cols-[1.15fr_1fr] sm:grid-cols-[1.2fr_1fr] gap-3 md:gap-3.5 items-stretch">
+        <div className="grid grid-cols-[1.2fr_1fr] sm:grid-cols-[1.25fr_1fr] gap-3.5 sm:gap-4 items-stretch">
           
-          {/* Right Column: Reminder & Daily Action Box */}
-          <div className="bg-white dark:bg-[#1e293b] p-4 sm:p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm flex flex-col justify-between transition-all">
-            {/* Header: Title + Time Icon (Matching Reference App) */}
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-base sm:text-lg font-bold text-[#1e354d] dark:text-white">
+          {/* Right Column: Dynamic Action Area (Borderless, clean, exactly as in screenshot) */}
+          <div className="flex flex-col justify-between py-1 px-1">
+            {/* Header: Title + Weather/Tasbeeh Icon */}
+            <div className="flex items-center justify-between pt-0.5">
+              <span className="text-xl sm:text-2xl font-bold text-[#1e354d] dark:text-[#d1fae5] tracking-tight">
                 {timeEvent.title}
               </span>
-              <span className="text-xl select-none" aria-hidden="true">
-                {timeEvent.icon}
-              </span>
+              <div className="flex items-center justify-center">
+                {timeEvent.category === "tasbeeh" ? (
+                  <svg className="w-6 h-6 shrink-0" viewBox="0 0 32 32" fill="none">
+                    {/* Heart shaped tasbeeh beads matching screenshot */}
+                    <path
+                      d="M16 23C16 23 7 17.5 5 11.5C3.5 5.5 9.5 2.5 13.5 6.5L16 9L18.5 6.5C22.5 2.5 28.5 5.5 27 11.5C25 17.5 16 23 16 23Z"
+                      stroke="#f472b6"
+                      strokeWidth="2.5"
+                      strokeDasharray="2 3"
+                      strokeLinecap="round"
+                    />
+                    {/* Tassel */}
+                    <path d="M16 23V26.5M14 26.5H18M14.5 26.5L13 30.5M16 26.5V31M17.5 26.5L19 30.5" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                ) : (
+                  <span className="text-2xl select-none" aria-hidden="true">
+                    {timeEvent.icon}
+                  </span>
+                )}
+              </div>
             </div>
 
-            {/* Middle: Primary Action Button according to current time event */}
+            {/* Middle: Dark Glass Capsule Button */}
             <div className="my-auto py-2">
               <Link
                 href={timeEvent.href}
-                className="block w-full text-center py-2.5 px-3 rounded-full bg-[#1e354d] dark:bg-[#0f172a] text-white hover:bg-[#0f8e5d] dark:hover:bg-[#0f8e5d] transition-all text-xs font-bold shadow-sm active:scale-95"
+                className="block w-full text-center py-2.5 sm:py-3 px-4 rounded-full bg-[#1e354d] dark:bg-[#121c17] text-white hover:bg-[#0f8e5d] dark:hover:bg-[#1c2e25] border border-black/10 dark:border-white/10 shadow-sm text-xs sm:text-sm font-bold active:scale-[0.98] transition-all"
               >
                 {timeEvent.buttonText}
               </Link>
             </div>
 
-            {/* Bottom: Next Prayer Badge with Soft Sage Green Pill */}
-            <div className="mt-1 flex items-center justify-between py-2 px-3 rounded-xl bg-[#85b882] dark:bg-[#78a873] text-[#0f331b] dark:text-[#0b2915] text-[11px] font-bold shadow-sm">
-              <span>صلاة {nextPrayer.name} بعد : {nextPrayer.countdownBadgeText}</span>
-              <svg className="w-4 h-4 shrink-0 opacity-90" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2c-.4 0-.8.2-1 .6L9.6 5H6c-.6 0-1 .4-1 1v14c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V6c0-.6-.4-1-1-1h-3.6l-1.4-2.4c-.2-.4-.6-.6-1-.6zm0 2.2l1 1.8h-2l1-1.8zM7 7h10v13H7V7zm5 4c-1.7 0-3 1.3-3 3v6h6v-6c0-1.7-1.3-3-3-3zm0 2c.6 0 1 .4 1 1v4h-2v-4c0-.6.4-1 1-1z" />
-              </svg>
+            {/* Bottom Row: Mosque Icon + Prayer Name + Lime Green Countdown Badge */}
+            <div className="flex items-center justify-between gap-1.5 pb-0.5">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white dark:bg-[#121c17] border border-black/5 dark:border-white/10 flex items-center justify-center text-[#65a30d] dark:text-[#a3e635] shrink-0 shadow-sm">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2c-.4 0-.8.2-1 .6L9.6 5H6c-.6 0-1 .4-1 1v14c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V6c0-.6-.4-1-1-1h-3.6l-1.4-2.4c-.2-.4-.6-.6-1-.6zm0 2.2l1 1.8h-2l1-1.8zM7 7h10v13H7V7zm5 4c-1.7 0-3 1.3-3 3v6h6v-6c0-1.7-1.3-3-3-3zm0 2c.6 0 1 .4 1 1v4h-2v-4c0-.6.4-1 1-1z" />
+                  </svg>
+                </div>
+                <span className="text-[11px] sm:text-xs font-bold text-[#4a6b8c] dark:text-[#94a3b8] whitespace-nowrap">
+                  صلاة {nextPrayer.name} بعد :
+                </span>
+              </div>
+
+              <span className="bg-[#65a30d] dark:bg-[#74a548] text-white px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-bold shadow-sm shrink-0 whitespace-nowrap font-mono" dir="ltr">
+                {nextPrayer.countdownBadgeText}
+              </span>
             </div>
           </div>
 
-          {/* Left Column: Date Card (Slightly wider with generous spacing) */}
-          <div className="bg-white dark:bg-[#1e293b] p-3.5 sm:p-4 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm flex flex-col justify-between text-center relative overflow-hidden transition-all">
-            <div className="pt-1">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f8e5d] dark:text-[#4ade80] leading-none mb-2" style={{ fontFamily: 'var(--font-amiri)' }}>
+          {/* Left Column: Date Card (Dark distinct box with pale mint calligraphy day name) */}
+          <div className="bg-white dark:bg-[#121c17] p-3.5 sm:p-4 rounded-3xl border border-black/5 dark:border-white/10 shadow-sm flex flex-col justify-between text-center relative overflow-hidden transition-all">
+            <div className="pt-0.5">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0f8e5d] dark:text-[#a7f3d0] leading-none mb-3" style={{ fontFamily: 'var(--font-amiri)' }}>
                 {dayName}
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 gap-1 border-t border-black/5 dark:border-white/5 pt-2.5">
+            <div className="grid grid-cols-2 gap-1 border-t border-black/5 dark:border-white/10 pt-2.5">
               {/* Hijri */}
               <div className="text-center px-0.5">
                 <span className="block text-[10px] sm:text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold leading-tight truncate">
                   {hijri ? hijri.month.ar : "جمادى الأولى"}
                 </span>
-                <span className="block text-lg sm:text-xl font-black text-[#1e354d] dark:text-white my-0.5">
+                <span className="block text-xl sm:text-2xl font-black text-[#1e354d] dark:text-white my-1 font-mono sm:font-sans">
                   {hijri ? hijri.day : "1"}
                 </span>
                 <span className="block text-[10px] sm:text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold">
@@ -688,11 +726,11 @@ export default function Dashboard() {
               </div>
 
               {/* Gregorian */}
-              <div className="text-center border-r border-black/5 dark:border-white/5 px-0.5">
+              <div className="text-center border-r border-black/5 dark:border-white/10 px-0.5">
                 <span className="block text-[10px] sm:text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold leading-tight truncate">
                   {gregorianMonthName}
                 </span>
-                <span className="block text-lg sm:text-xl font-black text-[#1e354d] dark:text-white my-0.5">
+                <span className="block text-xl sm:text-2xl font-black text-[#1e354d] dark:text-white my-1 font-mono sm:font-sans">
                   {gregorianDay}
                 </span>
                 <span className="block text-[10px] sm:text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold">
