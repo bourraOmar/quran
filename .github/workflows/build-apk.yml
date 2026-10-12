@@ -48,8 +48,7 @@ jobs:
         run: |
           mkdir -p public/downloads
           cp android/app/build/outputs/apk/debug/*.apk public/downloads/uns-quran.apk
-          cp android/app/build/outputs/apk/debug/*.apk public/uns-quran.apk
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add public/downloads/uns-quran.apk public/uns-quran.apk
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update live APK download binary [skip ci]" && git push origin main)
+          git add public/downloads/uns-quran.apk
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update live APK download binary" && git push origin main)
