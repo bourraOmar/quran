@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -173,7 +172,7 @@ export default function DownloadPage() {
               <div>
                 <h4 className="font-bold text-sm text-[#1e354d] dark:text-white">فتح الملف بعد اكتمال التنزيل</h4>
                 <p className="text-xs text-[#4a6b8c] dark:text-[#8ba7c0] mt-0.5">
-                  افتح شريط الإشعارات واضغط على الملف المكتمل تنزيله <code className="bg-[#f4f7f9] dark:bg-[#0f172a] px-2 py-0.5 rounded text-[11px]">uns-quran.apk</code>، أو افتحه من مجلد "الملفات / التنزيلات" (Downloads).
+                  افتح شريط الإشعارات واضغط على الملف المكتمل تنزيله <code className="bg-[#f4f7f9] dark:bg-[#0f172a] px-2 py-0.5 rounded text-[11px]">uns-quran.apk</code>، أو افتحه من مجلد «الملفات / التنزيلات» (Downloads).
                 </p>
               </div>
             </div>
@@ -185,7 +184,7 @@ export default function DownloadPage() {
               <div>
                 <h4 className="font-bold text-sm text-[#1e354d] dark:text-white">تأكيد التثبيت</h4>
                 <p className="text-xs text-[#4a6b8c] dark:text-[#8ba7c0] mt-0.5">
-                  اضغط على "تثبيت". إذا طلب منك الهاتف تفعيل خيار <em>"تثبيت التطبيقات غير المعروفة"</em>، فعّل الخيار للمتصفح واضغط تثبيت.
+                  اضغط على «تثبيت». إذا طلب منك الهاتف تفعيل خيار <em>«تثبيت التطبيقات غير المعروفة»</em>، فعّل الخيار للمتصفح واضغط تثبيت.
                 </p>
               </div>
             </div>
