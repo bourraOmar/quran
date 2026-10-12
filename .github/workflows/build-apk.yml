@@ -8,6 +8,9 @@ on:
       - '.github/workflows/build-apk.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,6 +18,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -38,3 +43,13 @@ jobs:
           name: uns-quran-apk
           path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+
+      - name: Deploy built APK to public downloads
+        run: |
+          mkdir -p public/downloads
+          cp android/app/build/outputs/apk/debug/*.apk public/downloads/uns-quran.apk
+          cp android/app/build/outputs/apk/debug/*.apk public/uns-quran.apk
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add public/downloads/uns-quran.apk public/uns-quran.apk
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update live APK download binary [skip ci]" && git push origin main)
