@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.UnsQuran" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_green</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:navigationBarColor">@color/nav_bar_color</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

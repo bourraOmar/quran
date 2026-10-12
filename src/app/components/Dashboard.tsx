@@ -969,6 +969,45 @@ export default function Dashboard() {
         </div>
 
         {/* ============================================================== */}
+        {/* 7.5 ANDROID APK DOWNLOAD BANNER                                */}
+        {/* ============================================================== */}
+        <div className="bg-[#121c17] p-5 sm:p-6 rounded-3xl border border-[#34d399]/20 shadow-md relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-4 text-white">
+          <div className="relative z-10 max-w-xl text-center sm:text-right">
+            <div className="inline-flex items-center gap-2 bg-[#34d399]/15 text-[#34d399] px-3 py-1 rounded-full text-xs font-bold mb-2">
+              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.523 15.3414C17.523 17.5028 15.654 19.349 13.414 19.349C11.173 19.349 9.305 17.503 9.305 15.3414C9.305 13.18 11.174 11.334 13.414 11.334C15.654 11.334 17.523 13.18 17.523 15.3414ZM12.981 12.0163C12.981 12.0163 12.544 11.4552 11.895 11.4552C10.603 11.4552 9.544 12.5492 9.544 13.8863C9.544 15.2234 10.603 16.3174 11.895 16.3174C13.187 16.3174 14.246 15.2234 14.246 13.8863C14.246 13.3364 14.053 12.8341 13.731 12.4332L12.981 12.0163Z" />
+              </svg>
+              <span>تطبيق أندرويد الرسمي (APK)</span>
+            </div>
+            <h3 className="text-lg sm:text-xl font-extrabold mb-1.5 text-white">
+              حمّل تطبيق أُنس مباشرة على هاتفك
+            </h3>
+            <p className="text-xs text-[#94a3b8] leading-relaxed">
+              استماع للتلاوات في الخلفية وشاشة القفل، أذكار الصباح والمساء، ومواقيت الصلاة الدقيقة بدون انقطاع.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto justify-center">
+            <a
+              href="/downloads/uns-quran.apk"
+              download="uns-quran.apk"
+              className="flex items-center gap-2.5 px-5 py-3 bg-[#0f8e5d] hover:bg-[#0c754d] text-white rounded-2xl text-xs sm:text-sm font-bold shadow-md hover:shadow-lg active:scale-95 transition-all text-center justify-center flex-1 sm:flex-initial"
+            >
+              <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>تحميل ملف APK</span>
+            </a>
+            <Link
+              href="/download"
+              className="px-4 py-3 bg-white/10 hover:bg-white/20 text-white rounded-2xl text-xs font-bold transition-all text-center"
+            >
+              التفاصيل
+            </Link>
+          </div>
+        </div>
+
+        {/* ============================================================== */}
         {/* 8. THREE DAILY STACKED CARDS (آية، حديث، دعاء)                */}
         {/* ============================================================== */}
         <div className="space-y-4">

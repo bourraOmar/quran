@@ -13,9 +13,27 @@ export default function Footer() {
               <Image src="/logo.jpg" alt="Quran Logo" width={42} height={42} className="rounded-full shadow-sm group-hover:scale-105 transition-transform" />
               <span className="text-4xl font-bold tracking-tight text-[#1e354d] dark:text-white" style={{ fontFamily: 'var(--font-aref-ruqaa)' }}>أُنس</span>
             </Link>
-            <p className="text-[#4a6b8c] dark:text-[#8ba7c0] leading-relaxed mb-8 font-medium">
+            <p className="text-[#4a6b8c] dark:text-[#8ba7c0] leading-relaxed mb-6 font-medium">
               المكان الذي تبدأ منه رحلتك الإيمانية عبر قراءة واستماع كتاب الله الكريم، والأذكار والأدعية النبوية الشريفة.
             </p>
+
+            {/* Direct APK Download Button */}
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/download"
+                className="inline-flex items-center gap-3 bg-[#0f8e5d] hover:bg-[#0c754d] text-white px-5 py-3 rounded-2xl shadow-sm hover:shadow transition-all group active:scale-95"
+              >
+                <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center text-white">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.523 15.3414C17.523 17.5028 15.654 19.349 13.414 19.349C11.173 19.349 9.305 17.503 9.305 15.3414C9.305 13.18 11.174 11.334 13.414 11.334C15.654 11.334 17.523 13.18 17.523 15.3414ZM12.981 12.0163C12.981 12.0163 12.544 11.4552 11.895 11.4552C10.603 11.4552 9.544 12.5492 9.544 13.8863C9.544 15.2234 10.603 16.3174 11.895 16.3174C13.187 16.3174 14.246 15.2234 14.246 13.8863C14.246 13.3364 14.053 12.8341 13.731 12.4332L12.981 12.0163Z" />
+                  </svg>
+                </div>
+                <div className="text-right">
+                  <span className="block text-[11px] opacity-80 leading-none">تطبيق الأندرويد</span>
+                  <span className="block text-sm font-bold mt-1">تحميل ملف APK مباشر</span>
+                </div>
+              </Link>
+            </div>
           </div>
 
           {/* Links Columns */}

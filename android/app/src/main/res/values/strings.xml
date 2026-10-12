@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">أُنس - القرآن الكريم</string>
+    <string name="offline_title">لا يوجد اتصال بالإنترنت</string>
+    <string name="offline_message">يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.</string>
+    <string name="retry">إعادة المحاولة</string>
+</resources>
