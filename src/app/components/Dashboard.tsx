@@ -204,6 +204,7 @@ export default function Dashboard() {
         formatted12: "--:--",
         countdownHMS: "00:00:00",
         countdownText: "...",
+        countdownBadgeText: "...",
         remainingHours: 1,
       };
     }
@@ -243,14 +244,25 @@ export default function Dashboard() {
     const sStr = s.toString().padStart(2, "0");
 
     const countdownHMS = `${hStr}:${mStr}:${sStr}`;
-    const countdownText = h > 0 ? `${h} ساعة` : `${m} دقيقة`;
+    
+    let countdownBadgeText = "";
+    if (h > 0) {
+      if (m > 0) {
+        countdownBadgeText = h === 1 ? `ساعة و${m} د` : `${h} س و${m} د`;
+      } else {
+        countdownBadgeText = `${h} ساعة`;
+      }
+    } else {
+      countdownBadgeText = `${m} دقيقة`;
+    }
 
     return {
       name: next.name,
       time: next.time,
       formatted12: format12Hour(next.time),
       countdownHMS,
-      countdownText,
+      countdownText: countdownBadgeText,
+      countdownBadgeText,
       remainingHours: h || 1,
     };
   };
@@ -461,10 +473,71 @@ export default function Dashboard() {
     );
   };
 
-  // Determine morning vs evening dhikr based on current hour
-  const currentHour = currentTime.getHours();
-  const isMorningDhikrTime = currentHour >= 3 && currentHour < 15;
-  const dhikrPromptText = isMorningDhikrTime ? "اقرأ أذكار الصباح" : "اقرأ أذكار المساء";
+  // Determine dynamic event, greeting, and suggested action based on time of day
+  const getTimeEventInfo = () => {
+    const now = currentTime;
+    const currentMins = now.getHours() * 60 + now.getMinutes();
+
+    const parseMin = (t?: string) => {
+      if (!t) return null;
+      const [h, m] = t.split(":");
+      return parseInt(h, 10) * 60 + parseInt(m, 10);
+    };
+
+    const fajrMin = timings ? parseMin(timings.Fajr) : 5 * 60 + 17; // ~05:17
+    const dhuhrMin = timings ? parseMin(timings.Dhuhr) : 12 * 60 + 24; // ~12:24
+    const asrMin = timings ? parseMin(timings.Asr) : 15 * 60 + 39; // ~15:39
+    const ishaMin = timings ? parseMin(timings.Isha) : 19 * 60 + 25; // ~19:25
+
+    // Boundaries matching reference screenshots:
+    // 1. Morning (أذكار الصباح): from (Fajr - 30 min) up to Dhuhr (~04:47 to 12:24)
+    // 2. Afternoon (التسبيح والمسبحة): from Dhuhr up to (Asr + 30 min) (~12:24 to 16:10)
+    // 3. Evening (أذكار المساء): from (Asr + 30 min) up to (Isha + 90 min) (~16:10 to 21:00)
+    // 4. Night (أذكار النوم): from (Isha + 90 min) until (Fajr - 30 min) (~21:00 to 04:47)
+
+    const morningStart = (fajrMin ?? 317) - 30;
+    const morningEnd = dhuhrMin ?? 744;
+    const afternoonStart = morningEnd;
+    const afternoonEnd = (asrMin ?? 939) + 30;
+    const eveningStart = afternoonEnd;
+    const eveningEnd = (ishaMin ?? 1165) + 90;
+
+    if (currentMins >= morningStart && currentMins < morningEnd) {
+      return {
+        title: "صباح الخير",
+        icon: "☀️",
+        buttonText: "اقرأ أذكار الصباح",
+        category: "morning",
+        href: "/dhikr?category=morning",
+      };
+    } else if (currentMins >= afternoonStart && currentMins < afternoonEnd) {
+      return {
+        title: "وقت مبارك",
+        icon: "📿",
+        buttonText: "لنُسبح الله",
+        category: "tasbeeh",
+        href: "/dhikr?category=tasbeeh",
+      };
+    } else if (currentMins >= eveningStart && currentMins < eveningEnd) {
+      return {
+        title: "حبينا نذكرك",
+        icon: "⛅",
+        buttonText: "اقرأ أذكار المساء",
+        category: "evening",
+        href: "/dhikr?category=evening",
+      };
+    } else {
+      return {
+        title: "طابت ليلتك",
+        icon: "🌙",
+        buttonText: "اقرأ أذكار النوم",
+        category: "sleep",
+        href: "/dhikr?category=sleep",
+      };
+    }
+  };
+
+  const timeEvent = getTimeEventInfo();
 
   // Calculate Qibla angle from user coordinates
   const calculateQibla = () => {
@@ -559,68 +632,70 @@ export default function Dashboard() {
         {/* ============================================================== */}
         {/* 2. HERO REMINDER & DATE CARDS (Side by Side)                   */}
         {/* ============================================================== */}
-        <div className="grid grid-cols-[1fr_135px] md:grid-cols-[1fr_150px] gap-3.5 items-stretch">
+        <div className="grid grid-cols-[1.15fr_1fr] sm:grid-cols-[1.2fr_1fr] gap-3 md:gap-3.5 items-stretch">
           
-          {/* Right Column: Reminder Box */}
-          <div className="bg-white dark:bg-[#1e293b] p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm flex flex-col justify-between">
-            <div>
-              <div className="flex items-center gap-1.5 mb-2">
-                <span className="text-base md:text-lg font-bold text-[#1e354d] dark:text-white">حبينا نذكرك</span>
-                <span className="text-lg">⛅</span>
-              </div>
-              <p className="text-xs text-[#4a6b8c] dark:text-[#8ba7c0] mb-4 font-medium">
-                ألا بذكر الله تطمئن القلوب، حصّن يومك بالأذكار.
-              </p>
+          {/* Right Column: Reminder & Daily Action Box */}
+          <div className="bg-white dark:bg-[#1e293b] p-4 sm:p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm flex flex-col justify-between transition-all">
+            {/* Header: Title + Time Icon (Matching Reference App) */}
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-base sm:text-lg font-bold text-[#1e354d] dark:text-white">
+                {timeEvent.title}
+              </span>
+              <span className="text-xl select-none" aria-hidden="true">
+                {timeEvent.icon}
+              </span>
             </div>
 
-            <div className="space-y-2.5">
+            {/* Middle: Primary Action Button according to current time event */}
+            <div className="my-auto py-2">
               <Link
-                href="/dhikr"
-                className="block text-center py-2.5 px-4 rounded-full bg-[#1e354d] dark:bg-[#0f172a] text-white hover:bg-[#0f8e5d] dark:hover:bg-[#0f8e5d] transition-colors text-xs font-bold shadow-sm"
+                href={timeEvent.href}
+                className="block w-full text-center py-2.5 px-3 rounded-full bg-[#1e354d] dark:bg-[#0f172a] text-white hover:bg-[#0f8e5d] dark:hover:bg-[#0f8e5d] transition-all text-xs font-bold shadow-sm active:scale-95"
               >
-                {dhikrPromptText}
+                {timeEvent.buttonText}
               </Link>
+            </div>
 
-              <div className="flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#0f8e5d]/10 text-[#0f8e5d] dark:text-[#4ade80] text-[11px] font-bold">
-                <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                </svg>
-                <span>صلاة {nextPrayer.name} بعد : {nextPrayer.countdownText}</span>
-              </div>
+            {/* Bottom: Next Prayer Badge with Soft Sage Green Pill */}
+            <div className="mt-1 flex items-center justify-between py-2 px-3 rounded-xl bg-[#85b882] dark:bg-[#78a873] text-[#0f331b] dark:text-[#0b2915] text-[11px] font-bold shadow-sm">
+              <span>صلاة {nextPrayer.name} بعد : {nextPrayer.countdownBadgeText}</span>
+              <svg className="w-4 h-4 shrink-0 opacity-90" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2c-.4 0-.8.2-1 .6L9.6 5H6c-.6 0-1 .4-1 1v14c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V6c0-.6-.4-1-1-1h-3.6l-1.4-2.4c-.2-.4-.6-.6-1-.6zm0 2.2l1 1.8h-2l1-1.8zM7 7h10v13H7V7zm5 4c-1.7 0-3 1.3-3 3v6h6v-6c0-1.7-1.3-3-3-3zm0 2c.6 0 1 .4 1 1v4h-2v-4c0-.6.4-1 1-1z" />
+              </svg>
             </div>
           </div>
 
-          {/* Left Column: Date Card */}
-          <div className="bg-white dark:bg-[#1e293b] p-4 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm flex flex-col justify-between text-center relative overflow-hidden">
+          {/* Left Column: Date Card (Slightly wider with generous spacing) */}
+          <div className="bg-white dark:bg-[#1e293b] p-3.5 sm:p-4 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm flex flex-col justify-between text-center relative overflow-hidden transition-all">
             <div className="pt-1">
-              <h2 className="text-3xl font-extrabold text-[#0f8e5d] dark:text-[#4ade80] leading-none mb-3" style={{ fontFamily: 'var(--font-amiri)' }}>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f8e5d] dark:text-[#4ade80] leading-none mb-2" style={{ fontFamily: 'var(--font-amiri)' }}>
                 {dayName}
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 gap-1 border-t border-black/5 dark:border-white/5 pt-3">
+            <div className="grid grid-cols-2 gap-1 border-t border-black/5 dark:border-white/5 pt-2.5">
               {/* Hijri */}
-              <div className="text-center">
-                <span className="block text-[10px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold leading-tight">
-                  {hijri ? hijri.month.ar : "ربيع الآخر"}
+              <div className="text-center px-0.5">
+                <span className="block text-[10px] sm:text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold leading-tight truncate">
+                  {hijri ? hijri.month.ar : "جمادى الأولى"}
                 </span>
-                <span className="block text-lg font-black text-[#1e354d] dark:text-white my-0.5">
-                  {hijri ? hijri.day : "30"}
+                <span className="block text-lg sm:text-xl font-black text-[#1e354d] dark:text-white my-0.5">
+                  {hijri ? hijri.day : "1"}
                 </span>
-                <span className="block text-[10px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold">
+                <span className="block text-[10px] sm:text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold">
                   {hijri ? hijri.year : "1448"}
                 </span>
               </div>
 
               {/* Gregorian */}
-              <div className="text-center border-r border-black/5 dark:border-white/5">
-                <span className="block text-[10px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold leading-tight">
+              <div className="text-center border-r border-black/5 dark:border-white/5 px-0.5">
+                <span className="block text-[10px] sm:text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold leading-tight truncate">
                   {gregorianMonthName}
                 </span>
-                <span className="block text-lg font-black text-[#1e354d] dark:text-white my-0.5">
+                <span className="block text-lg sm:text-xl font-black text-[#1e354d] dark:text-white my-0.5">
                   {gregorianDay}
                 </span>
-                <span className="block text-[10px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold">
+                <span className="block text-[10px] sm:text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] font-semibold">
                   {gregorianYear}
                 </span>
               </div>

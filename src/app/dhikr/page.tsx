@@ -156,6 +156,19 @@ export default function DhikrApp() {
 
       const favs = localStorage.getItem("dhikr_favorites");
       if (favs) setFavorites(JSON.parse(favs));
+
+      if (typeof window !== "undefined") {
+        const urlParams = new URLSearchParams(window.location.search);
+        const cat = urlParams.get("category");
+        if (cat) {
+          if (cat === "tasbeeh") {
+            setView("tasbeeh_counter");
+          } else {
+            setSelectedCategory(cat);
+            setView("reading");
+          }
+        }
+      }
     } catch {
       // localStorage unavailable
     }
