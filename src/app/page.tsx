@@ -73,9 +73,7 @@ export default async function Home() {
         {/* Right Side: Content */}
         <div className="flex-1 text-center md:text-right">
           <div className="inline-flex items-center gap-2 bg-[#0f8e5d]/10 dark:bg-[#4ade80]/15 text-[#0f8e5d] dark:text-[#4ade80] px-4 py-1.5 rounded-full text-xs font-bold mb-4">
-            <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17.523 15.3414C17.523 17.5028 15.654 19.349 13.414 19.349C11.173 19.349 9.305 17.503 9.305 15.3414C9.305 13.18 11.174 11.334 13.414 11.334C15.654 11.334 17.523 13.18 17.523 15.3414ZM12.981 12.0163C12.981 12.0163 12.544 11.4552 11.895 11.4552C10.603 11.4552 9.544 12.5492 9.544 13.8863C9.544 15.2234 10.603 16.3174 11.895 16.3174C13.187 16.3174 14.246 15.2234 14.246 13.8863C14.246 13.3364 14.053 12.8341 13.731 12.4332L12.981 12.0163Z" />
-            </svg>
+            <Image src="/apk-file.png" alt="APK" width={18} height={18} className="w-4.5 h-4.5 object-contain" />
             <span>متاح الآن بصيغة APK لهواتف الأندرويد</span>
           </div>
 
@@ -95,9 +93,7 @@ export default async function Home() {
                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
              </Link>
              <Link href="/download" className="w-full sm:w-auto justify-center bg-[#0f8e5d] hover:bg-[#0c754d] text-white px-7 py-3.5 rounded-full font-bold transition-all shadow-lg shadow-[#0f8e5d]/25 flex items-center gap-2.5 group">
-               <svg className="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
-                 <path d="M17.523 15.3414C17.523 17.5028 15.654 19.349 13.414 19.349C11.173 19.349 9.305 17.503 9.305 15.3414C9.305 13.18 11.174 11.334 13.414 11.334C15.654 11.334 17.523 13.18 17.523 15.3414Z" />
-               </svg>
+               <Image src="/apk-file.png" alt="APK" width={22} height={22} className="w-5 h-5 object-contain group-hover:scale-110 transition-transform" />
                <span>تحميل تطبيق أندرويد (APK)</span>
              </Link>
           </div>

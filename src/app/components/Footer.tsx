@@ -20,9 +20,7 @@ export default function Footer() {
               href="/download" 
               className="inline-flex items-center gap-2 bg-[#0f8e5d] hover:bg-[#0c754d] text-white px-5 py-2.5 rounded-2xl text-xs font-bold shadow-md transition-all active:scale-95"
             >
-              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.523 15.3414C17.523 17.5028 15.654 19.349 13.414 19.349C11.173 19.349 9.305 17.503 9.305 15.3414C9.305 13.18 11.174 11.334 13.414 11.334C15.654 11.334 17.523 13.18 17.523 15.3414Z" />
-              </svg>
+              <Image src="/apk-file.png" alt="APK" width={18} height={18} className="w-4.5 h-4.5 object-contain" />
               <span>تحميل تطبيق أندرويد (APK)</span>
             </Link>
           </div>

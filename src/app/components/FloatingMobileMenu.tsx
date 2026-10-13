@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function FloatingMobileMenu() {
@@ -57,10 +58,22 @@ export default function FloatingMobileMenu() {
         </Link>
 
         {/* Download APK */}
-        <Link href="/download" aria-label="تحميل تطبيق APK" className={`p-2.5 rounded-full flex items-center justify-center transition-all ${pathname === "/download" ? "bg-[#0f8e5d] text-white" : "text-[#0f8e5d] dark:text-[#4ade80] hover:bg-[#0f8e5d]/10"}`}>
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17.523 15.3414C17.523 17.5028 15.654 19.349 13.414 19.349C11.173 19.349 9.305 17.503 9.305 15.3414C9.305 13.18 11.174 11.334 13.414 11.334C15.654 11.334 17.523 13.18 17.523 15.3414Z" />
-          </svg>
+        <Link 
+          href="/download" 
+          aria-label="تحميل تطبيق APK" 
+          className={`p-2 rounded-full flex items-center justify-center transition-all ${
+            pathname === "/download" 
+              ? "bg-[#0f8e5d]/20 ring-2 ring-[#0f8e5d]" 
+              : "hover:bg-[#0f8e5d]/10 hover:scale-110"
+          }`}
+        >
+          <Image 
+            src="/apk-file.png" 
+            alt="APK" 
+            width={24} 
+            height={24} 
+            className="w-6 h-6 object-contain" 
+          />
         </Link>
 
       </div>
