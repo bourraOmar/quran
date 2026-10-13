@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/display-name */
 export const dynamic = 'force-dynamic';
 import ReciterPlaylist from "./ReciterPlaylist";
 
@@ -27,6 +25,7 @@ async function getReciterInfo(id: string) {
   if (!res.ok) return null;
   const json = await res.json();
   
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const r = json.find((r: any) => r.id.toString() === id);
   if (!r) return null;
 
@@ -40,9 +39,8 @@ async function getReciterInfo(id: string) {
   };
 }
 
-
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const { id } = params;
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   try {
     const res = await fetch(`https://www.mp3quran.net/api/v3/reciters?language=ar&reciter=${id}`);
     const data = await res.json();
@@ -56,7 +54,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         description: `القرآن الكريم كاملاً بصوت ${reciterName}.`,
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: `القارئ`,
     };

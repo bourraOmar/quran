@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/display-name */
 export const dynamic = 'force-dynamic';
-import Link from "next/link";
 import RecitersGrid from "./RecitersGrid";
 
 export const metadata = {
@@ -15,10 +12,11 @@ async function getAllReciters() {
   
   const json = await res.json();
   
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return json.map((r: any) => ({
     id: r.id,
     reciter_name: r.name,
-    reciter_name_eng: "",
+    reciter_name_eng: "", // English name not provided by this endpoint, fallback to empty
     style: r.rewaya
   }));
 }
@@ -27,38 +25,19 @@ export default async function RecitersPage() {
   const reciters = await getAllReciters();
 
   return (
-    <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] pb-32 pt-8 px-4 md:px-8 transition-colors" dir="rtl">
-      <div className="max-w-[1400px] mx-auto">
-        {/* Header Bar matching Dua/Dhikr */}
-        <div className="flex items-center justify-between mb-8 pt-4">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="w-11 h-11 rounded-full bg-white dark:bg-[#1e293b] flex items-center justify-center text-[#1e354d] dark:text-white shadow-sm border border-transparent hover:border-[#4a6b8c]/30 active:scale-95 transition-all"
-              title="الرجوع للرئيسية"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-            <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-[#1e354d] dark:text-white">
-                قُرّاء القرآن الكريم
-              </h1>
-              <p className="text-sm text-[#4a6b8c] dark:text-[#8ba7c0] mt-1">
-                استمع إلى تلاوات خاشعة بأصوات أشهر القراء في العالم الإسلامي
-              </p>
-            </div>
-          </div>
-
-          <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0f8e5d]/10 text-[#0f8e5d] dark:text-[#4ade80] text-xs font-bold">
-            <span>{reciters.length} قارئ معتمد</span>
-          </div>
-        </div>
-
-        {/* Grid */}
-        <RecitersGrid initialReciters={reciters} />
+    <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] pb-32">
+      {/* Hero Header */}
+      <div className="bg-gradient-to-b from-[#8ba7c0] to-[#f4f7f9] dark:from-[#0f172a] dark:to-[#1e293b] pt-24 pb-12 px-4 text-center">
+        <h1 className="text-5xl md:text-6xl font-extrabold text-[#1e354d] dark:text-[#f8fafc] mb-4">
+          القرّاء
+        </h1>
+        <p className="text-[#1e354d] dark:text-[#f8fafc]/80 text-lg md:text-xl font-medium max-w-2xl mx-auto">
+          استمع للقرآن الكريم بصوت أكثر من {reciters.length} قارئ من العالم الإسلامي
+        </p>
       </div>
+
+      {/* Grid */}
+      <RecitersGrid initialReciters={reciters} />
     </div>
   );
 }
