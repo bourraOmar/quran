@@ -9,6 +9,7 @@ import ApkFileIcon from "./ApkFileIcon";
 export default function FloatingMobileMenu() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isAppUser, setIsAppUser] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +23,10 @@ export default function FloatingMobileMenu() {
     // Hide initially when route changes
     setIsScrolled(false);
     
+    if (typeof window !== "undefined") {
+      setIsAppUser(navigator.userAgent.includes("UnsQuranApp") || pathname === "/app");
+    }
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname]);
@@ -36,7 +41,15 @@ export default function FloatingMobileMenu() {
       <div className={`pointer-events-auto bg-white/90 dark:bg-[#0f172a]/95 backdrop-blur-md h-[54px] rounded-full flex items-center justify-between shadow-2xl border border-[#e2e8f0] dark:border-white/10 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${innerClasses}`}>
     
         {/* Home */}
-        <Link href="/" aria-label="الرئيسية" className={`p-2.5 rounded-full flex items-center justify-center transition-all ${pathname === "/" ? "bg-[#4a6b8c] text-white" : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"}`}>
+        <Link 
+          href={isAppUser ? "/app" : "/"} 
+          aria-label="الرئيسية" 
+          className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
+            pathname === "/" || pathname === "/app" 
+              ? "bg-[#4a6b8c] text-white" 
+              : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
+          }`}
+        >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
@@ -57,18 +70,34 @@ export default function FloatingMobileMenu() {
           </svg>
         </Link>
 
-        {/* Download APK */}
-        <Link 
-          href="/download" 
-          aria-label="تحميل تطبيق APK" 
-          className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
-            pathname === "/download" 
-              ? "bg-[#4a6b8c] text-white" 
-              : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
-          }`}
-        >
-          <ApkFileIcon className="w-5 h-5" />
-        </Link>
+        {/* 4th Action: Adhkar in App mode, Download APK on Web */}
+        {isAppUser ? (
+          <Link 
+            href="/dhikr" 
+            aria-label="الأذكار والتسبيح" 
+            className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
+              pathname.startsWith("/dhikr") 
+                ? "bg-[#4a6b8c] text-white" 
+                : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </Link>
+        ) : (
+          <Link 
+            href="/download" 
+            aria-label="تحميل تطبيق APK" 
+            className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
+              pathname === "/download" 
+                ? "bg-[#4a6b8c] text-white" 
+                : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
+            }`}
+          >
+            <ApkFileIcon className="w-5 h-5" />
+          </Link>
+        )}
 
       </div>
     </div>

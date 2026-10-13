@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRetry: Button
 
     companion object {
-        const val APP_URL = "https://quran-al-karim.vercel.app"
+        const val APP_URL = "https://quran-al-karim.vercel.app/app"
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                 // Keep app navigation inside WebView, open external schemes in default browser
                 return if (url.startsWith("http://") || url.startsWith("https://")) {
                     if (url.contains("quran-al-karim.vercel.app") ||
-                        url.contains("quran-bourraomars-projects.vercel.app") ||
+                        url.contains("bourraomars-projects.vercel.app") ||
                         url.contains("quran.com") ||
                         url.contains("mp3quran.net")
                     ) {
