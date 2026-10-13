@@ -94,8 +94,10 @@ export default function DownloadPage() {
         {/* App Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white dark:bg-[#1e293b] p-6 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#0f8e5d]/10 dark:bg-[#4ade80]/10 flex items-center justify-center text-[#0f8e5d] dark:text-[#4ade80] shrink-0 text-xl">
-              📖
+            <div className="w-12 h-12 rounded-2xl bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 flex items-center justify-center text-[#4a6b8c] dark:text-[#94a3b8] shrink-0">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
             </div>
             <div>
               <h3 className="font-bold text-base text-[#1e354d] dark:text-white mb-1">المصحف الشريف كاملاً</h3>
@@ -106,8 +108,11 @@ export default function DownloadPage() {
           </div>
 
           <div className="bg-white dark:bg-[#1e293b] p-6 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#0f8e5d]/10 dark:bg-[#4ade80]/10 flex items-center justify-center text-[#0f8e5d] dark:text-[#4ade80] shrink-0 text-xl">
-              🎧
+            <div className="w-12 h-12 rounded-2xl bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 flex items-center justify-center text-[#4a6b8c] dark:text-[#94a3b8] shrink-0">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+              </svg>
             </div>
             <div>
               <h3 className="font-bold text-base text-[#1e354d] dark:text-white mb-1">استماع وتلاوات في الخلفية</h3>
@@ -118,8 +123,15 @@ export default function DownloadPage() {
           </div>
 
           <div className="bg-white dark:bg-[#1e293b] p-6 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#0f8e5d]/10 dark:bg-[#4ade80]/10 flex items-center justify-center text-[#0f8e5d] dark:text-[#4ade80] shrink-0 text-xl">
-              🕌
+            <div className="w-12 h-12 rounded-2xl bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 flex items-center justify-center text-[#4a6b8c] dark:text-[#94a3b8] shrink-0">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2.5a.5.5 0 0 1 .5.5v1.2a4.8 4.8 0 0 1 2.3 1.3C16 6.7 16.5 8.5 16.5 10H7.5c0-1.5.5-3.3 1.7-4.5A4.8 4.8 0 0 1 11.5 4.2V3a.5.5 0 0 1 .5-.5z" />
+                <path d="M5 21v-8l1.5-1.5L8 13v8" />
+                <path d="M16 21v-8l1.5-1.5L19 13v8" />
+                <path d="M8 14h8v7H8z" />
+                <path d="M12 17a1.5 1.5 0 0 1 1.5 1.5V21h-3v-2.5A1.5 1.5 0 0 1 12 17z" />
+                <path d="M3 21h18" />
+              </svg>
             </div>
             <div>
               <h3 className="font-bold text-base text-[#1e354d] dark:text-white mb-1">مواقيت الصلاة الدقيقة</h3>
@@ -130,8 +142,21 @@ export default function DownloadPage() {
           </div>
 
           <div className="bg-white dark:bg-[#1e293b] p-6 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#0f8e5d]/10 dark:bg-[#4ade80]/10 flex items-center justify-center text-[#0f8e5d] dark:text-[#4ade80] shrink-0 text-xl">
-              📿
+            <div className="w-12 h-12 rounded-2xl bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 flex items-center justify-center text-[#4a6b8c] dark:text-[#94a3b8] shrink-0">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="5" r="1.5" />
+                <circle cx="16" cy="6.5" r="1.5" />
+                <circle cx="18.5" cy="10" r="1.5" />
+                <circle cx="18" cy="14" r="1.5" />
+                <circle cx="15.5" cy="17" r="1.5" />
+                <circle cx="12" cy="18" r="1.5" />
+                <circle cx="8.5" cy="17" r="1.5" />
+                <circle cx="6" cy="14" r="1.5" />
+                <circle cx="5.5" cy="10" r="1.5" />
+                <circle cx="8" cy="6.5" r="1.5" />
+                <path d="M12 18v3.5" />
+                <path d="M10.5 21.5h3" />
+              </svg>
             </div>
             <div>
               <h3 className="font-bold text-base text-[#1e354d] dark:text-white mb-1">السبحة وحصن المسلم</h3>
@@ -144,26 +169,32 @@ export default function DownloadPage() {
 
         {/* Installation Guide */}
         <div className="bg-white dark:bg-[#1e293b] p-6 sm:p-8 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs">
-          <h2 className="text-xl font-bold text-[#1e354d] dark:text-white mb-6 flex items-center gap-2">
-            <span>📲</span>
+          <h2 className="text-xl font-bold text-[#1e354d] dark:text-white mb-6 flex items-center gap-3">
+            <span className="w-9 h-9 rounded-xl bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 flex items-center justify-center text-[#4a6b8c] dark:text-[#94a3b8] shrink-0">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="3" />
+                <path d="M12 18h.01" />
+                <path d="M12 7v6m-2.5-2.5L12 13l2.5-2.5" />
+              </svg>
+            </span>
             <span>طريقة تثبيت ملف APK على جهاز الأندرويد:</span>
           </h2>
 
           <div className="space-y-4">
             <div className="flex items-start gap-4">
-              <div className="w-8 h-8 rounded-full bg-[#0f8e5d] text-white font-bold flex items-center justify-center shrink-0 text-sm">
+              <div className="w-8 h-8 rounded-full bg-[#4a6b8c] text-white font-bold flex items-center justify-center shrink-0 text-sm shadow-sm">
                 1
               </div>
               <div>
                 <h4 className="font-bold text-sm text-[#1e354d] dark:text-white">تنزيل الملف</h4>
                 <p className="text-xs text-[#4a6b8c] dark:text-[#8ba7c0] mt-0.5">
-                  اضغط على زر <strong className="text-[#0f8e5d] dark:text-[#4ade80]">تحميل ملف APK مباشر</strong> في الأعلى لحفظ الملف على جهازك.
+                  اضغط على زر <strong className="text-[#4a6b8c] dark:text-[#94a3b8]">تحميل ملف APK مباشر</strong> في الأعلى لحفظ الملف على جهازك.
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-8 h-8 rounded-full bg-[#0f8e5d] text-white font-bold flex items-center justify-center shrink-0 text-sm">
+              <div className="w-8 h-8 rounded-full bg-[#4a6b8c] text-white font-bold flex items-center justify-center shrink-0 text-sm shadow-sm">
                 2
               </div>
               <div>
@@ -175,7 +206,7 @@ export default function DownloadPage() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-8 h-8 rounded-full bg-[#0f8e5d] text-white font-bold flex items-center justify-center shrink-0 text-sm">
+              <div className="w-8 h-8 rounded-full bg-[#4a6b8c] text-white font-bold flex items-center justify-center shrink-0 text-sm shadow-sm">
                 3
               </div>
               <div>
