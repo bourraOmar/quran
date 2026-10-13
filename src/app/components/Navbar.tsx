@@ -2,7 +2,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import AmbientSoundMenu from "./AmbientSoundMenu";
 import ApkFileIcon from "./ApkFileIcon";
@@ -36,9 +35,8 @@ export default function Navbar() {
       <div className="max-w-[1400px] mx-auto flex items-center justify-between">
         
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.jpg" alt="Quran Logo" width={40} height={40} className="rounded-full shadow-sm" priority />
-          <span className="text-3xl font-bold tracking-tight text-[#1e354d] dark:text-white" style={{ fontFamily: 'var(--font-aref-ruqaa)' }}>أُنس</span>
+        <Link href="/" className="flex items-center">
+          <span className="text-3xl font-bold tracking-tight text-[#1e354d] dark:text-white hover:text-[#4a6b8c] dark:hover:text-[#94a3b8] transition-colors" style={{ fontFamily: 'var(--font-aref-ruqaa)' }}>أُنس</span>
         </Link>
 
         {/* Navigation Links */}

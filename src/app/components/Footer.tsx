@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import ApkFileIcon from "./ApkFileIcon";
 
 export default function Footer() {
@@ -10,9 +9,8 @@ export default function Footer() {
           
           {/* Brand Column */}
           <div className="lg:w-1/3">
-            <Link href="/" className="flex items-center gap-3 mb-6">
-              <Image src="/logo.jpg" alt="Quran Logo" width={40} height={40} className="rounded-full shadow-sm" />
-              <span className="text-4xl font-bold tracking-tight text-[#1e354d] dark:text-white" style={{ fontFamily: 'var(--font-aref-ruqaa)' }}>أُنس</span>
+            <Link href="/" className="flex items-center mb-6">
+              <span className="text-4xl font-bold tracking-tight text-[#1e354d] dark:text-white hover:text-[#4a6b8c] dark:hover:text-[#94a3b8] transition-colors" style={{ fontFamily: 'var(--font-aref-ruqaa)' }}>أُنس</span>
             </Link>
             <p className="text-[#4a6b8c] dark:text-[#94a3b8] leading-relaxed mb-6 font-medium">
               المكان الذي تبدأ منه رحلتك الإيمانية عبر قراءة واستماع كتاب الله الكريم، وتنزيل التطبيق المباشر للأندرويد.
