@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import ApkFileIcon from "./ApkFileIcon";
 
 export default function Footer() {
   return (
@@ -18,9 +19,9 @@ export default function Footer() {
             </p>
             <Link 
               href="/download" 
-              className="inline-flex items-center gap-2 bg-[#0f8e5d] hover:bg-[#0c754d] text-white px-5 py-2.5 rounded-2xl text-xs font-bold shadow-md transition-all active:scale-95"
+              className="inline-flex items-center gap-2 bg-[#4a6b8c] hover:bg-[#395675] text-white px-5 py-2.5 rounded-2xl text-xs font-bold shadow-md transition-all active:scale-95"
             >
-              <Image src="/apk-file.png" alt="APK" width={18} height={18} className="w-4.5 h-4.5 object-contain" />
+              <ApkFileIcon className="w-4.5 h-4.5 shrink-0" />
               <span>تحميل تطبيق أندرويد (APK)</span>
             </Link>
           </div>

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import ApkFileIcon from "../components/ApkFileIcon";
 
 export const metadata: Metadata = {
   title: "تحميل تطبيق أُنس للقرآن الكريم | أندرويد APK",
@@ -37,8 +38,8 @@ export default function DownloadPage() {
               />
             </div>
 
-            <div className="inline-flex items-center gap-2 bg-[#0f8e5d]/10 dark:bg-[#4ade80]/10 text-[#0f8e5d] dark:text-[#4ade80] px-4 py-1.5 rounded-full text-xs font-bold mb-3">
-              <Image src="/apk-file.png" alt="APK" width={18} height={18} className="w-4.5 h-4.5 object-contain" />
+            <div className="inline-flex items-center gap-2 bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 text-[#395675] dark:text-[#94a3b8] px-4 py-1.5 rounded-full text-xs font-bold mb-3">
+              <ApkFileIcon className="w-4.5 h-4.5 shrink-0" />
               <span>تطبيق أندرويد الرسمي • الإصدار 1.0.0</span>
             </div>
 
@@ -55,11 +56,9 @@ export default function DownloadPage() {
               <a
                 href="/downloads/uns-quran.apk"
                 download="uns-quran.apk"
-                className="w-full sm:w-auto flex-1 flex items-center justify-center gap-3 bg-[#0f8e5d] hover:bg-[#0c754d] text-white py-4 px-8 rounded-2xl font-bold shadow-md hover:shadow-lg transition-all active:scale-[0.98] group"
+                className="w-full sm:w-auto flex-1 flex items-center justify-center gap-3 bg-[#4a6b8c] hover:bg-[#395675] text-white py-4 px-8 rounded-2xl font-bold shadow-md hover:shadow-lg transition-all active:scale-[0.98] group"
               >
-                <svg className="w-6 h-6 group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
+                <ApkFileIcon className="w-6 h-6 shrink-0 group-hover:scale-110 transition-transform" />
                 <div className="text-right">
                   <span className="block text-base leading-tight">تحميل ملف APK مباشر</span>
                   <span className="block text-[11px] text-white/80 mt-0.5 font-normal">حجم الملف: ~4.5 MB • مجاني 100%</span>

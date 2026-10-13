@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import ApkFileIcon from "./components/ApkFileIcon";
 
 interface Chapter {
   id: number;
@@ -72,8 +73,8 @@ export default async function Home() {
 
         {/* Right Side: Content */}
         <div className="flex-1 text-center md:text-right">
-          <div className="inline-flex items-center gap-2 bg-[#0f8e5d]/10 dark:bg-[#4ade80]/15 text-[#0f8e5d] dark:text-[#4ade80] px-4 py-1.5 rounded-full text-xs font-bold mb-4">
-            <Image src="/apk-file.png" alt="APK" width={18} height={18} className="w-4.5 h-4.5 object-contain" />
+          <div className="inline-flex items-center gap-2 bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 text-[#395675] dark:text-[#94a3b8] px-4 py-1.5 rounded-full text-xs font-bold mb-4">
+            <ApkFileIcon className="w-4.5 h-4.5 shrink-0" />
             <span>متاح الآن بصيغة APK لهواتف الأندرويد</span>
           </div>
 
@@ -92,8 +93,8 @@ export default async function Home() {
                <span>استماع للقرآن</span>
                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
              </Link>
-             <Link href="/download" className="w-full sm:w-auto justify-center bg-[#0f8e5d] hover:bg-[#0c754d] text-white px-7 py-3.5 rounded-full font-bold transition-all shadow-lg shadow-[#0f8e5d]/25 flex items-center gap-2.5 group">
-               <Image src="/apk-file.png" alt="APK" width={22} height={22} className="w-5 h-5 object-contain group-hover:scale-110 transition-transform" />
+             <Link href="/download" className="w-full sm:w-auto justify-center bg-[#4a6b8c] hover:bg-[#395675] text-white px-7 py-3.5 rounded-full font-bold transition-all shadow-lg shadow-[#4a6b8c]/25 flex items-center gap-2.5 group">
+               <ApkFileIcon className="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform" />
                <span>تحميل تطبيق أندرويد (APK)</span>
              </Link>
           </div>

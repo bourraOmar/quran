@@ -3,8 +3,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
+import ApkFileIcon from "./ApkFileIcon";
 
 export default function FloatingMobileMenu() {
   const pathname = usePathname();
@@ -61,19 +61,13 @@ export default function FloatingMobileMenu() {
         <Link 
           href="/download" 
           aria-label="تحميل تطبيق APK" 
-          className={`p-2 rounded-full flex items-center justify-center transition-all ${
+          className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
             pathname === "/download" 
-              ? "bg-[#0f8e5d]/20 ring-2 ring-[#0f8e5d]" 
-              : "hover:bg-[#0f8e5d]/10 hover:scale-110"
+              ? "bg-[#4a6b8c] text-white" 
+              : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
           }`}
         >
-          <Image 
-            src="/apk-file.png" 
-            alt="APK" 
-            width={24} 
-            height={24} 
-            className="w-6 h-6 object-contain" 
-          />
+          <ApkFileIcon className="w-5 h-5" />
         </Link>
 
       </div>

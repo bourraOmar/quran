@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import AmbientSoundMenu from "./AmbientSoundMenu";
+import ApkFileIcon from "./ApkFileIcon";
 
 export default function Navbar() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -52,16 +53,10 @@ export default function Navbar() {
            {/* APK Download Button */}
            <Link 
              href="/download" 
-             className="flex items-center gap-2 bg-[#0f8e5d]/10 dark:bg-[#4ade80]/15 hover:bg-[#0f8e5d] text-[#0f8e5d] dark:text-[#4ade80] hover:text-white px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border border-[#0f8e5d]/25 hover:border-transparent group"
+             className="flex items-center gap-2 bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 hover:bg-[#4a6b8c] text-[#395675] dark:text-[#94a3b8] hover:text-white dark:hover:text-white px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border border-[#4a6b8c]/20 hover:border-transparent group"
              title="تحميل تطبيق أندرويد APK"
            >
-             <Image 
-               src="/apk-file.png" 
-               alt="APK" 
-               width={18} 
-               height={18} 
-               className="w-4.5 h-4.5 object-contain group-hover:scale-110 transition-transform" 
-             />
+             <ApkFileIcon className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform" />
              <span>تطبيق أندرويد (APK)</span>
            </Link>
 
@@ -87,15 +82,9 @@ export default function Navbar() {
         <div className="flex items-center gap-2 lg:hidden">
           <Link 
             href="/download" 
-            className="flex items-center gap-1.5 bg-[#0f8e5d]/10 dark:bg-[#4ade80]/15 text-[#0f8e5d] dark:text-[#4ade80] px-2.5 py-1 rounded-full text-[11px] font-bold border border-[#0f8e5d]/20"
+            className="flex items-center gap-1.5 bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 text-[#395675] dark:text-[#94a3b8] px-2.5 py-1 rounded-full text-[11px] font-bold border border-[#4a6b8c]/20"
           >
-            <Image 
-              src="/apk-file.png" 
-              alt="APK" 
-              width={16} 
-              height={16} 
-              className="w-4 h-4 object-contain" 
-            />
+            <ApkFileIcon className="w-3.5 h-3.5 shrink-0" />
             <span>APK</span>
           </Link>
           <AmbientSoundMenu />
