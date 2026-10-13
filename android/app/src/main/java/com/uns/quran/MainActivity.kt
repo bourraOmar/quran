@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRetry: Button
 
     companion object {
-        const val APP_URL = "https://quran-al-karim.vercel.app/app"
+        const val APP_URL = "https://quran-al-karim.vercel.app"
     }
 
     @SuppressLint("SetJavaScriptEnabled")

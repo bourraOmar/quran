@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import ApkFileIcon from "./ApkFileIcon";
 
 export default function FloatingMobileMenu() {
   const pathname = usePathname();
@@ -12,70 +13,61 @@ export default function FloatingMobileMenu() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 400) {
+      if (window.scrollY > 50) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
     };
     
-    // Hide initially when route changes
     setIsScrolled(false);
-
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname]);
 
-  const wrapperClasses = "fixed bottom-6 left-0 w-full pointer-events-none flex z-50 md:hidden";
+  const wrapperClasses = "fixed bottom-5 left-0 w-full pointer-events-none flex z-50 justify-center";
   const innerClasses = isScrolled
-    ? "w-[calc(100%-88px)] ml-4 mr-auto px-5"
-    : "w-[91.666%] max-w-[350px] mx-auto px-6";
+    ? "w-[calc(100%-24px)] max-w-[440px] mx-auto px-3"
+    : "w-[94%] max-w-[440px] mx-auto px-4";
 
   return (
     <div className={wrapperClasses}>
-      <div className={`pointer-events-auto bg-white/90 dark:bg-[#0f172a]/95 backdrop-blur-md h-[54px] rounded-full flex items-center justify-between shadow-2xl border border-[#e2e8f0] dark:border-white/10 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${innerClasses}`}>
-    
-        {/* Home */}
-        <Link 
-          href="/" 
-          aria-label="الرئيسية" 
-          className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
-            pathname === "/" 
-              ? "bg-[#4a6b8c] text-white" 
-              : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
-          }`}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
+      <div className={`pointer-events-auto bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-xl h-[66px] rounded-[33px] flex items-center justify-around shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] border border-black/5 dark:border-white/10 transition-all duration-300 ${innerClasses}`}>
+
+        {/* 1. Home */}
+        <Link href="/" aria-label="الرئيسية" className="p-2 flex-1 flex flex-col items-center justify-center transition-all">
+          <div className={`p-1.5 rounded-full transition-all ${pathname === "/" ? "bg-[#0f8e5d]/15 dark:bg-[#0f8e5d]/25 text-[#0f8e5d]" : "text-[#4a6b8c] dark:text-[#8ba7c0]"}`}>
+            <Image src="/icons/home.png" width={22} height={22} alt="الرئيسية" className={`w-5 h-5 object-contain dark:invert transition-all ${pathname === "/" ? "opacity-100 scale-110" : "opacity-60"}`} />
+          </div>
         </Link>
 
-        {/* Read (Surahs) */}
-        <Link href="/surahs" aria-label="قراءة القرآن" className={`p-2.5 rounded-full flex items-center justify-center transition-all ${pathname.startsWith("/surah") ? "bg-[#4a6b8c] text-white" : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"}`}>
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
+        {/* 2. Quran / Surahs */}
+        <Link href="/surahs" aria-label="القرآن" className="p-2 flex-1 flex flex-col items-center justify-center transition-all">
+          <div className={`p-1.5 rounded-full transition-all ${pathname.startsWith("/surah") ? "bg-[#0f8e5d]/15 dark:bg-[#0f8e5d]/25 text-[#0f8e5d]" : "text-[#4a6b8c] dark:text-[#8ba7c0]"}`}>
+            <Image src="/icons/quran.png" width={22} height={22} alt="القرآن" className={`w-5 h-5 object-contain dark:invert transition-all ${pathname.startsWith("/surah") ? "opacity-100 scale-110" : "opacity-60"}`} />
+          </div>
         </Link>
 
-        {/* Listen (Reciters) */}
-        <Link href="/reciters" aria-label="استماع للقرآن" className={`p-2.5 rounded-full flex items-center justify-center transition-all ${pathname.startsWith("/reciter") ? "bg-[#4a6b8c] text-white" : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"}`}>
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
-          </svg>
+        {/* 3. Reciters */}
+        <Link href="/reciters" aria-label="القراء" className="p-2 flex-1 flex flex-col items-center justify-center transition-all">
+          <div className={`p-1.5 rounded-full transition-all ${pathname.startsWith("/reciter") ? "bg-[#0f8e5d]/15 dark:bg-[#0f8e5d]/25 text-[#0f8e5d]" : "text-[#4a6b8c] dark:text-[#8ba7c0]"}`}>
+            <Image src="/icons/reciters.png" width={22} height={22} alt="القراء" className={`w-5 h-5 object-contain dark:invert transition-all ${pathname.startsWith("/reciter") ? "opacity-100 scale-110" : "opacity-60"}`} />
+          </div>
         </Link>
 
-        {/* Download APK */}
-        <Link 
-          href="/download" 
-          aria-label="تحميل تطبيق APK" 
-          className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
-            pathname === "/download" 
-              ? "bg-[#4a6b8c] text-white" 
-              : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
-          }`}
-        >
-          <ApkFileIcon className="w-5 h-5" />
+        {/* 4. Dhikr */}
+        <Link href="/dhikr" aria-label="الأذكار" className="p-2 flex-1 flex flex-col items-center justify-center transition-all">
+          <div className={`p-1.5 rounded-full transition-all ${pathname === "/dhikr" ? "bg-[#0f8e5d]/15 dark:bg-[#0f8e5d]/25 text-[#0f8e5d]" : "text-[#4a6b8c] dark:text-[#8ba7c0]"}`}>
+            <Image src="/icons/dhikr.png" width={24} height={24} alt="الأذكار" className={`w-6 h-6 object-contain dark:invert transition-all ${pathname === "/dhikr" ? "opacity-100 scale-110" : "opacity-60"}`} />
+          </div>
+        </Link>
+
+        {/* 5. Dua */}
+        <Link href="/dua" aria-label="الأدعية" className="p-2 flex-1 flex flex-col items-center justify-center transition-all">
+          <div className={`p-1.5 rounded-full transition-all ${pathname === "/dua" ? "bg-[#0f8e5d]/15 dark:bg-[#0f8e5d]/25 text-[#0f8e5d]" : "text-[#4a6b8c] dark:text-[#8ba7c0]"}`}>
+            <Image src="/icons/dua.png" width={22} height={22} alt="الأدعية" className={`w-5 h-5 object-contain dark:invert transition-all ${pathname === "/dua" ? "opacity-100 scale-110" : "opacity-60"}`} />
+          </div>
         </Link>
 
       </div>
