@@ -1,7 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import ApkFileIcon from "./components/ApkFileIcon";
 
 interface Chapter {
@@ -53,12 +51,6 @@ async function getRecitations() {
 }
 
 export default async function Home() {
-  const headersList = await headers();
-  const userAgent = headersList.get("user-agent") || "";
-  if (userAgent.includes("UnsQuranApp")) {
-    redirect("/app");
-  }
-
   const surahs = await getSurahs();
   const recitations = await getRecitations();
   

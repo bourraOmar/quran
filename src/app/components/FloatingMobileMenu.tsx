@@ -9,7 +9,6 @@ import ApkFileIcon from "./ApkFileIcon";
 export default function FloatingMobileMenu() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isAppUser, setIsAppUser] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,10 +21,6 @@ export default function FloatingMobileMenu() {
     
     // Hide initially when route changes
     setIsScrolled(false);
-    
-    if (typeof window !== "undefined") {
-      setIsAppUser(navigator.userAgent.includes("UnsQuranApp") || pathname === "/app");
-    }
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -42,10 +37,10 @@ export default function FloatingMobileMenu() {
     
         {/* Home */}
         <Link 
-          href={isAppUser ? "/app" : "/"} 
+          href="/" 
           aria-label="الرئيسية" 
           className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
-            pathname === "/" || pathname === "/app" 
+            pathname === "/" 
               ? "bg-[#4a6b8c] text-white" 
               : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
           }`}
@@ -70,34 +65,18 @@ export default function FloatingMobileMenu() {
           </svg>
         </Link>
 
-        {/* 4th Action: Adhkar in App mode, Download APK on Web */}
-        {isAppUser ? (
-          <Link 
-            href="/dhikr" 
-            aria-label="الأذكار والتسبيح" 
-            className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
-              pathname.startsWith("/dhikr") 
-                ? "bg-[#4a6b8c] text-white" 
-                : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
-            }`}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </Link>
-        ) : (
-          <Link 
-            href="/download" 
-            aria-label="تحميل تطبيق APK" 
-            className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
-              pathname === "/download" 
-                ? "bg-[#4a6b8c] text-white" 
-                : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
-            }`}
-          >
-            <ApkFileIcon className="w-5 h-5" />
-          </Link>
-        )}
+        {/* Download APK */}
+        <Link 
+          href="/download" 
+          aria-label="تحميل تطبيق APK" 
+          className={`p-2.5 rounded-full flex items-center justify-center transition-all ${
+            pathname === "/download" 
+              ? "bg-[#4a6b8c] text-white" 
+              : "text-[#395675] hover:text-[#1e354d] dark:text-[#94a3b8] dark:hover:text-white"
+          }`}
+        >
+          <ApkFileIcon className="w-5 h-5" />
+        </Link>
 
       </div>
     </div>

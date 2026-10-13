@@ -44,7 +44,6 @@ export default function Navbar() {
           <Link href="/" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">الرئيسية</Link>
           <Link href="/surahs" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">قراءة القرآن</Link>
           <Link href="/reciters" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">استماع للقرآن</Link>
-          <Link href="/app" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">تطبيق أُنس</Link>
         </div>
 
         {/* Right side Actions (APK Button + Theme + Ambient) */}
