@@ -193,10 +193,8 @@ export default async function Home() {
                  <span>استماع للقرآن</span>
                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                </Link>
-               <Link href="/download" className="bg-[#0f8e5d] text-white px-8 py-4 rounded-full font-bold hover:bg-[#0c754d] transition-colors shadow-lg flex items-center gap-3">
-                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                   <path d="M17.523 15.3414C17.523 17.5028 15.654 19.349 13.414 19.349C11.173 19.349 9.305 17.503 9.305 15.3414Z" />
-                 </svg>
+               <Link href="/download" className="bg-[#0f8e5d] text-white px-8 py-4 rounded-full font-bold hover:bg-[#0c754d] transition-colors shadow-lg flex items-center gap-3 group">
+                 <ApkFileIcon className="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform" />
                  <span>تحميل تطبيق أندرويد (APK)</span>
                </Link>
             </div>
