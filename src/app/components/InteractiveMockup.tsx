@@ -17,25 +17,33 @@ const screens: ScreenTab[] = [
     id: "home",
     title: "الرئيسية",
     icon: "🏠",
-    image: "/images/mockup-home.jpg",
+    image: "/images/app-screen-home.png",
     alt: "تطبيق أُنس - الشاشة الرئيسية",
-    caption: "واجهة إيمانية عصرية تجمع الصلاة، الأذكار، والمصحف",
+    caption: "مواقيت الصلاة الدقيقة، ساعة الاستجابة، والأذكار في واجهة واحدة",
   },
   {
     id: "quran",
-    title: "المصحف الشريف",
+    title: "المصحف",
     icon: "📖",
-    image: "/images/mockup-quran.jpg",
-    alt: "تطبيق أُنس - تصفح المصحف",
-    caption: "قراءة عمودية مريحة بالرسم العثماني المعتمد",
+    image: "/images/app-screen-quran.png",
+    alt: "تطبيق أُنس - تصفح المصحف الشريف",
+    caption: "تصفح سور القرآن بالرسم العثماني وأرقام الزخارف الإسلامية",
   },
   {
-    id: "prayer",
-    title: "مواقيت الصلاة",
-    icon: "🕌",
-    image: "/images/mockup-prayer.jpg",
-    alt: "تطبيق أُنس - مواقيت الصلاة",
-    caption: "مواقيت دقيقة حسب موقعك مع عد تنازلي حي للصلوات",
+    id: "reciters",
+    title: "القُرّاء",
+    icon: "🎙️",
+    image: "/images/app-screen-reciters.png",
+    alt: "تطبيق أُنس - قائمة القراء والتلاوات",
+    caption: "استماع لكبار القراء مع استمرار الصوت في الخلفية وعند قفل الشاشة",
+  },
+  {
+    id: "adhkar",
+    title: "الأذكار",
+    icon: "📿",
+    image: "/images/app-screen-adhkar.png",
+    alt: "تطبيق أُنس - الأذكار والأدعية",
+    caption: "أذكار الصباح والمساء، الرقية الشرعية، المسبحة، وأدعية القرآن والسنة",
   },
 ];
 
@@ -46,14 +54,14 @@ export default function InteractiveMockup() {
   return (
     <div className="relative flex flex-col items-center">
       {/* Tab Switchers */}
-      <div className="flex items-center gap-2 p-1.5 bg-[#e8edf2] dark:bg-[#1e293b] rounded-full mb-6 border border-[#d8e2eb] dark:border-[#334155] shadow-xs">
+      <div className="flex flex-wrap items-center justify-center gap-1.5 p-1.5 bg-[#e8edf2] dark:bg-[#1e293b] rounded-full mb-6 border border-[#d8e2eb] dark:border-[#334155] shadow-xs max-w-full">
         {screens.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                 isActive
                   ? "bg-[#4a6b8c] text-white shadow-sm"
                   : "text-[#395675] dark:text-[#94a3b8] hover:text-[#1e354d] dark:hover:text-white"
@@ -69,17 +77,17 @@ export default function InteractiveMockup() {
       {/* Phone Mockup Frame */}
       <div className="relative group">
         {/* Ambient Back Glow */}
-        <div className="absolute -inset-4 bg-gradient-to-r from-[#4a6b8c]/20 to-[#0f8e5d]/20 rounded-[48px] blur-2xl opacity-75 group-hover:opacity-100 transition duration-700 pointer-events-none" />
+        <div className="absolute -inset-4 bg-gradient-to-r from-[#4a6b8c]/20 to-[#0f8e5d]/20 rounded-[52px] blur-2xl opacity-75 group-hover:opacity-100 transition duration-700 pointer-events-none" />
 
         {/* Smartphone Shell */}
-        <div className="relative w-[280px] sm:w-[310px] md:w-[330px] h-[580px] sm:h-[620px] md:h-[660px] bg-[#1e293b] rounded-[44px] p-3 shadow-2xl border-[6px] border-[#334155] dark:border-[#475569] flex flex-col overflow-hidden">
+        <div className="relative w-[280px] sm:w-[310px] md:w-[330px] h-[580px] sm:h-[630px] md:h-[680px] bg-[#0c151f] rounded-[48px] p-2.5 sm:p-3 shadow-2xl border-[6px] border-[#223547] dark:border-[#33485d] flex flex-col overflow-hidden">
           {/* Dynamic Island / Speaker Pill */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-5 bg-[#0f172a] rounded-full z-30 flex items-center justify-end px-3">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#1e293b] border border-white/10"></div>
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-4.5 bg-[#080d14] rounded-full z-30 flex items-center justify-end px-3">
+            <div className="w-2 h-2 rounded-full bg-[#1b2b3a] border border-white/10"></div>
           </div>
 
           {/* Screen Content Wrapper */}
-          <div className="relative w-full h-full rounded-[34px] overflow-hidden bg-black flex flex-col">
+          <div className="relative w-full h-full rounded-[38px] overflow-hidden bg-[#0c151f] flex flex-col">
             <Image
               key={currentScreen.id}
               src={currentScreen.image}
@@ -92,7 +100,7 @@ export default function InteractiveMockup() {
           </div>
 
           {/* Home indicator bar at bottom */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/40 rounded-full z-30 pointer-events-none"></div>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/40 rounded-full z-30 pointer-events-none"></div>
         </div>
 
         {/* Floating Feature Badges */}
@@ -122,7 +130,7 @@ export default function InteractiveMockup() {
       </div>
 
       {/* Screen Caption */}
-      <p className="text-xs text-[#4a6b8c] dark:text-[#94a3b8] mt-4 font-medium text-center max-w-[280px]">
+      <p className="text-xs text-[#4a6b8c] dark:text-[#94a3b8] mt-4 font-medium text-center max-w-[300px]">
         {currentScreen.caption}
       </p>
     </div>

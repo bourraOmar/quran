@@ -222,11 +222,60 @@ export default async function Home() {
               ⚡
             </div>
             <h3 className="text-xl font-bold text-[#1e354d] dark:text-white mb-2">
-              تثبيت مباشر وسريع
+              خفيف وسريع جداً (6 MB)
             </h3>
             <p className="text-sm text-[#4a6b8c] dark:text-[#94a3b8] leading-relaxed">
               حجم صغير للغاية يتيح التثبيت في ثوانٍ معدودة دون التأثير على ذاكرة هاتفك أو استهلاك باقة الإنترنت.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* App Real Screenshots Gallery */}
+      <section className="max-w-[1200px] mx-auto py-16 px-4">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#4a6b8c] dark:text-[#94a3b8] bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 px-3.5 py-1.5 rounded-full mb-3">
+            <span>واجهات التطبيق الحقيقية</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-[#1e354d] dark:text-[#f8fafc] mb-3">
+            تجربة بصرية مريحة للعين ومتقنة
+          </h2>
+          <p className="text-sm sm:text-base text-[#4a6b8c] dark:text-[#94a3b8]">
+            شاهد التصميم الداخلي لتطبيق أُنس مع الوضع الداكن المريح والخطوط الواضحة
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          <div className="flex flex-col items-center">
+            <div className="w-full aspect-[9/19.5] relative rounded-[28px] overflow-hidden shadow-xl border-4 border-[#223547] dark:border-[#33485d] bg-[#0c151f] hover:scale-[1.02] transition-transform duration-300">
+              <Image src="/images/app-screen-home.png" alt="الشاشة الرئيسية - تطبيق أُنس" fill className="object-cover object-top" sizes="(max-width: 640px) 50vw, 25vw" />
+            </div>
+            <h4 className="text-sm font-bold text-[#1e354d] dark:text-white mt-3 text-center">الرئيسية ومواقيت الصلاة</h4>
+            <p className="text-[11px] text-[#4a6b8c] dark:text-[#94a3b8] text-center mt-0.5">أوقات الصلاة والعد التنازلي</p>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="w-full aspect-[9/19.5] relative rounded-[28px] overflow-hidden shadow-xl border-4 border-[#223547] dark:border-[#33485d] bg-[#0c151f] hover:scale-[1.02] transition-transform duration-300">
+              <Image src="/images/app-screen-quran.png" alt="المصحف الشريف - تطبيق أُنس" fill className="object-cover object-top" sizes="(max-width: 640px) 50vw, 25vw" />
+            </div>
+            <h4 className="text-sm font-bold text-[#1e354d] dark:text-white mt-3 text-center">المصحف الشريف</h4>
+            <p className="text-[11px] text-[#4a6b8c] dark:text-[#94a3b8] text-center mt-0.5">فهرس السور بالرسم العثماني</p>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="w-full aspect-[9/19.5] relative rounded-[28px] overflow-hidden shadow-xl border-4 border-[#223547] dark:border-[#33485d] bg-[#0c151f] hover:scale-[1.02] transition-transform duration-300">
+              <Image src="/images/app-screen-reciters.png" alt="أشهر القراء - تطبيق أُنس" fill className="object-cover object-top" sizes="(max-width: 640px) 50vw, 25vw" />
+            </div>
+            <h4 className="text-sm font-bold text-[#1e354d] dark:text-white mt-3 text-center">قائمة كبار القراء</h4>
+            <p className="text-[11px] text-[#4a6b8c] dark:text-[#94a3b8] text-center mt-0.5">استماع متواصل في الخلفية</p>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="w-full aspect-[9/19.5] relative rounded-[28px] overflow-hidden shadow-xl border-4 border-[#223547] dark:border-[#33485d] bg-[#0c151f] hover:scale-[1.02] transition-transform duration-300">
+              <Image src="/images/app-screen-adhkar.png" alt="الأذكار والأدعية - تطبيق أُنس" fill className="object-cover object-top" sizes="(max-width: 640px) 50vw, 25vw" />
+            </div>
+            <h4 className="text-sm font-bold text-[#1e354d] dark:text-white mt-3 text-center">الأذكار وحصن المسلم</h4>
+            <p className="text-[11px] text-[#4a6b8c] dark:text-[#94a3b8] text-center mt-0.5">الرقية الشرعية والمسبحة</p>
           </div>
         </div>
       </section>
@@ -297,7 +346,7 @@ export default async function Home() {
               className="inline-flex items-center gap-3 bg-[#4a6b8c] hover:bg-[#395675] text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-[#4a6b8c]/25 hover:shadow-xl transition-all"
             >
               <ApkFileIcon className="w-5 h-5" />
-              <span>تحميل ملف APK الآن (111 MB)</span>
+              <span>تحميل ملف APK الآن (6.0 MB)</span>
             </a>
           </div>
         </div>

@@ -167,6 +167,40 @@ export default function DownloadPage() {
           </div>
         </div>
 
+        {/* Screenshots Showcase */}
+        <div className="bg-white dark:bg-[#1e293b] p-6 sm:p-8 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs">
+          <div className="text-right mb-6">
+            <h2 className="text-xl font-bold text-[#1e354d] dark:text-white mb-1">لقطات حقيقية من داخل التطبيق</h2>
+            <p className="text-xs text-[#4a6b8c] dark:text-[#8ba7c0]">تصميم إسلامي عصري ومريح للعين مع الوضع الداكن</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="flex flex-col items-center">
+              <div className="w-full aspect-[9/19.5] relative rounded-2xl overflow-hidden shadow-md border-2 border-[#223547] dark:border-[#33485d] bg-[#0c151f]">
+                <Image src="/images/app-screen-home.png" alt="الشاشة الرئيسية" fill className="object-cover object-top" sizes="(max-width: 640px) 50vw, 25vw" />
+              </div>
+              <span className="text-xs font-bold text-[#1e354d] dark:text-white mt-2">الرئيسية والمواقيت</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-full aspect-[9/19.5] relative rounded-2xl overflow-hidden shadow-md border-2 border-[#223547] dark:border-[#33485d] bg-[#0c151f]">
+                <Image src="/images/app-screen-quran.png" alt="المصحف الشريف" fill className="object-cover object-top" sizes="(max-width: 640px) 50vw, 25vw" />
+              </div>
+              <span className="text-xs font-bold text-[#1e354d] dark:text-white mt-2">المصحف الشريف</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-full aspect-[9/19.5] relative rounded-2xl overflow-hidden shadow-md border-2 border-[#223547] dark:border-[#33485d] bg-[#0c151f]">
+                <Image src="/images/app-screen-reciters.png" alt="القراء والتلاوات" fill className="object-cover object-top" sizes="(max-width: 640px) 50vw, 25vw" />
+              </div>
+              <span className="text-xs font-bold text-[#1e354d] dark:text-white mt-2">كبار القراء</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-full aspect-[9/19.5] relative rounded-2xl overflow-hidden shadow-md border-2 border-[#223547] dark:border-[#33485d] bg-[#0c151f]">
+                <Image src="/images/app-screen-adhkar.png" alt="الأذكار والأدعية" fill className="object-cover object-top" sizes="(max-width: 640px) 50vw, 25vw" />
+              </div>
+              <span className="text-xs font-bold text-[#1e354d] dark:text-white mt-2">الأذكار وحصن المسلم</span>
+            </div>
+          </div>
+        </div>
+
         {/* Installation Guide */}
         <div className="bg-white dark:bg-[#1e293b] p-6 sm:p-8 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs">
           <h2 className="text-xl font-bold text-[#1e354d] dark:text-white mb-6 flex items-center gap-3">
