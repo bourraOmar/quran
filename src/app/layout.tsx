@@ -84,6 +84,7 @@ export const viewport = {
 import { GlobalAudioProvider } from "./context/GlobalAudioContext";
 import { AmbientAudioProvider } from "./context/AmbientAudioContext";
 import GlobalPlayer from "./components/GlobalPlayer";
+import MobileInstallBar from "./components/MobileInstallBar";
 
 export default function RootLayout({
   children,
@@ -95,6 +96,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:bg-[#0f172a] dark:text-[#e2e8f0] transition-colors duration-300">
         <AmbientAudioProvider>
         <GlobalAudioProvider>
+          <MobileInstallBar />
           <Navbar />
           <main className="flex-1 w-full pb-24 md:pb-0">{children}</main>
           <ScrollToTop />

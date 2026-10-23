@@ -51,11 +51,11 @@ export default function Navbar() {
            {/* APK Download Button */}
            <Link 
              href="/download" 
-             className="flex items-center gap-2 bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 hover:bg-[#4a6b8c] text-[#395675] dark:text-[#94a3b8] hover:text-white dark:hover:text-white px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border border-[#4a6b8c]/20 hover:border-transparent group"
+             className="flex items-center gap-2 bg-[#4a6b8c] hover:bg-[#395675] text-white px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm group"
              title="تحميل تطبيق أندرويد APK"
            >
              <ApkFileIcon className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform" />
-             <span>تطبيق أندرويد (APK)</span>
+             <span>تثبيت تطبيق أُنس (APK)</span>
            </Link>
 
            <AmbientSoundMenu />
