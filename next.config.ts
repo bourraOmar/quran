@@ -10,6 +10,15 @@ const nextConfig: NextConfig = {
   },
   compress: true,
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/downloads/uns-quran.apk",
+        destination: "https://github.com/bourraOmar/uns-app/releases/download/v1.0.0/uns-quran.apk",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

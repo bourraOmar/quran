@@ -61,7 +61,7 @@ export default function DownloadPage() {
                 <ApkFileIcon className="w-6 h-6 shrink-0 group-hover:scale-110 transition-transform" />
                 <div className="text-right">
                   <span className="block text-base leading-tight">تحميل ملف APK مباشر</span>
-                  <span className="block text-[11px] text-white/80 mt-0.5 font-normal">حجم الملف: ~4.5 MB • مجاني 100%</span>
+                  <span className="block text-[11px] text-white/80 mt-0.5 font-normal">حجم الملف: 111 MB • مجاني 100%</span>
                 </div>
               </a>
 

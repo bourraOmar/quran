@@ -222,7 +222,7 @@ export default async function Home() {
               ⚡
             </div>
             <h3 className="text-xl font-bold text-[#1e354d] dark:text-white mb-2">
-              خفيف وسريع جداً (6 MB)
+              تثبيت مباشر وسريع
             </h3>
             <p className="text-sm text-[#4a6b8c] dark:text-[#94a3b8] leading-relaxed">
               حجم صغير للغاية يتيح التثبيت في ثوانٍ معدودة دون التأثير على ذاكرة هاتفك أو استهلاك باقة الإنترنت.
@@ -297,7 +297,7 @@ export default async function Home() {
               className="inline-flex items-center gap-3 bg-[#4a6b8c] hover:bg-[#395675] text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-[#4a6b8c]/25 hover:shadow-xl transition-all"
             >
               <ApkFileIcon className="w-5 h-5" />
-              <span>تحميل ملف APK الآن (6.0 MB)</span>
+              <span>تحميل ملف APK الآن (111 MB)</span>
             </a>
           </div>
         </div>
@@ -422,7 +422,7 @@ export default async function Home() {
               <ApkFileIcon className="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform text-[#0f8e5d]" />
               <div>
                 <span className="block text-base leading-tight font-extrabold">تحميل تطبيق أندرويد (APK)</span>
-                <span className="block text-[11px] text-[#4a6b8c] font-normal">تنزيل مباشر 6 MB • مجاني 100%</span>
+                <span className="block text-[11px] text-[#4a6b8c] font-normal">تنزيل مباشر 111 MB • مجاني 100%</span>
               </div>
             </a>
 
