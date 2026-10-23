@@ -19,7 +19,7 @@ const screens: ScreenTab[] = [
     icon: "🏠",
     image: "/images/app-screen-home.png",
     alt: "تطبيق أُنس - الشاشة الرئيسية",
-    caption: "مواقيت الصلاة الدقيقة، ساعة الاستجابة، والأذكار في واجهة واحدة",
+    caption: "مواقيت الصلاة الدقيقة، ساعة الاستجابة، وتطبيقاتك اليومية",
   },
   {
     id: "quran",
@@ -74,37 +74,54 @@ export default function InteractiveMockup() {
         })}
       </div>
 
-      {/* Phone Mockup Frame */}
+      {/* Artboard Studio Android Phone Mockup (Ultra-Thin Bezels & Centered Punch Hole) */}
       <div className="relative group">
         {/* Ambient Back Glow */}
-        <div className="absolute -inset-4 bg-gradient-to-r from-[#4a6b8c]/20 to-[#0f8e5d]/20 rounded-[52px] blur-2xl opacity-75 group-hover:opacity-100 transition duration-700 pointer-events-none" />
+        <div className="absolute -inset-4 bg-gradient-to-r from-[#4a6b8c]/20 via-[#0f8e5d]/15 to-[#4a6b8c]/20 rounded-[54px] blur-2xl opacity-75 group-hover:opacity-100 transition duration-700 pointer-events-none" />
 
-        {/* Smartphone Shell */}
-        <div className="relative w-[280px] sm:w-[310px] md:w-[330px] h-[580px] sm:h-[630px] md:h-[680px] bg-[#0c151f] rounded-[48px] p-2.5 sm:p-3 shadow-2xl border-[6px] border-[#223547] dark:border-[#33485d] flex flex-col overflow-hidden">
-          {/* Dynamic Island / Speaker Pill */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-4.5 bg-[#080d14] rounded-full z-30 flex items-center justify-end px-3">
-            <div className="w-2 h-2 rounded-full bg-[#1b2b3a] border border-white/10"></div>
+        {/* Android Device Outer Wrapper with Side Hardware Buttons */}
+        <div className="relative mx-auto select-none">
+          {/* Right-side Volume Rocker button */}
+          <div className="absolute -right-[3px] top-[110px] w-[3px] h-[55px] bg-[#94a3b8] dark:bg-[#475569] rounded-r-[2px] shadow-xs pointer-events-none" />
+          
+          {/* Right-side Power button */}
+          <div className="absolute -right-[3px] top-[180px] w-[3px] h-[36px] bg-[#94a3b8] dark:bg-[#475569] rounded-r-[2px] shadow-xs pointer-events-none" />
+
+          {/* Left-side Antenna line */}
+          <div className="absolute -left-[3px] top-[130px] w-[3px] h-[26px] bg-[#94a3b8] dark:bg-[#475569] rounded-l-[2px] shadow-xs pointer-events-none" />
+
+          {/* Premium Metallic Outer Frame (Ultra-thin 2.5px ring) */}
+          <div className="relative w-[280px] sm:w-[310px] md:w-[325px] h-[610px] sm:h-[665px] md:h-[700px] rounded-[46px] p-[2.5px] bg-gradient-to-b from-[#e2e8f0] via-[#cbd5e1] to-[#94a3b8] dark:from-[#64748b] dark:via-[#334155] dark:to-[#1e293b] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] ring-1 ring-black/10 dark:ring-white/10">
+            
+            {/* Ultra-Slim Inner Black Bezel (3.5px - 4px) */}
+            <div className="relative w-full h-full rounded-[43px] p-[3.5px] bg-[#000000] flex flex-col overflow-hidden">
+              
+              {/* Screen Display Area */}
+              <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-[#0c151f]">
+                
+                {/* Android Punch-Hole Camera (Centered at Top) */}
+                <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#05080c] ring-1 ring-white/15 z-30 flex items-center justify-center shadow-inner pointer-events-none">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#0e1724] opacity-90" />
+                </div>
+
+                {/* Screenshot Image */}
+                <Image
+                  key={currentScreen.id}
+                  src={currentScreen.image}
+                  alt={currentScreen.alt}
+                  fill
+                  className="object-cover object-top transition-opacity duration-300"
+                  priority
+                  sizes="(max-width: 640px) 280px, (max-width: 768px) 310px, 325px"
+                />
+              </div>
+
+            </div>
           </div>
-
-          {/* Screen Content Wrapper */}
-          <div className="relative w-full h-full rounded-[38px] overflow-hidden bg-[#0c151f] flex flex-col">
-            <Image
-              key={currentScreen.id}
-              src={currentScreen.image}
-              alt={currentScreen.alt}
-              fill
-              className="object-cover object-top transition-opacity duration-300"
-              priority
-              sizes="(max-width: 640px) 280px, (max-width: 768px) 310px, 330px"
-            />
-          </div>
-
-          {/* Home indicator bar at bottom */}
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/40 rounded-full z-30 pointer-events-none"></div>
         </div>
 
-        {/* Floating Feature Badges */}
-        <div className="hidden lg:flex flex-col gap-3 absolute -right-20 top-20 z-20 animate-[float_4s_ease-in-out_infinite]">
+        {/* Floating Feature Badges (Placed gracefully with ample spacing) */}
+        <div className="hidden xl:flex flex-col gap-3 absolute -right-24 top-16 z-20 animate-[float_4s_ease-in-out_infinite]">
           <div className="bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-black/5 dark:border-white/10 flex items-center gap-3 text-right">
             <div className="w-9 h-9 rounded-xl bg-[#0f8e5d]/10 text-[#0f8e5d] flex items-center justify-center font-bold text-lg">
               ✓
@@ -116,7 +133,7 @@ export default function InteractiveMockup() {
           </div>
         </div>
 
-        <div className="hidden lg:flex flex-col gap-3 absolute -left-20 bottom-24 z-20 animate-[float_5s_ease-in-out_infinite_1s]">
+        <div className="hidden xl:flex flex-col gap-3 absolute -left-24 bottom-20 z-20 animate-[float_5s_ease-in-out_infinite_1s]">
           <div className="bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-black/5 dark:border-white/10 flex items-center gap-3 text-right">
             <div className="w-9 h-9 rounded-xl bg-[#4a6b8c]/10 text-[#4a6b8c] dark:text-[#94a3b8] flex items-center justify-center font-bold text-lg">
               🎧
