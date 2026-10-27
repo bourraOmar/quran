@@ -5,6 +5,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import AudioPlayer, { AudioPlayerRef } from "./AudioPlayer";
+import { QURAN_CHAPTERS } from "@/data/quranChapters";
 
 interface Verse {
   id: number;
@@ -112,6 +113,14 @@ export default function SurahReader({
                    className="block text-[#4a6b8c] dark:text-[#8ba7c0] hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] hover:text-[#0f8e5d] dark:hover:text-[#4ade80] p-3 rounded-2xl font-medium transition-colors"
                  >
                    العودة لفهرس السور
+                 </Link>
+               </li>
+               <li>
+                 <Link 
+                   href={`/mushaf/${QURAN_CHAPTERS.find((ch) => ch.id === chapter.id)?.start_page || 1}`}
+                   className="block text-[#4a6b8c] dark:text-[#8ba7c0] hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] hover:text-[#0f8e5d] dark:hover:text-[#4ade80] p-3 rounded-2xl font-medium transition-colors"
+                 >
+                   📖 قراءة بصفحات المصحف
                  </Link>
                </li>
              </ul>

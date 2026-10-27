@@ -42,7 +42,8 @@ export default function Navbar() {
         {/* Navigation Links */}
         <div className="hidden lg:flex items-center gap-8 text-[16px] font-semibold text-[#4a6b8c] dark:text-[#94a3b8]">
           <Link href="/" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">الرئيسية</Link>
-          <Link href="/surahs" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">قراءة القرآن</Link>
+          <Link href="/mushaf" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">المصحف (صفحات)</Link>
+          <Link href="/surahs" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">قراءة بالسورة</Link>
           <Link href="/reciters" className="hover:text-[#1e354d] dark:hover:text-white transition-colors">استماع للقرآن</Link>
         </div>
 
