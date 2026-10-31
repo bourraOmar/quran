@@ -471,7 +471,7 @@ export default async function Home() {
               <ApkFileIcon className="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform text-[#0f8e5d]" />
               <div>
                 <span className="block text-base leading-tight font-extrabold">تحميل تطبيق أندرويد (APK)</span>
-                <span className="block text-[11px] text-[#4a6b8c] font-normal">تنزيل مباشر 111 MB • مجاني 100%</span>
+                <span className="block text-[11px] text-[#4a6b8c] font-normal">تنزيل مباشر 116 MB • مجاني 100%</span>
               </div>
             </a>
 

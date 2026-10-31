@@ -7,18 +7,23 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 86400,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "files.quran.app",
+      },
+      {
+        protocol: "https",
+        hostname: "android.quran.com",
+      },
+      {
+        protocol: "https",
+        hostname: "static.quran.com",
+      },
+    ],
   },
   compress: true,
   poweredByHeader: false,
-  async redirects() {
-    return [
-      {
-        source: "/downloads/uns-quran.apk",
-        destination: "https://github.com/bourraOmar/uns-app/releases/download/v1.0.0/uns-quran.apk",
-        permanent: false,
-      },
-    ];
-  },
 };
 
 export default nextConfig;

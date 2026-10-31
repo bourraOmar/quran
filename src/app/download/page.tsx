@@ -8,7 +8,41 @@ export const metadata: Metadata = {
   description: "حمّل تطبيق أُنس للقرآن الكريم بصيغة APK مباشرة لهواتف أندرويد. تلاوات خاشعة، أذكار الصباح والمساء، مواقيت الصلاة، وبوصلة القبلة.",
 };
 
-export default function DownloadPage() {
+async function getLatestRelease() {
+  try {
+    const res = await fetch('https://api.github.com/repos/bourraOmar/uns-app/releases/latest', {
+      headers: {
+        Accept: 'application/vnd.github.v3+json',
+        'User-Agent': 'uns-quran-website',
+      },
+      next: { revalidate: 120 },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const apkAsset = data.assets?.find((a: any) =>
+        typeof a.name === 'string' && a.name.toLowerCase().endsWith('.apk')
+      );
+      const sizeMb = apkAsset ? Math.round(apkAsset.size / (1024 * 1024)) : 116;
+      const tag = data.tag_name || '1.0.1';
+      const cleanVersion = String(tag).replace(/^v/i, '');
+      return {
+        versionTag: `v${cleanVersion}`,
+        versionClean: cleanVersion,
+        fileSizeMb: `${sizeMb} MB`,
+      };
+    }
+  } catch (error) {
+    console.error('Failed to fetch latest release metadata:', error);
+  }
+  return {
+    versionTag: 'v1.0.1',
+    versionClean: '1.0.1',
+    fileSizeMb: '116 MB',
+  };
+}
+
+export default async function DownloadPage() {
+  const release = await getLatestRelease();
   return (
     <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#f8fafc] py-12 px-4 transition-colors">
       <div className="max-w-4xl mx-auto space-y-10">
@@ -40,7 +74,7 @@ export default function DownloadPage() {
 
             <div className="inline-flex items-center gap-2 bg-[#4a6b8c]/10 dark:bg-[#4a6b8c]/20 text-[#395675] dark:text-[#94a3b8] px-4 py-1.5 rounded-full text-xs font-bold mb-3">
               <ApkFileIcon className="w-4.5 h-4.5 shrink-0" />
-              <span>تطبيق أندرويد الرسمي • الإصدار 1.0.0</span>
+              <span>تطبيق أندرويد الرسمي • الإصدار {release.versionClean}</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1e354d] dark:text-white tracking-tight mb-3">
@@ -61,7 +95,7 @@ export default function DownloadPage() {
                 <ApkFileIcon className="w-6 h-6 shrink-0 group-hover:scale-110 transition-transform" />
                 <div className="text-right">
                   <span className="block text-base leading-tight">تحميل ملف APK مباشر</span>
-                  <span className="block text-[11px] text-white/80 mt-0.5 font-normal">حجم الملف: 111 MB • مجاني 100%</span>
+                  <span className="block text-[11px] text-white/80 mt-0.5 font-normal">حجم الملف: {release.fileSizeMb} • مجاني 100%</span>
                 </div>
               </a>
 
@@ -84,7 +118,7 @@ export default function DownloadPage() {
                 <span className="block text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] mt-0.5">بدون إعلانات</span>
               </div>
               <div>
-                <span className="block text-lg font-black text-[#1e354d] dark:text-white">v1.0.0</span>
+                <span className="block text-lg font-black text-[#1e354d] dark:text-white">{release.versionTag}</span>
                 <span className="block text-[11px] text-[#4a6b8c] dark:text-[#8ba7c0] mt-0.5">آخر إصدار</span>
               </div>
             </div>
