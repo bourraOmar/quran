@@ -39,13 +39,6 @@ export default async function AllSurahsPage() {
         <span className="bg-[#4a6b8c] text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-sm">
           فهرس السور
         </span>
-        <Link
-          href="/mushaf"
-          className="bg-white dark:bg-[#1e293b] hover:bg-gray-100 dark:hover:bg-[#334155] text-[#1e354d] dark:text-[#f8fafc] border border-black/5 dark:border-white/5 px-5 py-2.5 rounded-full font-bold text-sm transition-colors shadow-xs flex items-center gap-2"
-        >
-          <span>📖 قراءة بالمصحف الشريف (صفحات)</span>
-          <span>←</span>
-        </Link>
       </div>
 
       <SurahsGrid initialSurahs={surahs} />

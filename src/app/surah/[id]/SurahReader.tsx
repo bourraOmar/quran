@@ -2,10 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import AudioPlayer, { AudioPlayerRef } from "./AudioPlayer";
-import { QURAN_CHAPTERS } from "@/data/quranChapters";
+import { QURAN_CHAPTERS, QURAN_JUZS } from "@/data/quranChapters";
 
 interface Verse {
   id: number;
@@ -20,10 +21,15 @@ interface Chapter {
   name_simple: string;
   revelation_place: string;
   verses_count: number;
-  translated_name: {
+  translated_name?: {
     name: string;
   };
-  bismillah_pre: boolean;
+  bismillah_pre?: boolean;
+}
+
+function toArabicDigits(num: number | string): string {
+  const digits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+  return String(num).replace(/[0-9]/g, (d) => digits[+d]);
 }
 
 export default function SurahReader({ 
@@ -43,6 +49,80 @@ export default function SurahReader({
   const [showTranslationModal, setShowTranslationModal] = useState<{ verseKey: string; translation: string } | null>(null);
 
   const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+
+  // Chapter and Page metadata
+  const chapterMeta = useMemo(() => {
+    return QURAN_CHAPTERS.find((ch) => ch.id === chapter.id) || {
+      id: chapter.id,
+      name_arabic: chapter.name_arabic,
+      name_simple: chapter.name_simple,
+      verses_count: chapter.verses_count,
+      revelation_place: chapter.revelation_place,
+      bismillah_pre: chapter.bismillah_pre,
+      start_page: 1,
+      end_page: 1,
+    };
+  }, [chapter.id, chapter.name_arabic, chapter.name_simple, chapter.verses_count, chapter.revelation_place, chapter.bismillah_pre]);
+
+  // Generate list of all pages in this surah
+  const pages = useMemo(() => {
+    const count = chapterMeta.end_page - chapterMeta.start_page + 1;
+    return Array.from({ length: count }, (_, i) => chapterMeta.start_page + i);
+  }, [chapterMeta.start_page, chapterMeta.end_page]);
+
+  const [activePageOnScroll, setActivePageOnScroll] = useState<number>(chapterMeta.start_page);
+
+  // Track active page as user scrolls down
+  useEffect(() => {
+    if (typeof window === "undefined" || pages.length <= 1) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const pageId = entry.target.id;
+            const pNum = Number(pageId.replace("surah-page-", ""));
+            if (!isNaN(pNum)) {
+              setActivePageOnScroll(pNum);
+            }
+          }
+        });
+      },
+      { rootMargin: "-20% 0px -60% 0px", threshold: 0.1 }
+    );
+
+    pages.forEach((p) => {
+      const el = document.getElementById(`surah-page-${p}`);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [pages]);
+
+  const scrollToPage = (p: number) => {
+    const el = document.getElementById(`surah-page-${p}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const getJuzAndHizb = (p: number) => {
+    const juzItem = [...QURAN_JUZS].reverse().find((j) => p >= j.start_page) || QURAN_JUZS[0];
+    const juz = juzItem.juz;
+    const hizb = Math.ceil(juzItem.juz * 2);
+    return { juz, hizb };
+  };
+
+  const getPageImageUrl = (p: number) => {
+    const padded = String(p).padStart(3, "0");
+    if (p === 1 || p === 2) {
+      return `/images/mushaf/page${padded}.png`;
+    }
+    return `https://files.quran.app/hafs/madani/width_1260/page${padded}.png`;
+  };
+
+  const nextChapter = chapter.id < 114 ? QURAN_CHAPTERS.find((c) => c.id === chapter.id + 1) : null;
+  const prevChapter = chapter.id > 1 ? QURAN_CHAPTERS.find((c) => c.id === chapter.id - 1) : null;
 
   const handleTouchStart = (e: React.TouchEvent, verseKey: string, translation?: string) => {
     const touch = e.touches[0];
@@ -97,14 +177,32 @@ export default function SurahReader({
              </h3>
              <ul className="flex flex-col gap-2 text-right">
                <li className="bg-[#0f8e5d]/10 text-[#0f8e5d] dark:text-[#4ade80] font-bold p-3 rounded-2xl transition-colors">
-                 قراءة السورة
+                 قراءة السورة (المصحف الشريف)
                </li>
+               {pages.length > 1 && (
+                 <li className="p-3 bg-[#f4f7f9] dark:bg-[#0f172a] rounded-2xl">
+                   <label className="block text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0] mb-2">
+                     الانتقال السريع للصفحة:
+                   </label>
+                   <select
+                     value={activePageOnScroll}
+                     onChange={(e) => scrollToPage(Number(e.target.value))}
+                     className="w-full bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-white px-3 py-2 rounded-xl border border-black/5 dark:border-white/10 font-bold outline-none cursor-pointer text-xs"
+                   >
+                     {pages.map((p) => (
+                       <option key={p} value={p}>
+                         صفحة {toArabicDigits(p)} (صفحة {toArabicDigits(p - chapterMeta.start_page + 1)} بالسورة)
+                       </option>
+                     ))}
+                   </select>
+                 </li>
+               )}
                <li>
                  <Link 
                    href={`/surah/${chapter.id}?showTranslation=${isTranslationEnabled ? "false" : "true"}`}
                    className="block text-[#4a6b8c] dark:text-[#8ba7c0] hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] hover:text-[#0f8e5d] dark:hover:text-[#4ade80] p-3 rounded-2xl font-medium transition-colors"
                  >
-                   {isTranslationEnabled ? "إخفاء التفسير" : "إظهار التفسير"}
+                   {isTranslationEnabled ? "📖 عرض المصحف الشريف" : "🔍 إظهار التفسير والترجمة"}
                  </Link>
                </li>
                <li>
@@ -113,14 +211,6 @@ export default function SurahReader({
                    className="block text-[#4a6b8c] dark:text-[#8ba7c0] hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] hover:text-[#0f8e5d] dark:hover:text-[#4ade80] p-3 rounded-2xl font-medium transition-colors"
                  >
                    العودة لفهرس السور
-                 </Link>
-               </li>
-               <li>
-                 <Link 
-                   href={`/mushaf/${QURAN_CHAPTERS.find((ch) => ch.id === chapter.id)?.start_page || 1}`}
-                   className="block text-[#4a6b8c] dark:text-[#8ba7c0] hover:bg-[#f4f7f9] dark:hover:bg-[#0f172a] hover:text-[#0f8e5d] dark:hover:text-[#4ade80] p-3 rounded-2xl font-medium transition-colors"
-                 >
-                   📖 قراءة بصفحات المصحف
                  </Link>
                </li>
              </ul>
@@ -164,6 +254,11 @@ export default function SurahReader({
                 </span>
                 <span className="text-xs text-[#4a6b8c] dark:text-[#8ba7c0] font-medium">
                   رقم {chapter.id} • {chapter.verses_count} آية
+                  {chapterMeta.start_page === chapterMeta.end_page ? (
+                    <> • صفحة {toArabicDigits(chapterMeta.start_page)}</>
+                  ) : (
+                    <> • صفحة {toArabicDigits(chapterMeta.start_page)} إلى {toArabicDigits(chapterMeta.end_page)}</>
+                  )}
                 </span>
               </div>
             </div>
@@ -191,29 +286,18 @@ export default function SurahReader({
           </button>
         </div>
 
-        {/* Surah Text Area */}
-        <div className={`text-center leading-[2.5] md:leading-[2.8] text-[#1e354d] dark:text-[#f8fafc] font-medium ${
-          isTranslationEnabled ? "" : "text-2xl md:text-4xl"
-        } mb-16 bg-white dark:bg-[#1e293b] p-6 md:p-12 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm`}>
-          
-          {chapter.id !== 1 && chapter.id !== 9 && (
-            <div className="flex justify-center mb-12">
-              <img src="/img/basmalah.png" alt="بسم الله الرحمن الرحيم" className="max-w-[75%] md:max-w-[45%] dark:invert opacity-85" loading="lazy" />
-            </div>
-          )}
+        {/* Translation Mode */}
+        {isTranslationEnabled ? (
+          <div className="text-center leading-[2.5] md:leading-[2.8] text-[#1e354d] dark:text-[#f8fafc] font-medium mb-16 bg-white dark:bg-[#1e293b] p-6 md:p-12 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm">
+            <div className="flex flex-col gap-8 text-right select-none">
+              {verses.map((verse) => {
+                const ayahNumber = verse.verse_key.split(":")[1];
+                const isFatihaBasmalah = chapter.id === 1 && ayahNumber === "1";
+                const isActive = activeVerseKey === verse.verse_key;
+                const highlightClass = isActive 
+                  ? "bg-[#0f8e5d]/10 dark:bg-[#0f8e5d]/20 text-[#0f8e5d] dark:text-[#4ade80] rounded-2xl px-2 py-1 transition-all duration-300 shadow-sm" 
+                  : "transition-all duration-300";
 
-          <div className={isTranslationEnabled ? "flex flex-col gap-8 text-right select-none" : "inline-block text-center select-none"}>
-            {verses.map((verse) => {
-              const ayahNumber = verse.verse_key.split(":")[1];
-              const isFatihaBasmalah = chapter.id === 1 && ayahNumber === "1";
-              const isActive = activeVerseKey === verse.verse_key;
-              
-              // Highlight styling
-              const highlightClass = isActive 
-                ? "bg-[#0f8e5d]/10 dark:bg-[#0f8e5d]/20 text-[#0f8e5d] dark:text-[#4ade80] rounded-2xl px-2 py-1 transition-all duration-300 shadow-sm" 
-                : "transition-all duration-300";
-
-              if (isTranslationEnabled) {
                 return (
                   <div 
                     key={verse.id} 
@@ -243,39 +327,106 @@ export default function SurahReader({
                     )}
                   </div>
                 );
-              }
+              })}
+            </div>
+          </div>
+        ) : (
+          /* Continuous Scroll Madani Mushaf View (Matching Site Theme) */
+          <div className="flex flex-col mb-16">
+            {/* Continuous Vertical Feed of Pages */}
+            <div className="flex flex-col gap-8 mb-12">
+              {pages.map((p, idx) => {
+                const meta = getJuzAndHizb(p);
+                const isShort = p === 1 || p === 2;
 
-              if (isFatihaBasmalah) {
                 return (
-                  <div 
-                    key={verse.id} 
-                    className={`flex flex-col items-center justify-center w-full mb-8 mt-2 py-4 ${highlightClass}`}
-                    ref={isActive ? (activeVerseRef as React.RefObject<HTMLDivElement>) : null}
+                  <div
+                    key={p}
+                    id={`surah-page-${p}`}
+                    className={`relative rounded-3xl overflow-hidden shadow-sm border border-black/5 dark:border-white/5 bg-white dark:bg-[#1e293b] text-[#1e354d] dark:text-white transition-all duration-300 flex flex-col justify-between items-center p-3 sm:p-5 md:p-6 ${
+                      isShort ? "min-h-[580px] sm:min-h-[680px] md:min-h-[740px]" : ""
+                    }`}
                   >
-                    <div className="flex items-center justify-center w-full">
-                      <img src="/img/basmalah.png" alt="بسم الله الرحمن الرحيم" className="max-w-[60%] md:max-w-[40%] dark:invert opacity-85" loading="lazy" />
-                      <span className="text-[#0f8e5d] dark:text-[#4ade80] mx-3 font-sans text-xl md:text-2xl font-bold">({ayahNumber})</span>
+                    {/* Header info bar */}
+                    <div className="w-full flex items-center justify-between px-2 sm:px-4 pb-3 text-[11px] sm:text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0] border-b border-black/5 dark:border-white/5">
+                      <span>سورة {chapter.name_arabic}</span>
+                      <span>الجزء {toArabicDigits(meta.juz)} - الحزب {toArabicDigits(meta.hizb)}</span>
+                      <span>صفحة {toArabicDigits(p)}</span>
+                    </div>
+
+                    {/* High-Resolution 15-Line Mushaf Image */}
+                    <div className={`w-full flex items-center justify-center ${isShort ? "my-auto py-4 sm:py-8" : "py-3"}`}>
+                      <div
+                        className={`relative w-full max-w-[720px] transition-all duration-300 ${
+                          isShort ? "aspect-[1260/1010]" : "aspect-[1/1.62]"
+                        } dark:[filter:invert(0.92)_hue-rotate(180deg)_brightness(1.05)_contrast(1.15)]`}
+                      >
+                        <Image
+                          src={getPageImageUrl(p)}
+                          alt={`سورة ${chapter.name_arabic} - صفحة ${p}`}
+                          fill
+                          loading={idx < 2 ? "eager" : "lazy"}
+                          priority={idx === 0}
+                          unoptimized
+                          className="object-contain select-none"
+                          sizes="(max-width: 768px) 100vw, 760px"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Footer page number */}
+                    <div className="w-full text-center pt-3 pb-1 text-xs font-bold text-[#4a6b8c] dark:text-[#8ba7c0] border-t border-black/5 dark:border-white/5">
+                      — {toArabicDigits(p)} —
                     </div>
                   </div>
                 );
-              }
+              })}
+            </div>
 
-              return (
-                <span 
-                  key={verse.id} 
-                  ref={isActive ? (activeVerseRef as React.RefObject<HTMLSpanElement>) : null}
-                  onContextMenu={(e) => handleContextMenu(e, verse.verse_key, verse.translation)}
-                  onTouchStart={(e) => handleTouchStart(e, verse.verse_key, verse.translation)}
-                  onTouchEnd={handleTouchEndOrMove}
-                  onTouchMove={handleTouchEndOrMove}
-                  className={`font-quran font-normal leading-[2.5] md:leading-[2.8] cursor-pointer hover:text-[#0f8e5d] dark:hover:text-[#4ade80] ${highlightClass}`}
+            {/* End of Surah Completion Card */}
+            <div className="bg-white dark:bg-[#1e293b] rounded-3xl border border-black/5 dark:border-white/5 p-6 sm:p-8 text-center shadow-sm mb-16 flex flex-col items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-[#0f8e5d]/10 text-[#0f8e5d] dark:text-[#4ade80] flex items-center justify-center font-bold text-xl">
+                ✓
+              </div>
+              <div>
+                <h3 className="font-bold text-xl text-[#1e354d] dark:text-white">
+                  تمت بحمد الله قراءة سورة {chapter.name_arabic}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#4a6b8c] dark:text-[#8ba7c0] mt-1">
+                  عدد الآيات: {toArabicDigits(chapter.verses_count)} • عدد الصفحات: {toArabicDigits(pages.length)}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-2">
+                {nextChapter && (
+                  <Link
+                    href={`/surah/${nextChapter.id}`}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#0f8e5d] hover:bg-[#0c734b] text-white font-bold text-sm shadow-md transition-all active:scale-95"
+                  >
+                    <span>السورة التالية: سورة {nextChapter.name_arabic}</span>
+                    <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </Link>
+                )}
+                {prevChapter && (
+                  <Link
+                    href={`/surah/${prevChapter.id}`}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-white hover:border-[#0f8e5d]/30 font-bold text-sm transition-all"
+                  >
+                    <span>سورة {prevChapter.name_arabic}</span>
+                  </Link>
+                )}
+                <button
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  className="px-4 py-2.5 rounded-2xl bg-[#f4f7f9] dark:bg-[#0f172a] text-[#4a6b8c] dark:text-[#8ba7c0] hover:text-[#1e354d] dark:hover:text-white font-bold text-sm transition-all"
                 >
-                  {verse.text_uthmani} <span className="text-[#0f8e5d] dark:text-[#4ade80] mx-1 font-sans text-xl md:text-2xl font-bold">({ayahNumber})</span>{' '}
-                </span>
-              );
-            })}
+                  الرجوع لأعلى السورة ↑
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Long Press / Context Menu Popup */}
         {popupMenu && (
