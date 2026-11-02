@@ -1,11 +1,25 @@
 export const dynamic = 'force-dynamic';
 import SurahReader from "./SurahReader";
 
+interface Word {
+  id: number;
+  position: number;
+  audio_url: string | null;
+  char_type_name: string;
+  code_v2?: string;
+  line_number: number;
+  page_number: number;
+  text: string;
+}
+
 interface Verse {
   id: number;
   verse_number: number;
   verse_key: string;
   text_uthmani: string;
+  code_v2?: string;
+  v2_page?: number;
+  words?: Word[];
   translations?: {
     id: number;
     text: string;
@@ -27,7 +41,7 @@ async function getSurahData(id: string) {
   const chapter: Chapter = chapterJson.chapter;
 
   const versesRes = await fetch(
-    `https://api.quran.com/api/v4/verses/by_chapter/${id}?language=ar&words=false&translations=16&per_page=300&fields=text_uthmani`
+    `https://api.quran.com/api/v4/verses/by_chapter/${id}?language=ar&words=true&translations=16&per_page=300&fields=text_uthmani,code_v2,v2_page&word_fields=code_v2,line_number,page_number&mushaf=1`
   );
   if (!versesRes.ok) throw new Error("Failed to fetch verses");
   const versesJson = await versesRes.json();
@@ -72,7 +86,7 @@ export default async function SurahPage({
   const { chapter, verses } = await getSurahData(id);
 
   return (
-    <div className="max-w-[1400px] mx-auto py-12 px-4">
+    <div className="max-w-[1600px] mx-auto py-8 sm:py-12 px-3 sm:px-6">
       <SurahReader chapter={chapter} verses={verses} isTranslationEnabled={isTranslationEnabled} />
     </div>
   );
