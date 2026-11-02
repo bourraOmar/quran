@@ -569,13 +569,18 @@ export default function SurahReader({
                   )}
 
                   {/* Centered Page Lines */}
-                  <div className="w-full flex flex-col items-center justify-center gap-2 sm:gap-3 my-auto py-2">
+                  <div className="w-full flex flex-col items-center justify-center gap-1 sm:gap-2 my-auto py-2">
                     {lineNumbers.map((lineNum) => {
                       const lineWords = linesMap[lineNum] || [];
+                      const isOpeningPage = p === 1 || p === 2;
+                      const isShortLine = isOpeningPage || lineWords.length < 5;
+
                       return (
                         <div
                           key={lineNum}
-                          className="w-full flex flex-wrap items-center justify-center text-center gap-x-1.5 sm:gap-x-2.5 gap-y-1 transition-colors"
+                          className={`w-full flex flex-nowrap whitespace-nowrap items-center ${
+                            isShortLine ? "justify-center gap-2 sm:gap-3" : "justify-between"
+                          } py-0.5 sm:py-1 transition-colors`}
                           dir="rtl"
                         >
                           {lineWords.map((w) => {
@@ -589,7 +594,11 @@ export default function SurahReader({
                                   const matchingVerse = verses.find(v => v.verse_key === w.verseKey);
                                   handleContextMenu(e, w.verseKey, matchingVerse?.translation);
                                 }}
-                                className={`text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] leading-[1.8] inline-block cursor-pointer transition-colors duration-200 select-none ${
+                                className={`${
+                                  isOpeningPage
+                                    ? "text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] leading-[2]"
+                                    : "text-[clamp(12px,1.9vw,24px)] leading-[2]"
+                                } inline-block cursor-pointer transition-colors duration-200 select-none ${
                                   isWordActive
                                     ? "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]"
                                     : "text-white hover:text-emerald-300"
