@@ -1,5 +1,12 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 86400;
+
+export function generateStaticParams() {
+  return Array.from({ length: 114 }, (_, i) => ({ id: String(i + 1) }));
+}
+
 import SurahReader from "./SurahReader";
+import { qfFetch } from "@/lib/quranFoundation";
+import { QURAN_CHAPTERS } from "@/data/quranChapters";
 
 interface Word {
   id: number;
@@ -34,42 +41,63 @@ interface Chapter {
   verses_count: number;
 }
 
-async function getSurahData(id: string) {
-  const chapterRes = await fetch(`https://api.quran.com/api/v4/chapters/${id}`);
-  if (!chapterRes.ok) throw new Error("Failed to fetch chapter");
-  const chapterJson = await chapterRes.json();
-  const chapter: Chapter = chapterJson.chapter;
+// In-memory memory cache for lightning-fast 0ms repeated reads
+const versesMemoryCache = new Map<string, Verse[]>();
 
-  const versesRes = await fetch(
-    `https://api.quran.com/api/v4/verses/by_chapter/${id}?language=ar&words=true&translations=16&per_page=300&fields=text_uthmani,code_v2,v2_page&word_fields=code_v2,line_number,page_number&mushaf=1`
+async function getSurahData(id: string) {
+  const chapterIdNum = parseInt(id, 10);
+  const localMeta = QURAN_CHAPTERS.find((c: any) => c.id === chapterIdNum);
+
+  const chapter: Chapter = localMeta
+    ? {
+        id: localMeta.id,
+        name_arabic: localMeta.name_arabic,
+        name_simple: localMeta.name_simple,
+        revelation_place: localMeta.revelation_place,
+        verses_count: localMeta.verses_count,
+      }
+    : {
+        id: chapterIdNum,
+        name_arabic: `سورة ${id}`,
+        name_simple: `Surah ${id}`,
+        revelation_place: "makkah",
+        verses_count: 7,
+      };
+
+  // Return cached verses in 0ms if available
+  if (versesMemoryCache.has(id)) {
+    return { chapter, verses: versesMemoryCache.get(id)! };
+  }
+
+  const versesRes = await qfFetch(
+    `verses/by_chapter/${id}?language=ar&words=true&translations=16&per_page=300&fields=text_uthmani,code_v2,v2_page&word_fields=code_v2,text_uthmani,line_number,page_number&mushaf=1`,
+    { next: { revalidate: 604800 } }
   );
+
   if (!versesRes.ok) throw new Error("Failed to fetch verses");
   const versesJson = await versesRes.json();
-  const verses: Verse[] = versesJson.verses;
+  const verses: Verse[] = versesJson.verses || [];
+
+  // Cache in memory
+  versesMemoryCache.set(id, verses);
 
   return { chapter, verses };
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  try {
-    const chapterRes = await fetch(`https://api.quran.com/api/v4/chapters/${id}`);
-    const chapterJson = await chapterRes.json();
-    const chapterName = chapterJson.chapter.name_arabic;
-    
-    return {
-      title: `سورة ${chapterName}`,
-      description: `اقرأ واستمع إلى سورة ${chapterName} بالتشكيل والترجمة من القرآن الكريم.`,
-      openGraph: {
-        title: `سورة ${chapterName} | القرآن الكريم`,
-        description: `اقرأ واستمع إلى سورة ${chapterName} من القرآن الكريم.`,
-      },
-    };
-  } catch {
-    return {
-      title: `سورة ${id}`,
-    };
-  }
+  const chapterIdNum = parseInt(id, 10);
+  const localMeta = QURAN_CHAPTERS.find((c: any) => c.id === chapterIdNum);
+  const chapterName = localMeta ? localMeta.name_arabic : id;
+
+  return {
+    title: `سورة ${chapterName} | القرآن الكريم`,
+    description: `اقرأ واستمع إلى سورة ${chapterName} بالتشكيل والرسم العثماني مع التفسير من القرآن الكريم.`,
+    openGraph: {
+      title: `سورة ${chapterName} | القرآن الكريم`,
+      description: `اقرأ واستمع إلى سورة ${chapterName} من القرآن الكريم.`,
+    },
+  };
 }
 
 export default async function SurahPage({
@@ -86,7 +114,7 @@ export default async function SurahPage({
   const { chapter, verses } = await getSurahData(id);
 
   return (
-    <div className="max-w-[1600px] mx-auto py-8 sm:py-12 px-3 sm:px-6">
+    <div className="max-w-[1180px] mx-auto py-8 sm:py-12 px-3 sm:px-6">
       <SurahReader chapter={chapter} verses={verses} isTranslationEnabled={isTranslationEnabled} />
     </div>
   );

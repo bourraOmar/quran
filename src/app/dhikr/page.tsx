@@ -542,7 +542,7 @@ export default function DhikrApp() {
                   : "bg-white dark:bg-[#1e293b] text-[#4a6b8c] dark:text-[#8ba7c0] border border-transparent hover:border-[#4a6b8c]/30"
               }`}
             >
-              ☀️ الصباح والمساء
+              الصباح والمساء
             </button>
             <button
               onClick={() => setActiveTab("tasbeeh")}
@@ -552,7 +552,7 @@ export default function DhikrApp() {
                   : "bg-white dark:bg-[#1e293b] text-[#4a6b8c] dark:text-[#8ba7c0] border border-transparent hover:border-[#4a6b8c]/30"
               }`}
             >
-              📿 المسبحة والتسابيح
+              المسبحة والتسابيح
             </button>
             <button
               onClick={() => setActiveTab("prayer_sleep")}
@@ -562,7 +562,7 @@ export default function DhikrApp() {
                   : "bg-white dark:bg-[#1e293b] text-[#4a6b8c] dark:text-[#8ba7c0] border border-transparent hover:border-[#4a6b8c]/30"
               }`}
             >
-              🌙 الصلاة والنوم
+              الصلاة والنوم
             </button>
           </div>
 
@@ -603,7 +603,9 @@ export default function DhikrApp() {
 
             {filteredCategories.length === 0 && (
               <div className="text-center py-12 bg-white dark:bg-[#1e293b] rounded-3xl p-6 shadow-sm border border-transparent">
-                <span className="text-4xl block mb-3">🔍</span>
+                <svg className="w-10 h-10 mx-auto mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  </svg>
                 <p className="font-bold text-lg text-[#1e354d] dark:text-white">لم يتم العثور على أي نتائج</p>
                 <p className="text-sm text-[#4a6b8c] dark:text-[#8ba7c0] mt-1">
                   جرب البحث بكلمة أخرى أو إلغاء التصفية
@@ -816,9 +818,7 @@ export default function DhikrApp() {
                   <button
                     onClick={() => setShowSettingsModal(false)}
                     className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white"
-                  >
-                    ✕
-                  </button>
+                  ><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
                 </div>
 
                 {/* Settings Options */}
@@ -938,7 +938,7 @@ export default function DhikrApp() {
                             : "bg-white/10 text-white/70 hover:bg-white/15"
                         }`}
                       >
-                        <span className="text-sm">✦ ✦</span>
+                        <span className="text-xs tracking-widest text-emerald-400">• •</span>
                         <span>النمطان معاً</span>
                       </button>
                     </div>
@@ -1145,7 +1145,7 @@ export default function DhikrApp() {
                             title="نسخ الذكر"
                           >
                             {isCopied ? (
-                              <span className="text-emerald-300 text-xs font-bold">✓</span>
+                              <svg className="w-4 h-4 text-emerald-300 shrink-0 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                             ) : (
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -1221,7 +1221,7 @@ export default function DhikrApp() {
                           title="نسخ"
                         >
                           {isCopied ? (
-                            <span className="text-[#0f8e5d] text-xs font-bold">✓</span>
+                            <svg className="w-4 h-4 text-[#0f8e5d] shrink-0 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                           ) : (
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path
@@ -1255,7 +1255,7 @@ export default function DhikrApp() {
                             : "bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-white border border-black/5 dark:border-white/10"
                         }`}
                       >
-                        {isDone ? "✓ تم إكمال الذكر" : `${currentProg} من ${dhikr.count} مرات`}
+                        {isDone ? "تم إكمال الذكر" : `${currentProg} من ${dhikr.count} مرات`}
                       </button>
                     </div>
                   </div>

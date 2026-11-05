@@ -34,7 +34,7 @@ export default function MobileInstallBar() {
           className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-sm p-1 -mr-1"
           aria-label="إغلاق التنبيه"
         >
-          ✕
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
         <div className="w-9 h-9 rounded-xl overflow-hidden shadow-sm shrink-0 border border-black/10 dark:border-white/10">
           <Image src="/logo.jpg" alt="أُنس" width={36} height={36} className="w-full h-full object-cover" />

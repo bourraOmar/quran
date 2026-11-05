@@ -92,8 +92,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${amiri.variable} ${amiriQuran.variable} ${arefRuqaaInk.variable} font-sans h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:bg-[#0f172a] dark:text-[#e2e8f0] transition-colors duration-300">
+    <html lang="ar" dir="rtl" suppressHydrationWarning className={`${cairo.variable} ${amiri.variable} ${amiriQuran.variable} ${arefRuqaaInk.variable} font-sans h-full antialiased`}>
+      <head>
+        <link rel="preconnect" href="https://verses.quran.foundation" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://apis.quran.foundation" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://server8.mp3quran.net" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://verses.quran.foundation" />
+        <link rel="dns-prefetch" href="https://mp3quran.net" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{const t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){}",
+          }}
+        />
+      </head>
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-[#f4f7f9] dark:bg-[#0f172a] text-[#1e354d] dark:text-[#e2e8f0] transition-colors duration-300">
         <AmbientAudioProvider>
         <GlobalAudioProvider>
           <MobileInstallBar />

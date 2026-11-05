@@ -366,7 +366,7 @@ export default function DuaPage() {
                   : "bg-white dark:bg-[#1e293b] text-[#4a6b8c] dark:text-[#8ba7c0] border border-transparent hover:border-[#4a6b8c]/30"
               }`}
             >
-              📖 أدعية من القرآن
+              أدعية من القرآن
             </button>
             <button
               onClick={() => setActiveTab("sunnah")}
@@ -376,7 +376,7 @@ export default function DuaPage() {
                   : "bg-white dark:bg-[#1e293b] text-[#4a6b8c] dark:text-[#8ba7c0] border border-transparent hover:border-[#4a6b8c]/30"
               }`}
             >
-              🕌 الأدعية النبوية
+              الأدعية النبوية
             </button>
             {favorites.length > 0 && (
               <button
@@ -437,7 +437,9 @@ export default function DuaPage() {
 
             {filteredCategories.length === 0 && (
               <div className="text-center py-12 bg-white dark:bg-[#1e293b] rounded-3xl p-6 shadow-sm border border-transparent">
-                <span className="text-4xl block mb-3">🔍</span>
+                <svg className="w-10 h-10 mx-auto mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  </svg>
                 <p className="font-bold text-lg text-[#1e354d] dark:text-white">لم يتم العثور على أي أدعية</p>
                 <p className="text-sm text-[#4a6b8c] dark:text-[#8ba7c0] mt-1">
                   جرب البحث بكلمة أخرى أو إلغاء التصفية
@@ -681,7 +683,7 @@ export default function DuaPage() {
                           title="نسخ"
                         >
                           {isCopied ? (
-                            <span className="text-[#0f8e5d] text-xs font-bold">✓</span>
+                            <svg className="w-4 h-4 text-[#0f8e5d] shrink-0 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                           ) : (
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path

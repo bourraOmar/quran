@@ -111,6 +111,16 @@ export default function Dashboard() {
   const fetchPrayerData = async (lat: number = 21.4225, lng: number = 39.8262) => {
     try {
       setUserCoords({ lat, lng });
+      const todayKey = 'prayer_data_cache_' + new Date().toISOString().slice(0, 10);
+      try {
+        const cached = localStorage.getItem(todayKey);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed.timings) setTimings(parsed.timings);
+          if (parsed.hijri) setHijri(parsed.hijri);
+          if (parsed.locationName) setLocationName(parsed.locationName);
+        }
+      } catch {}
       const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4`);
       const data = await res.json();
       
@@ -133,11 +143,16 @@ export default function Dashboard() {
 
       const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=ar`);
       const geoData = await geoRes.json();
-      if (geoData.city && geoData.countryName) {
-        setLocationName(`${geoData.city}، ${geoData.countryName}`);
-      } else {
-        setLocationName("مكة المكرمة، السعودية");
-      }
+      const loc = (geoData.city && geoData.countryName) ? `${geoData.city}، ${geoData.countryName}` : "مكة المكرمة، السعودية";
+      setLocationName(loc);
+      try {
+        const todayKey = 'prayer_data_cache_' + new Date().toISOString().slice(0, 10);
+        localStorage.setItem(todayKey, JSON.stringify({
+          timings: { Fajr: t.Fajr, Sunrise: t.Sunrise, Dhuhr: t.Dhuhr, Asr: t.Asr, Maghrib: t.Maghrib, Isha: t.Isha, Midnight: t.Midnight || "23:45" },
+          hijri: { day: data.data.date.hijri.day, month: data.data.date.hijri.month, year: data.data.date.hijri.year },
+          locationName: loc
+        }));
+      } catch {}
     } catch (e) {
       console.error(e);
       setLocationName("مكة المكرمة، السعودية");
@@ -505,7 +520,7 @@ export default function Dashboard() {
     if (currentMins >= morningStart && currentMins < morningEnd) {
       return {
         title: "صباح الخير",
-        icon: "☀️",
+        icon: "sun",
         buttonText: "اقرأ أذكار الصباح",
         category: "morning",
         href: "/dhikr?category=morning",
@@ -513,7 +528,7 @@ export default function Dashboard() {
     } else if (currentMins >= afternoonStart && currentMins < afternoonEnd) {
       return {
         title: "وقت مبارك",
-        icon: "📿",
+        icon: "tasbeeh",
         buttonText: "لنُسبح الله",
         category: "tasbeeh",
         href: "/dhikr?category=tasbeeh",
@@ -521,7 +536,7 @@ export default function Dashboard() {
     } else if (currentMins >= eveningStart && currentMins < eveningEnd) {
       return {
         title: "حبينا نذكرك",
-        icon: "⛅",
+        icon: "evening",
         buttonText: "اقرأ أذكار المساء",
         category: "evening",
         href: "/dhikr?category=evening",
@@ -529,7 +544,7 @@ export default function Dashboard() {
     } else {
       return {
         title: "طابت ليلتك",
-        icon: "🌙",
+        icon: "moon",
         buttonText: "اقرأ أذكار النوم",
         category: "sleep",
         href: "/dhikr?category=sleep",
@@ -563,7 +578,7 @@ export default function Dashboard() {
     } else {
       radioRef.current.play().then(() => {
         setIsRadioPlaying(true);
-        showToast("جاري تشغيل إذاعة القرآن الكريم مباشرة 📻");
+        showToast("جاري تشغيل إذاعة القرآن الكريم مباشرة");
       }).catch(() => {
         showToast("تعذر تشغيل البث المباشر");
       });
@@ -573,7 +588,7 @@ export default function Dashboard() {
   const copyText = (text: string) => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
-      showToast("تم النسخ بنجاح ✓");
+      showToast("تم النسخ بنجاح");
     }
   };
 
@@ -653,9 +668,8 @@ export default function Dashboard() {
                 {timeEvent.title}
               </span>
               <div className="flex items-center justify-center">
-                {timeEvent.category === "tasbeeh" ? (
+                {timeEvent.icon === "tasbeeh" ? (
                   <svg className="w-6 h-6 shrink-0" viewBox="0 0 32 32" fill="none">
-                    {/* Heart shaped tasbeeh beads matching screenshot */}
                     <path
                       d="M16 23C16 23 7 17.5 5 11.5C3.5 5.5 9.5 2.5 13.5 6.5L16 9L18.5 6.5C22.5 2.5 28.5 5.5 27 11.5C25 17.5 16 23 16 23Z"
                       stroke="#f472b6"
@@ -663,13 +677,20 @@ export default function Dashboard() {
                       strokeDasharray="2 3"
                       strokeLinecap="round"
                     />
-                    {/* Tassel */}
                     <path d="M16 23V26.5M14 26.5H18M14.5 26.5L13 30.5M16 26.5V31M17.5 26.5L19 30.5" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
+                ) : timeEvent.icon === "sun" ? (
+                  <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : timeEvent.icon === "evening" ? (
+                  <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414M16.95 16.95l1.414 1.414M7.05 7.05L5.636 5.636M12 8a5 5 0 100 10 5 5 0 000-10z" />
+                  </svg>
                 ) : (
-                  <span className="text-2xl select-none" aria-hidden="true">
-                    {timeEvent.icon}
-                  </span>
+                  <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
                 )}
               </div>
             </div>
@@ -971,18 +992,18 @@ export default function Dashboard() {
         {/* ============================================================== */}
         {/* 7.5 ANDROID APK DOWNLOAD BANNER                                */}
         {/* ============================================================== */}
-        <div className="bg-[#121c17] p-5 sm:p-6 rounded-3xl border border-[#34d399]/20 shadow-md relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-4 text-white">
+        <div className="bg-white dark:bg-[#121c17] p-5 sm:p-6 rounded-3xl border border-[#e2e8f0] dark:border-[#34d399]/20 shadow-sm dark:shadow-md relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-4 text-[#1e354d] dark:text-white">
           <div className="relative z-10 max-w-xl text-center sm:text-right">
-            <div className="inline-flex items-center gap-2 bg-[#34d399]/15 text-[#34d399] px-3 py-1 rounded-full text-xs font-bold mb-2">
+            <div className="inline-flex items-center gap-2 bg-[#0f8e5d]/10 dark:bg-[#34d399]/15 text-[#0f8e5d] dark:text-[#34d399] px-3 py-1 rounded-full text-xs font-bold mb-2">
               <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.523 15.3414C17.523 17.5028 15.654 19.349 13.414 19.349C11.173 19.349 9.305 17.503 9.305 15.3414C9.305 13.18 11.174 11.334 13.414 11.334C15.654 11.334 17.523 13.18 17.523 15.3414ZM12.981 12.0163C12.981 12.0163 12.544 11.4552 11.895 11.4552C10.603 11.4552 9.544 12.5492 9.544 13.8863C9.544 15.2234 10.603 16.3174 11.895 16.3174C13.187 16.3174 14.246 15.2234 14.246 13.8863C14.246 13.3364 14.053 12.8341 13.731 12.4332L12.981 12.0163Z" />
               </svg>
               <span>تطبيق أندرويد الرسمي (APK)</span>
             </div>
-            <h3 className="text-lg sm:text-xl font-extrabold mb-1.5 text-white">
+            <h3 className="text-lg sm:text-xl font-extrabold mb-1.5 text-[#1e354d] dark:text-white">
               حمّل تطبيق أُنس مباشرة على هاتفك
             </h3>
-            <p className="text-xs text-[#94a3b8] leading-relaxed">
+            <p className="text-xs text-[#4a6b8c] dark:text-[#94a3b8] leading-relaxed">
               استماع للتلاوات في الخلفية وشاشة القفل، أذكار الصباح والمساء، ومواقيت الصلاة الدقيقة بدون انقطاع.
             </p>
           </div>
@@ -1116,9 +1137,7 @@ export default function Dashboard() {
               <button 
                 onClick={() => setShowTasbihModal(false)}
                 className="w-9 h-9 rounded-full bg-[#f4f7f9] dark:bg-[#0f172a] flex items-center justify-center text-[#4a6b8c] hover:text-red-500"
-              >
-                ✕
-              </button>
+              ><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
               <h3 className="font-bold text-lg text-[#1e354d] dark:text-white flex items-center gap-2">
                 <span className="text-[#0f8e5d] dark:text-[#4ade80]">{renderDailyIcon("tasbih", "w-5 h-5")}</span>
                 <span>المسبحة الإلكترونية</span>
@@ -1181,9 +1200,7 @@ export default function Dashboard() {
               <button 
                 onClick={() => setShowQiblaModal(false)}
                 className="w-9 h-9 rounded-full bg-[#f4f7f9] dark:bg-[#0f172a] flex items-center justify-center text-[#4a6b8c] hover:text-red-500"
-              >
-                ✕
-              </button>
+              ><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
               <h3 className="font-bold text-lg text-[#1e354d] dark:text-white flex items-center gap-2">
                 <span className="text-[#9333ea] dark:text-[#c084fc]">{renderDailyIcon("qibla", "w-5 h-5")}</span>
                 <span>بوصلة اتجاه القبلة</span>
@@ -1202,7 +1219,9 @@ export default function Dashboard() {
                 style={{ transform: `rotate(${calculateQibla()}deg)` }}
               >
                 <div className="flex flex-col items-center -translate-y-12">
-                  <span className="text-2xl">🕋</span>
+                  <svg className="w-7 h-7 text-amber-400" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.2l6.5 3.6-6.5 3.6-6.5-3.6L12 4.2zM5 8.9l6 3.3v7.6l-6-3.3V8.9zm8 10.9v-7.6l6-3.3v7.6l-6 3.3z" />
+                  </svg>
                   <div className="w-1.5 h-12 bg-[#9333ea] rounded-full mt-1"></div>
                 </div>
               </div>

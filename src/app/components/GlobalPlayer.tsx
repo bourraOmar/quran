@@ -67,13 +67,28 @@ export default function GlobalPlayer() {
   }, [currentTime, showLyrics, verses, verseTimings, activeSurahId]);
 
   useEffect(() => {
-    if (showLyrics && activeSurahId && verses.length === 0) {
-      fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${activeSurahId}`)
-        .then(res => res.json())
-        .then(data => setVerses(data.verses || []))
-        .catch(err => console.error("Failed to fetch verses", err));
-    }
-  }, [showLyrics, activeSurahId]);
+    if (!showLyrics || !activeSurahId || verses.length > 0) return;
+
+    let isMounted = true;
+    const loadVerses = async () => {
+      try {
+        const res = await fetch(`/api/quran/verses?chapter=${activeSurahId}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (isMounted && data.verses) {
+          setVerses(data.verses);
+        }
+      } catch {
+        // Handled silently to avoid uncaught console errors
+      }
+    };
+
+    loadVerses();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [showLyrics, activeSurahId, verses.length]);
 
   // Reset verses and states if surah changes or player closes
   useEffect(() => {
