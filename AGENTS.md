@@ -35,3 +35,9 @@ The following rules must be strictly preserved in all future changes, refactors,
 - **No Emojis**: Strictly never use emojis anywhere in UI text, navigation, buttons, or badges. Always use clean inline SVG vector icons.
 - **Neutral Mushaf Label**: Keep the badge label as "مصحف مجمع الملك فهد" without technical version numbers like "V2" in user-facing text.
 
+
+## 5. Karpathy Guidelines (Coding Discipline)
+- **Think Before Coding**: State assumptions explicitly. Surface trade-offs. Push back when a simpler approach exists.
+- **Simplicity First**: Minimum code that solves the problem. No speculative abstractions or unrequested features.
+- **Surgical Changes**: Touch only what you must. Never alter unrelated code or styling.
+- **Goal-Driven Execution**: Define verifiable success criteria and verify with tests/builds before completing.
