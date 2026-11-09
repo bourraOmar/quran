@@ -13,6 +13,7 @@ interface Word {
   char_type_name: string;
   line_number: number;
   page_number: number;
+  code_v1?: string;
   code_v2?: string;
   text?: string;
   text_uthmani?: string;
@@ -25,6 +26,8 @@ interface Verse {
   text_uthmani: string;
   text_imlaei?: string;
   translation?: string;
+  code_v1?: string;
+  v1_page?: number;
   v2_page?: number;
   words?: Word[];
 }
@@ -141,6 +144,7 @@ export default function SurahReader({
     // Always include page 1 so the Bismillah calligraphy font 'p1' is loaded on every surah
     const set = new Set([1, ...pages]);
     verses.forEach((v) => {
+      if (v.v1_page) set.add(v.v1_page);
       if (v.v2_page) set.add(v.v2_page);
       v.words?.forEach((w) => {
         if (w.page_number) set.add(w.page_number);
@@ -419,7 +423,7 @@ export default function SurahReader({
           <link
             key={`preload-p${p}`}
             rel="preload"
-            href={`https://verses.quran.foundation/fonts/quran/hafs/v2/woff2/p${p}.woff2`}
+            href={`https://verses.quran.foundation/fonts/quran/hafs/v1/woff2/p${p}.woff2`}
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
@@ -440,7 +444,7 @@ export default function SurahReader({
                 (p) => `
                   @font-face {
                     font-family: 'p${p}';
-                    src: url('https://verses.quran.foundation/fonts/quran/hafs/v2/woff2/p${p}.woff2') format('woff2');
+                    src: url('https://verses.quran.foundation/fonts/quran/hafs/v1/woff2/p${p}.woff2') format('woff2');
                     font-display: block;
                   }
                 `
@@ -456,7 +460,7 @@ export default function SurahReader({
               {chapter.id !== 1 && chapter.id !== 9 && (
                 <div className="pb-8 text-center border-b border-black/5 dark:border-white/5 mb-8">
                   <span style={{ fontFamily: "p1" }} className="text-[clamp(16px,2.2vw,28px)] leading-[2] text-[#1e354d] dark:text-white inline-block">
-                    ﱁ ﱂ ﱃ ﱄ
+                    ﭑ ﭒ ﭓ ﭔ
                   </span>
                 </div>
               )}
@@ -493,7 +497,7 @@ export default function SurahReader({
                     </div>
 
                     <p 
-                      style={{ fontFamily: v.v2_page ? `p${v.v2_page}` : "var(--font-quran, serif)" }} 
+                      style={{ fontFamily: (v.v1_page || v.v2_page) ? `p${v.v1_page || v.v2_page}` : "var(--font-quran, serif)" }} 
                       className="text-2xl sm:text-3xl leading-[2.2] sm:leading-[2.4] text-[#1e354d] dark:text-white mb-4 select-none"
                     >
                       {v.words && v.words.length > 0 ? (
@@ -503,7 +507,7 @@ export default function SurahReader({
                             style={{ fontFamily: `p${w.page_number}` }}
                             className="inline-block mx-0.5"
                           >
-                            {w.code_v2 || w.text || w.text_uthmani}
+                            {w.code_v1 || w.code_v2 || w.text || w.text_uthmani}
                           </span>
                         ))
                       ) : (
@@ -541,7 +545,7 @@ export default function SurahReader({
                       className="w-full flex flex-nowrap items-center justify-center gap-0.5 sm:gap-1 pt-1 pb-3 select-none"
                       dir="rtl"
                     >
-                      {["ﱁ", "ﱂ", "ﱃ", "ﱄ"].map((glyph, idx) => (
+                      {["ﭑ", "ﭒ", "ﭓ", "ﭔ"].map((glyph, idx) => (
                         <span
                           key={idx}
                           style={{ fontFamily: "p1" }}
@@ -590,7 +594,7 @@ export default function SurahReader({
                                     : "text-[#1e293b] dark:text-white hover:text-[#0f8e5d] dark:hover:text-emerald-300"
                                 }`}
                               >
-                                {w.code_v2 || w.text || w.text_uthmani}
+                                {w.code_v1 || w.code_v2 || w.text || w.text_uthmani}
                               </span>
                             );
                           })}

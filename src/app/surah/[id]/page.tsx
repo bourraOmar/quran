@@ -13,6 +13,7 @@ interface Word {
   position: number;
   audio_url: string | null;
   char_type_name: string;
+  code_v1?: string;
   code_v2?: string;
   line_number: number;
   page_number: number;
@@ -24,7 +25,9 @@ interface Verse {
   verse_number: number;
   verse_key: string;
   text_uthmani: string;
+  code_v1?: string;
   code_v2?: string;
+  v1_page?: number;
   v2_page?: number;
   words?: Word[];
   translations?: {
@@ -70,7 +73,7 @@ async function getSurahData(id: string) {
   }
 
   const versesRes = await qfFetch(
-    `verses/by_chapter/${id}?language=ar&words=true&translations=16&per_page=300&fields=text_uthmani,code_v2,v2_page&word_fields=code_v2,text_uthmani,line_number,page_number&mushaf=1`,
+    `verses/by_chapter/${id}?language=ar&words=true&translations=16&per_page=300&fields=text_uthmani,code_v1,code_v2,v1_page,v2_page&word_fields=code_v1,code_v2,text_uthmani,line_number,page_number&mushaf=2`,
     { next: { revalidate: 604800 } }
   );
 

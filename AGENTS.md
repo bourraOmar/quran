@@ -20,13 +20,13 @@ The following rules must be strictly preserved in all future changes, refactors,
   `leading-[1.75] sm:leading-[1.85] md:leading-[1.95]`
 - **Container Structure**: The Mushaf page container width is locked to `max-w-[650px] mx-auto`. Do not wrap individual pages in heavy bordered cards or expand them to wide desktop viewports. Pages must flow seamlessly with a centered page number and subtle divider line, matching Quran.com.
 
-## 2. Font & API Configuration (King Fahad Complex V2)
-- **API Endpoint Parameter**: Verses must always be fetched with `mushaf=1` (King Fahad Complex V2):
-  `verses/by_chapter/${id}?...&word_fields=code_v2,text_uthmani,line_number,page_number&mushaf=1`
+## 2. Font & API Configuration (King Fahad Complex V1)
+- **API Endpoint Parameter**: Verses must always be fetched with `mushaf=2` (King Fahad Complex V1):
+  `verses/by_chapter/${id}?...&word_fields=code_v1,code_v2,text_uthmani,line_number,page_number&mushaf=2`
 - **Font URL**: Each page dynamically loads its official per-page WOFF2 glyph font:
-  `https://verses.quran.foundation/fonts/quran/hafs/v2/woff2/p${p}.woff2` with `font-display: block;`
+  `https://verses.quran.foundation/fonts/quran/hafs/v1/woff2/p${p}.woff2` with `font-display: block;`
 - **Font Preloading**: Preload the initial page fonts using `<link rel="preload" as="font" type="font/woff2" crossOrigin="anonymous" />`.
-- **Word Glyph Rendering**: Always render `{w.code_v2 || w.text || w.text_uthmani}` inside `span` with `style={{ fontFamily: 'p' + w.page_number }}`.
+- **Word Glyph Rendering**: Always render `{w.code_v1 || w.code_v2 || w.text || w.text_uthmani}` inside `span` with `style={{ fontFamily: 'p' + w.page_number }}`.
 
 ## 3. Homepage Preservation
 - The homepage layout and design in `src/app/page.tsx`, `InteractiveMockup.tsx`, and `InstallAppAction.tsx` must remain untouched unless explicitly requested by the user.
