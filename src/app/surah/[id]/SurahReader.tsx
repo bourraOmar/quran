@@ -505,7 +505,7 @@ export default function SurahReader({
                           <span 
                             key={w.id} 
                             style={{ fontFamily: `p${w.page_number}` }}
-                            className="inline-block mx-0.5"
+                            className={`inline-block mx-0.5 ${w.char_type_name === "end" ? "text-[#5c9983] dark:text-[#789270]" : ""}`}
                           >
                             {w.code_v2 || w.text || w.text_uthmani}
                           </span>
@@ -591,7 +591,7 @@ export default function SurahReader({
                                 className={`text-[clamp(18px,2.4vw,24px)] sm:text-[23px] md:text-[25px] leading-[1.75] sm:leading-[1.85] md:leading-[1.95] inline-block cursor-pointer transition-colors duration-200 select-none ${
                                   isWordActive
                                     ? "text-[#0f8e5d] dark:text-emerald-400 drop-shadow-[0_0_10px_rgba(15,142,93,0.35)] dark:drop-shadow-[0_0_12px_rgba(52,211,153,0.8)] font-semibold"
-                                    : "text-[#1e293b] dark:text-white hover:text-[#0f8e5d] dark:hover:text-emerald-300"
+                                    : w.char_type_name === "end" ? "text-[#5c9983] dark:text-[#789270]" : "text-[#1e293b] dark:text-white hover:text-[#0f8e5d] dark:hover:text-emerald-300"
                                 }`}
                               >
                                 {w.code_v2 || w.text || w.text_uthmani}
