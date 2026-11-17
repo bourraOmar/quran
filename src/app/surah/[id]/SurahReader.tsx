@@ -604,8 +604,23 @@ export default function SurahReader({
                   </div>
 
                   {/* Centered Page Number at Bottom */}
-                  <div className="w-full text-center pt-8 pb-2 text-sm sm:text-base font-semibold text-[#64748b] dark:text-gray-400 select-none">
-                    {toArabicDigits(p)}
+                  <div className="w-full flex justify-center items-center pt-8 pb-2 select-none">
+                    <div className="w-[68px] h-[32px]">
+                      <svg className="w-full h-full overflow-visible" viewBox="0 0 76 36" preserveAspectRatio="xMidYMid meet">
+                        <path className="fill-[#5c9983]/15 dark:fill-[#789270]/25 transition-colors" d="M 22,3 L 54,3 C 60,3 65,8 68,13 C 71,16 75,18 75,18 C 75,18 71,20 68,23 C 65,28 60,33 54,33 L 22,33 C 16,33 11,28 8,23 C 5,20 1,18 1,18 C 1,18 5,16 8,13 C 11,8 16,3 22,3 Z" />
+                        <path className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[1.3] fill-none stroke-round transition-colors" d="M 22,3 L 54,3 C 60,3 65,8 68,13 C 71,16 75,18 75,18 C 75,18 71,20 68,23 C 65,28 60,33 54,33 L 22,33 C 16,33 11,28 8,23 C 5,20 1,18 1,18 C 1,18 5,16 8,13 C 11,8 16,3 22,3 Z" />
+                        <rect x="18" y="5" width="40" height="26" rx="13" className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[1.3] fill-none transition-colors" />
+                        <path className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[0.95] fill-none opacity-85 transition-colors" d="M 8,13 C 12,15 15,16 18,18 C 15,20 12,21 8,23" />
+                        <path className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[0.95] fill-none opacity-85 transition-colors" d="M 2,18 L 11,18" />
+                        <path className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[0.95] fill-none opacity-85 transition-colors" d="M 12,9 C 14.5,12 16.5,13 18,13" />
+                        <path className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[0.95] fill-none opacity-85 transition-colors" d="M 12,27 C 14.5,24 16.5,23 18,23" />
+                        <path className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[0.95] fill-none opacity-85 transition-colors" d="M 68,13 C 64,15 61,16 58,18 C 61,20 64,21 68,23" />
+                        <path className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[0.95] fill-none opacity-85 transition-colors" d="M 74,18 L 65,18" />
+                        <path className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[0.95] fill-none opacity-85 transition-colors" d="M 64,9 C 61.5,12 59.5,13 58,13" />
+                        <path className="stroke-[#5c9983] dark:stroke-[#789270] stroke-[0.95] fill-none opacity-85 transition-colors" d="M 64,27 C 61.5,24 59.5,23 58,23" />
+                        <text x="38" y="19" className="font-bold text-[14px] fill-[#2b5f4c] dark:fill-white text-anchor-middle dominant-baseline-central">{toArabicDigits(p)}</text>
+                      </svg>
+                    </div>
                   </div>
                 </div>
               );
